@@ -107,7 +107,7 @@ int main(int argc, const char * argv[]) {
             return e1.intValue - e2.intValue;
         }];
         
-        int nums[] = {5,6,7,8,4,3,2,1};
+        int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40, 25, 46, 23, 10, 41, 11, 1, 24, 16, 30, 21, 22, 8, 50, 28, 48, 12, 31, 35, 39, 14, 5, 47, 42, 15, 7, 18, 33, 36, 20, 44, 29, 49};
         NSMutableArray *numbers = [NSMutableArray array];
         for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
             printf("%d ", nums[i]);
