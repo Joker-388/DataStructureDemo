@@ -8,7 +8,9 @@
 
 #import "LevelOrderPrinter.h"
 
+/// 二叉树节点左右横向线的最小长度
 #define TOP_LINE_SPACE 1
+/// 二叉树节点之间的最小距离
 #define MIN_SPACE 1
 
 @implementation PrintNode
@@ -61,6 +63,7 @@
     if (self.right) [self.right translateX:deltaX];
 }
 
+/// 顶部方向字符的X值
 - (int)topLineX {
     int delta = self.width;
     if (delta % 2 == 0) delta--;
@@ -70,28 +73,34 @@
     else return self.x + delta;
 }
 
+/// 右边界的位置
 - (int)rightBound {
     if (!self.right) return [self rightX];
     return [self.right topLineX] + 1;
 }
 
+/// 左边界的位置
 - (int)leftBound {
     if (!self.left) return self.x;
     return [self.left topLineX];
 }
 
+/// 左边界之间的长度
 - (int)leftBoundLength {
     return self.x - [self leftBound];
 }
 
+/// 右边界之间的长度
 - (int)rightBoundLength {
     return [self rightBound] - [self rightX];
 }
 
+/// 左边界可以清空的长度
 - (int)leftBoundEmptyLength {
     return [self leftBoundLength] - 1 - TOP_LINE_SPACE;
 }
 
+/// 左边界可以清空的长度
 - (int)rightBoundEmptyLength {
     return [self rightBoundLength] - 1 - TOP_LINE_SPACE;
 }
@@ -104,6 +113,7 @@
     return node.treeHeight;
 }
 
+/// 和右节点之间的最小层级距离
 - (int)minLevelSpaceToRight:(PrintNode *)right {
     int thisHeight = [self treeHeigh:self];
     int rightHeight = [self treeHeigh:right];
@@ -138,6 +148,10 @@
     return [[LevelInfo alloc] initWithLeft:left right:right];
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<%@: %p>: string: %@, x: %d, y: %d, treeHeight: %d, Width: %d", self.className, self, self.string, self.x, self.y, self.treeHeight, self.width];
+}
+
 @end
 
 
@@ -156,6 +170,7 @@
 
 @property (nonatomic, strong) PrintNode *root;
 @property (nonatomic, assign) int minX;
+// 所有节点的宽度最大值
 @property (nonatomic, assign) int maxWidth;
 
 @end
@@ -180,11 +195,17 @@
     return self;
 }
 
+#pragma mark - 二叉树格式化字符串
 - (NSString *)printString {
+    // 要打印的节点，二维数组，存储每一行: 每一行要打印的节点，要打印的节点用PrintNode对象表示（包括元素节点和连线符号）
     NSMutableArray <NSMutableArray<PrintNode *> *> *nodes = [NSMutableArray array];
+    // 将二叉树填充成满二叉树，用空元素填充，用于下一步计算每一个节点的坐标
     [self fillNodes:nodes];
+    // 计算节点的坐标，清除上一步用于填充的空元素节点
     [self cleanNodes:nodes];
+    // 压缩多余的空格
     [self compressNodes:nodes];
+    // 添加连线，更新x坐标
     [self addLineNodes:nodes];
     
     int rowCont = (int)nodes.count;
@@ -207,6 +228,7 @@
     return mutableString;
 }
 
+#pragma mark - 添加打印节点
 - (PrintNode *)addNodeWithNodes:(NSMutableArray<PrintNode *> *)nodes btNode:(id)btNode {
     if (btNode) {
         PrintNode *node = [[PrintNode alloc] initWithBtNode:btNode tree:self.tree];
@@ -220,6 +242,7 @@
     }
 }
 
+#pragma mark - 将二叉树填充成满二叉树
 - (void)fillNodes:(NSMutableArray <NSMutableArray<PrintNode *> *> *)nodes  {
     if (!nodes) return;
     NSMutableArray<PrintNode *> *firstRowNodes = [NSMutableArray array];
@@ -255,31 +278,36 @@
     }
 }
 
+#pragma mark - 计算节点的坐标
 - (void)cleanNodes:(NSMutableArray <NSMutableArray<PrintNode *> *> *)nodes {
     if (!nodes) return;
-    
     int rowCount = (int)nodes.count;
+    // rowCount小于2即只有一行节点，只有根节点，这种情况不需要处理
     if (rowCount < 2) return;
-    
+    // 最后一行节点的个数
     int lastRowNodeCount = (int)nodes[rowCount - 1].count;
+    // 节点的间距
     int nodeSpace = self.maxWidth + 2;
-    
+    // 最后一行的长度
     int lastRowLength = lastRowNodeCount * self.maxWidth + nodeSpace * (lastRowNodeCount - 1);
     for (int i = 0; i < rowCount; i++) {
         NSMutableArray<PrintNode *> *rowNodes = nodes[i];
-        
+        // 当前行要打印节点的个数
         int rowNodeCount = (int)rowNodes.count;
+        // 节点左右两边的间距
         int allSpace = lastRowLength - (rowNodeCount - 1) * nodeSpace;
         int cornerSpace = allSpace / rowNodeCount - self.maxWidth;
-        cornerSpace = cornerSpace >> 1;
-        
+        cornerSpace >>= 1;
         int rowLength = 0;
         for (int j = 0; j < rowNodeCount; j++) {
-            if (j != 0) rowLength += nodeSpace;
-            
+            if (j != 0) {
+                // 每个节点之间的间距
+                rowLength += nodeSpace;
+            }
             rowLength += cornerSpace;
             PrintNode *node = rowNodes[j];
             if (![node isKindOfClass:[NSNull class]]) {
+                // 居中
                 int deltaX = (self.maxWidth - node.width) >> 1;
                 node.x = rowLength + deltaX;
                 node.y = i;
@@ -287,16 +315,16 @@
             rowLength += self.maxWidth;
             rowLength += cornerSpace;
         }
-        
+        // 移除所有空节点
         NSMutableArray *removeRows = [NSMutableArray array];
         for (int m = 0; m < rowNodes.count; m++) {
             if ([rowNodes[m] isKindOfClass:[NSNull class]]) [removeRows addObject:rowNodes[m]];
         }
-        
         [rowNodes removeObjectsInArray:removeRows];
     }
 }
 
+#pragma mark - 压缩多余的空格
 - (void)compressNodes:(NSMutableArray <NSMutableArray<PrintNode *> *> *)nodes {
     if (!nodes) return;
     int rowCount = (int)nodes.count;
@@ -342,6 +370,38 @@
     }
 }
 
+#pragma mark - 添加连线
+- (void)addLineNodes:(NSMutableArray<NSMutableArray<PrintNode *> *> *)nodes {
+    NSMutableArray<NSMutableArray<PrintNode *> *> *newNodes = [NSMutableArray array];
+    int rowCount = (int)nodes.count;
+    if (rowCount < 2) return;
+    
+    self.minX = self.root.x;
+    
+    for (int i = 0; i < rowCount; i++) {
+        NSMutableArray<PrintNode *> *rowNodes = nodes[i];
+        if (i == rowCount - 1) {
+            [newNodes addObject:rowNodes];
+            continue;
+        }
+        
+        NSMutableArray<PrintNode *> *newRowNodes = [NSMutableArray array];
+        [newNodes addObject:newRowNodes];
+        
+        NSMutableArray<PrintNode *> *lineNodes = [NSMutableArray array];
+        [newNodes addObject:lineNodes];
+        
+        for (PrintNode *node in rowNodes) {
+            [self addLineNode:newRowNodes nextRow:lineNodes parent:node child:node.left];
+            [newRowNodes addObject:node];
+            [self addLineNode:newRowNodes nextRow:lineNodes parent:node child:node.right];
+        }
+    }
+    
+    [nodes removeAllObjects];
+    [nodes addObjectsFromArray:newNodes];
+}
+
 - (void)addXLineNode:(NSMutableArray<PrintNode *> *)curRow parent:(PrintNode *)parent x:(int)x {
     PrintNode *line = [[PrintNode alloc] initWithString:@"-"];
     line.x = x;
@@ -377,41 +437,7 @@
     return top;
 }
 
-- (void)addLineNodes:(NSMutableArray<NSMutableArray<PrintNode *> *> *)nodes {
-    NSMutableArray<NSMutableArray<PrintNode *> *> *newNodes = [NSMutableArray array];
-    int rowCount = (int)nodes.count;
-    if (rowCount < 2) return;
-    
-    self.minX = self.root.x;
-    
-    for (int i = 0; i < rowCount; i++) {
-        NSMutableArray<PrintNode *> *rowNodes = nodes[i];
-        if (i == rowCount - 1) {
-            [newNodes addObject:rowNodes];
-            continue;
-        }
-        
-        NSMutableArray<PrintNode *> *newRowNodes = [NSMutableArray array];
-        [newNodes addObject:newRowNodes];
-        
-        NSMutableArray<PrintNode *> *lineNodes = [NSMutableArray array];
-        [newNodes addObject:lineNodes];
-        
-        for (PrintNode *node in rowNodes) {
-            [self addLineNode:newRowNodes nextRow:lineNodes parent:node child:node.left];
-            [newRowNodes addObject:node];
-            [self addLineNode:newRowNodes nextRow:lineNodes parent:node child:node.right];
-        }
-    }
-    
-    [nodes removeAllObjects];
-    [nodes addObjectsFromArray:newNodes];
-}
-
-- (void)println {
-    NSLog(@"%@\n", [self printString]);
-}
-
+#pragma mark - 打印二叉树
 - (void)print {
     NSLog(@"%@", [self printString]);
 }

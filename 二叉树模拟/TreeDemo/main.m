@@ -117,7 +117,6 @@ int main(int argc, const char * argv[]) {
         for (NSNumber *number in numbers) {
             [avl add:number];
             [bst add:number];
-//            NSLog(@"Add: %zd", number.integerValue);
             printf("Add: %d\n\n", number.intValue);
             printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
             printf("-------------------------------------------------------------------\n\n\n");

@@ -33,8 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 返回二叉树的字符串
 - (NSString *)printString;
 /// 打印二叉树
-- (void)println;
-/// 打印二叉树
 - (void)print;
 
 @end
