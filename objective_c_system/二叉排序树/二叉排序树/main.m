@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <search.h>
 
+// 系统提供的二叉树，一棵不带自平衡功能的二叉搜索树
+
 //定义一个树节点类型，节点必须按这个格式定义
 typedef struct _node
 {
