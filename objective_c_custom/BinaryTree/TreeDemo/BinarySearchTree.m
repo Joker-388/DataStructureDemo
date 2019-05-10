@@ -93,15 +93,22 @@
         } else {
             node.parent.right = replacement;
         }
+        [self afterRemoveWithNode:node];
     } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
         _root = nil;
+        [self afterRemoveWithNode:node];
     } else { // 被删除的节点是叶子节点且不是根节点
         if (node == node.parent.left) {
             node.parent.left = nil;
         } else {
             node.parent.right = nil;
         }
+        [self afterRemoveWithNode:node];
     }
+}
+
+- (void)afterRemoveWithNode:(Node *)node {
+    
 }
 
 #pragma mark - 是否包含元素

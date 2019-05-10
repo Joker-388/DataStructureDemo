@@ -34,6 +34,9 @@ typedef int(^compareBlock)(id e1, id e2);
 /// 添加节点后的处理
 - (void)afterAddWithNewNode:(Node *)node;
 
+/// 删除节点后的处理
+- (void)afterRemoveWithNode:(Node *)node;
+
 ///// 通过元素获取对应节点
 //- (Node *)nodeWithElement:(id)element;
 ///// 删除节点

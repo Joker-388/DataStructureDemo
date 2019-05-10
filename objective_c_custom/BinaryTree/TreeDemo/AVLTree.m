@@ -27,24 +27,35 @@
     }
 }
 
+#pragma mark - 删除一个节点后平衡二叉树
+- (void)afterRemoveWithNode:(Node *)node {
+    while ((node = node.parent)) {
+        if ([self isBalancedWithNode:node]) {
+            [self updateHeigthWithNode:node];
+        } else {
+            [self rebalance:node];
+        }
+    }
+}
+
 #pragma mark - 统一旋转
 - (void)rebalance:(Node *)grand {
     Node *parent = ((AVLNode *) grand).tallerChild;
     Node *node = ((AVLNode *) parent).tallerChild;
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL 右旋转 grand
-            NSLog(@"统一旋转:LL");
+            NSLog(@"统一旋转:LL G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
             [self rotateWithRoot:grand a:node.left b:node c:node.right d:parent e:parent.right f:grand g:grand.right];
         } else { // LR
-            NSLog(@"统一旋转:LR");
+            NSLog(@"统一旋转:LR G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
             [self rotateWithRoot:grand a:parent.left b:parent c:node.left d:node e:node.right f:grand g:grand.right];
         }
     } else { // R
         if (node.isLeftChild) { // RL
-            NSLog(@"统一旋转:RL");
+            NSLog(@"统一旋转:RL G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
             [self rotateWithRoot:grand a:grand.left b:grand c:node.left d:node e:node.right f:parent g:parent.right];
         } else { // RR 左旋转 grand
-            NSLog(@"统一旋转:RR");
+            NSLog(@"统一旋转:RR G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
             [self rotateWithRoot:grand a:grand.left b:grand c:parent.left d:parent e:node.left f:node g:node.right];
         }
     }
