@@ -10,6 +10,10 @@
 #import "Person.h"
 #import "SingleCircleLinkedList.h"
 
+/*
+ 单向循环链表解决约瑟夫问题
+ */
+
 void test() {
     SingleCircleLinkedList *linkList = [SingleCircleLinkedList new];
     for (NSInteger i = 0; i < 8; i++) {
