@@ -68,6 +68,8 @@ typedef int(^compareBlock)(id e1, id e2);
 - (BOOL)isLeftChild;
 /// 是否是父节点的右子树
 - (BOOL)isRightChild;
+/// 返回兄弟节点
+- (Node *)sibling;
 
 @end
 

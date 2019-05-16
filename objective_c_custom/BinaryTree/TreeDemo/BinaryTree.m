@@ -306,6 +306,16 @@ typedef void(^orderBlock)(id element);
     return self.parent && self.parent.right == self;
 }
 
+- (Node *)sibling {
+    if ([self isLeftChild]) {
+        return self.parent.right;
+    }
+    if ([self isRightChild]) {
+        return self.parent.left;
+    }
+    return nil;
+}
+
 - (void)dealloc {
     NSLog(@"<%@: %p> dealloc", self.className, self);
 }

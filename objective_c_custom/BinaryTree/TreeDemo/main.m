@@ -10,6 +10,7 @@
 #import "BinarySearchTree.h"
 #import "LevelOrderPrinter.h"
 #import "AVLTree.h"
+#import "RedBlackTree.h"
 
 NSString * getRandomStr() {
     char data[6];
@@ -19,7 +20,7 @@ NSString * getRandomStr() {
     return string;
 }
 
-void test1() {
+void testBinarySearchTree() {
     BinarySearchTree<NSNumber *> *tree = [[BinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
         return e1.intValue - e2.intValue;
     }];
@@ -96,54 +97,71 @@ void test1() {
     [tree clear];
 }
 
+void testAVLTree() {
+    BinarySearchTree<NSNumber *> *avl = [[AVLTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
+        return e1.intValue - e2.intValue;
+    }];
+    
+    BinarySearchTree<NSNumber *> *bst = [[BinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
+        return e1.intValue - e2.intValue;
+    }];
+    
+    int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40, 25, 46, 23, 10, 41, 11, 1, 24, 16, 30, 21, 22, 8, 50, 28, 48, 12, 31, 35, 39, 14, 5, 47, 42, 15, 7, 18, 33, 36, 20, 44, 29, 49};
+    NSMutableArray *numbers = [NSMutableArray array];
+    for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
+        printf("%d ", nums[i]);
+        [numbers addObject:[NSNumber numberWithInt:nums[i]]];
+    }
+    printf("\n--- Start Add ---\n\n");
+    for (NSNumber *number in numbers) {
+        [avl add:number];
+        [bst add:number];
+        printf("Add: %d\n\n", number.intValue);
+        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
+        printf("--- AVL ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String]);
+        printf("-------------------------------------------------------------------\n\n\n");
+    }
+}
+
+void testRedBlackTree() {
+    BinarySearchTree<NSNumber *> *rb = [[RedBlackTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
+        return e1.intValue - e2.intValue;
+    }];
+    
+    BinarySearchTree<NSNumber *> *bst = [[BinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
+        return e1.intValue - e2.intValue;
+    }];
+    
+    int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40};
+    NSMutableArray *numbers = [NSMutableArray array];
+    for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
+        printf("%d ", nums[i]);
+        [numbers addObject:[NSNumber numberWithInt:nums[i]]];
+    }
+    printf("\n--- Start Add ---\n\n");
+    for (NSNumber *number in numbers) {
+        [rb add:number];
+        [bst add:number];
+        printf("Add: %d\n\n", number.intValue);
+        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
+        printf("--- RedBlack ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
+        printf("-------------------------------------------------------------------\n\n\n");
+    }
+    
+    for (NSNumber *number in numbers) {
+        [rb remove:number];
+        [bst remove:number];
+        printf("Remove: %d\n\n", number.intValue);
+        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
+        printf("--- RedBlack ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
+        printf("-------------------------------------------------------------------\n\n\n");
+    }
+    
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-//        test1();
-        BinarySearchTree<NSNumber *> *avl = [[AVLTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-            return e1.intValue - e2.intValue;
-        }];
-        
-        BinarySearchTree<NSNumber *> *bst = [[BinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-            return e1.intValue - e2.intValue;
-        }];
-        
-//        int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40, 25, 46, 23, 10, 41, 11, 1, 24, 16, 30, 21, 22, 8, 50, 28, 48, 12, 31, 35, 39, 14, 5, 47, 42, 15, 7, 18, 33, 36, 20, 44, 29, 49};
-        int nums[] = {7,4,2,1,8,5};
-        NSMutableArray *numbers = [NSMutableArray array];
-        for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
-            printf("%d ", nums[i]);
-            [numbers addObject:[NSNumber numberWithInt:nums[i]]];
-        }
-        printf("\n--- Start Add ---\n\n");
-        for (NSNumber *number in numbers) {
-            [avl add:number];
-            [bst add:number];
-            printf("Add: %d\n\n", number.intValue);
-//            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
-            printf("--- AVL ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String]);
-            printf("-------------------------------------------------------------------\n\n\n");
-        }
-        
-        printf("-------------------------------------------------------------------\n\n\n");
-        printf("-------------------------------------------------------------------\n\n\n");
-        printf("-------------------------------------------------------------------\n\n\n");
-        
-        {
-            int nums[] = {1, 2, 8};
-            NSMutableArray *numbers = [NSMutableArray array];
-            for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
-                printf("%d ", nums[i]);
-                [numbers addObject:[NSNumber numberWithInt:nums[i]]];
-            }
-            for (NSNumber *number in numbers) {
-                [avl remove:number];
-                [bst remove:number];
-                printf("Remove: %d\n\n", number.intValue);
-                //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
-                printf("--- AVL ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String]);
-                printf("-------------------------------------------------------------------\n\n\n");
-            }
-        }
+        testRedBlackTree();
     }
     
     return 0;

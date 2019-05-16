@@ -10,6 +10,7 @@
 		052132DD22788EA600AFCAE8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 052132DC22788EA600AFCAE8 /* main.m */; };
 		052132E522788EF100AFCAE8 /* BinarySearchTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 052132E422788EF100AFCAE8 /* BinarySearchTree.m */; };
 		0577BC0022792DFF0040B157 /* LevelOrderPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0577BBFF22792DFF0040B157 /* LevelOrderPrinter.m */; };
+		F36DB5D7228D4ED1003C7907 /* RedBlackTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F36DB5D6228D4ED1003C7907 /* RedBlackTree.m */; };
 		F37F38BE22815D7A00D17189 /* JKRTimeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F37F38BC22815D7A00D17189 /* JKRTimeTool.m */; };
 		F3CB6B0D2280091600AEA7A8 /* AVLTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3CB6B0C2280091600AEA7A8 /* AVLTree.m */; };
 		F3CB6B10228041D900AEA7A8 /* BinaryTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3CB6B0F228041D900AEA7A8 /* BinaryTree.m */; };
@@ -34,6 +35,8 @@
 		052132E422788EF100AFCAE8 /* BinarySearchTree.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BinarySearchTree.m; sourceTree = "<group>"; };
 		0577BBFE22792DFF0040B157 /* LevelOrderPrinter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LevelOrderPrinter.h; sourceTree = "<group>"; };
 		0577BBFF22792DFF0040B157 /* LevelOrderPrinter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LevelOrderPrinter.m; sourceTree = "<group>"; };
+		F36DB5D5228D4ED1003C7907 /* RedBlackTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedBlackTree.h; sourceTree = "<group>"; };
+		F36DB5D6228D4ED1003C7907 /* RedBlackTree.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RedBlackTree.m; sourceTree = "<group>"; };
 		F37F38BC22815D7A00D17189 /* JKRTimeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRTimeTool.m; sourceTree = "<group>"; };
 		F37F38BD22815D7A00D17189 /* JKRTimeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRTimeTool.h; sourceTree = "<group>"; };
 		F3CB6B0B2280091600AEA7A8 /* AVLTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLTree.h; sourceTree = "<group>"; };
@@ -76,10 +79,20 @@
 				F37F38BF22815D7D00D17189 /* TimeTool */,
 				F37F38B822812E8000D17189 /* Printer */,
 				F37F38B522812E5E00D17189 /* BinaryTree */,
-				F37F38B622812E6C00D17189 /* BST */,
+				F37F38B622812E6C00D17189 /* BinarySearchTree */,
 				F37F38B722812E7600D17189 /* AVLTree */,
+				F36DB5D9228D4F0B003C7907 /* RedBlackTree */,
 			);
 			path = TreeDemo;
+			sourceTree = "<group>";
+		};
+		F36DB5D9228D4F0B003C7907 /* RedBlackTree */ = {
+			isa = PBXGroup;
+			children = (
+				F36DB5D5228D4ED1003C7907 /* RedBlackTree.h */,
+				F36DB5D6228D4ED1003C7907 /* RedBlackTree.m */,
+			);
+			name = RedBlackTree;
 			sourceTree = "<group>";
 		};
 		F37F38B522812E5E00D17189 /* BinaryTree */ = {
@@ -91,13 +104,13 @@
 			name = BinaryTree;
 			sourceTree = "<group>";
 		};
-		F37F38B622812E6C00D17189 /* BST */ = {
+		F37F38B622812E6C00D17189 /* BinarySearchTree */ = {
 			isa = PBXGroup;
 			children = (
 				052132E322788EF100AFCAE8 /* BinarySearchTree.h */,
 				052132E422788EF100AFCAE8 /* BinarySearchTree.m */,
 			);
-			name = BST;
+			name = BinarySearchTree;
 			sourceTree = "<group>";
 		};
 		F37F38B722812E7600D17189 /* AVLTree */ = {
@@ -187,6 +200,7 @@
 				052132E522788EF100AFCAE8 /* BinarySearchTree.m in Sources */,
 				F3CB6B0D2280091600AEA7A8 /* AVLTree.m in Sources */,
 				0577BC0022792DFF0040B157 /* LevelOrderPrinter.m in Sources */,
+				F36DB5D7228D4ED1003C7907 /* RedBlackTree.m in Sources */,
 				F3CB6B10228041D900AEA7A8 /* BinaryTree.m in Sources */,
 				052132DD22788EA600AFCAE8 /* main.m in Sources */,
 			);

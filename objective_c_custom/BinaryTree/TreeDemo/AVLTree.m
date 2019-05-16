@@ -69,28 +69,9 @@
                      e:(Node *)e
                      f:(Node *)f
                      g:(Node *)g {
-    d.parent = root.parent;
-    if (root.isLeftChild) root.parent.left = d;
-    else if (root.isRightChild) root.parent.right = d;
-    else _root = d;
-    
-    b.left = a;
-    if (a) a.parent = b;
-    b.right = c;
-    if (c) c.parent = b;
+    [super rotateWithRoot:root b:b c:c d:d e:e f:f];
     [self updateHeigthWithNode:b];
-    
-    f.left = e;
-    if (e) e.parent = f;
-    f.right = g;
-    if (g) g.parent = f;
     [self updateHeigthWithNode:f];
-    
-    d.left = b;
-    d.right = f;
-    b.parent = d;
-    f.parent = d;
-    
     [self updateHeigthWithNode:d];
 }
 
@@ -115,42 +96,8 @@
     }
 }
 
-- (void)rotateLeft:(Node *)grand {
-    Node *parent = grand.right;
-    Node *child = parent.left;
-    
-    grand.right = child;
-    parent.left = grand;
-    
-    [self afterRotateWithGrand:grand parent:parent child:child];
-}
-
-- (void)rotateRight:(Node *)grand {
-    Node *parent = grand.left;
-    Node *child = parent.right;
-    
-    grand.left = child;
-    parent.right = grand;
-    
-    [self afterRotateWithGrand:grand parent:parent child:child];
-}
-
 - (void)afterRotateWithGrand:(Node *)grand parent:(Node *)parent child:(Node *)child {
-    if (grand.isLeftChild) {
-        grand.parent.left = parent;
-    } else if (grand.isRightChild) {
-        grand.parent.right = parent;
-    } else {
-        _root = parent;
-    }
-    
-    if (child) {
-        child.parent = grand;
-    }
-    
-    parent.parent = grand.parent;
-    grand.parent = parent;
-    
+    [super afterRotateWithGrand:grand parent:parent child:child];
     [self updateHeigthWithNode:grand];
     [self updateHeigthWithNode:parent];
 }

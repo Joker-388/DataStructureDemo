@@ -93,7 +93,7 @@
         } else {
             node.parent.right = replacement;
         }
-        [self afterRemoveWithNode:node];
+        [self afterRemoveWithNode:replacement];
     } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
         _root = nil;
         [self afterRemoveWithNode:node];
@@ -130,6 +130,66 @@
         }
     }
     return nil;
+}
+
+#pragma mark - 左旋转一个节点
+- (void)rotateLeft:(Node *)grand {
+    Node *parent = grand.right;
+    Node *child = parent.left;
+    grand.right = child;
+    parent.left = grand;
+    [self afterRotateWithGrand:grand parent:parent child:child];
+}
+
+#pragma mark - 右旋转一个节点
+- (void)rotateRight:(Node *)grand {
+    Node *parent = grand.left;
+    Node *child = parent.right;
+    grand.left = child;
+    parent.right = grand;
+    [self afterRotateWithGrand:grand parent:parent child:child];
+}
+
+#pragma mark - 旋转后处理
+- (void)afterRotateWithGrand:(Node *)grand parent:(Node *)parent child:(Node *)child {
+    if (grand.isLeftChild) {
+        grand.parent.left = parent;
+    } else if (grand.isRightChild) {
+        grand.parent.right = parent;
+    } else {
+        _root = parent;
+    }
+    
+    if (child) {
+        child.parent = grand;
+    }
+    
+    parent.parent = grand.parent;
+    grand.parent = parent;
+}
+
+#pragma mark - 统一旋转
+- (void)rotateWithRoot:(Node *)root
+                     b:(Node *)b
+                     c:(Node *)c
+                     d:(Node *)d
+                     e:(Node *)e
+                     f:(Node *)f {
+    d.parent = root.parent;
+    if (root.isLeftChild) root.parent.left = d;
+    else if (root.isRightChild) root.parent.right = d;
+    else _root = d;
+    
+    b.right = c;
+    if (c) c.parent = b;
+    
+    f.left = e;
+    if (e) e.parent = f;
+    
+    d.left = b;
+    d.right = f;
+    b.parent = d;
+    f.parent = d;
 }
 
 @end
