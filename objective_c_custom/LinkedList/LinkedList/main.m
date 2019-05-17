@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SingleCircleLinkedList.h"
-
+#import "LinkedCircleList.h"
 
 void testSingleCircleLinkedLis() {
     SingleCircleLinkedList *linkList = [SingleCircleLinkedList new];
@@ -25,9 +25,25 @@ void testSingleCircleLinkedLis() {
     }
 }
 
+void testLinkedCircleList() {
+    LinkedCircleList *linkList = [LinkedCircleList new];
+    for (NSInteger i = 0; i < 8; i++) {
+        [linkList addObject:[NSNumber numberWithInteger:i + 1]];
+    }
+    NSLog(@"%@", linkList);
+    LinkedCircleListNode *node = linkList.first;
+    while (linkList.count) {
+        node = node.next;
+        node = node.next;
+        NSLog(@"%@", [linkList removeObject:node.element]);
+        NSLog(@"%@", linkList);
+        node = node.next;
+    }
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        testSingleCircleLinkedLis();
+        testLinkedCircleList();
     }
     return 0;
 }
