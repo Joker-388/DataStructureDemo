@@ -40,7 +40,9 @@ static BOOL const BLACK = true;
     
     // 添加的节点是根节点 或者 上溢出到达根节点
     if (!parent) {
-        printf("\n--- 染色不旋转 --- %s \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+        if (self.rotateBlock) {
+            printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+        }
         [self black:node];
         return;
     }
@@ -60,7 +62,9 @@ static BOOL const BLACK = true;
       R_2
      */
     if ([self isBlack:parent]) {
-        printf("\n--- 不需要平衡 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+        if (self.rotateBlock) {
+            printf("\n--- 不需要平衡 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+        }
         return;
     }
     
@@ -72,7 +76,9 @@ static BOOL const BLACK = true;
     
     // 叔父节点是红色的情况，B树节点上溢
     if ([self isRed:uncle]) {
-        printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+        if(self.rotateBlock) {
+            printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);            
+        }
         /*
          只需要处理染色就可以，不需要旋转
          叔父节点是红色
@@ -87,8 +93,9 @@ static BOOL const BLACK = true;
 
         [self black:parent];
         [self black:uncle];
-        
-        self.rotateBlock();
+        if(self.rotateBlock) {
+            self.rotateBlock();
+        }
         // 把祖父节点当作是新添加的节点
         [self afterAddWithNewNode:grand];
         return;
@@ -97,7 +104,9 @@ static BOOL const BLACK = true;
     // 叔父节点不是红色
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL
-            printf("\n--- LL --- \n\n");
+            if(self.rotateBlock) {
+                printf("\n--- LL --- \n\n");
+            }
             /*
              LL:
              叔父节点不是红色
@@ -127,7 +136,9 @@ static BOOL const BLACK = true;
              */
             [self black:parent];
         } else { // LR
-            printf("\n--- LR --- \n\n");
+            if(self.rotateBlock) {
+                printf("\n--- LR --- \n\n");
+            }
             /*
              LR:
              叔父节点不是红色
@@ -171,7 +182,9 @@ static BOOL const BLACK = true;
         [self rotateRight:grand];
     } else { // R
         if (node.isLeftChild) { // RL
-            printf("\n--- RL --- \n\n");
+            if(self.rotateBlock) {
+                printf("\n--- RL --- \n\n");
+            }
             /*
              RL:
              叔父节点不是红色
@@ -212,7 +225,9 @@ static BOOL const BLACK = true;
             [self black:node];
             [self rotateRight:parent];
         } else { // RR
-            printf("\n--- RR --- \n\n");
+            if(self.rotateBlock) {
+                printf("\n--- RR --- \n\n");
+            }
             /*
              RR:
              叔父节点不是红色RR

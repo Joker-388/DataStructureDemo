@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSInteger)count;
 - (NSInteger)indexOfObject:(nullable E)object;
+- (BOOL)containsObject:(nullable E)object;
 - (void)removeAllObjects;
 
 - (E)objectAtIndex:(NSInteger)index;

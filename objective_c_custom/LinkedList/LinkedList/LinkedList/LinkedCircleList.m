@@ -27,7 +27,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"<%@: %p>: %@ dealloc", self.className, self, self.element);
+//    NSLog(@"<%@: %p>: %@ dealloc", self.className, self, self.element);
 }
 
 - (NSString *)description {
@@ -152,6 +152,8 @@
 
 - (void)removeAllObjects {
     self.size = 0;
+    // 防止循环引用造成无法清空
+    self.last.next = nil;
     self.first = nil;
     self.last = nil;
 }
@@ -210,6 +212,10 @@
     }
     [string appendString:@"]"];
     return string;
+}
+
+- (BOOL)containsObject:(id)object {
+    return [self indexOfObject:object] != LINKED_LIST_ELEMETN_NOT_FOUND;
 }
 
 - (void)dealloc {

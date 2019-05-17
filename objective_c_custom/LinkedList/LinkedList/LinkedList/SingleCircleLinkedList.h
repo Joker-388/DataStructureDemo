@@ -40,6 +40,7 @@ static const NSInteger SINGLE_LINKED_LIST_ELEMETN_NOT_FOUND = -1;
 
 - (NSInteger)count;
 - (NSInteger)indexOfObject:(nullable E)object;
+- (BOOL)containsObject:(nullable E)object;
 - (void)removeAllObjects;
 
 - (E)objectAtIndex:(NSInteger)index;

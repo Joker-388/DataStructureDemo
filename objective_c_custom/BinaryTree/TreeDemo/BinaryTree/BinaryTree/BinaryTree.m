@@ -317,7 +317,7 @@ typedef void(^orderBlock)(id element);
 }
 
 - (void)dealloc {
-    NSLog(@"<%@: %p> dealloc", self.className, self);
+//    NSLog(@"<%@: %p> dealloc", self.className, self);
 }
 
 - (NSString *)description {

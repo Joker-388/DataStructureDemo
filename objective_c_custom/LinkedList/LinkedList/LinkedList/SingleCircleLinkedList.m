@@ -127,6 +127,10 @@
     return SINGLE_LINKED_LIST_ELEMETN_NOT_FOUND;
 }
 
+- (BOOL)containsObject:(id)object {
+    return [self indexOfObject:object] != SINGLE_LINKED_LIST_ELEMETN_NOT_FOUND;
+}
+
 - (NSInteger)count {
     return self.size;
 }
@@ -141,6 +145,11 @@
 }
 
 - (void)removeAllObjects {
+    // 防止循环引用造成无法清空
+    if(self.size > 1) {
+        SingleCircleLinkedListNode *lastNode = [self nodeWithIndex:self.size - 1];
+        lastNode.next = nil;
+    }
     self.size = 0;
     self.first = nil;
 }

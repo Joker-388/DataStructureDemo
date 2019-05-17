@@ -112,8 +112,8 @@
 		F3106EA3228E97F8005C15CB /* BinaryTree */ = {
 			isa = PBXGroup;
 			children = (
-				F3106EA4228E97F8005C15CB /* BinaryTree.m */,
 				F3106EAE228E97F8005C15CB /* BinaryTree.h */,
+				F3106EA4228E97F8005C15CB /* BinaryTree.m */,
 				F3106EA5228E97F8005C15CB /* BinarySearchTree */,
 			);
 			path = BinaryTree;
