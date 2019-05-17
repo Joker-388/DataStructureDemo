@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-static const NSInteger LINKEDLIST_ELEMETN_NOT_FOUND = -1;
+static const NSInteger LINKED_LIST_ELEMETN_NOT_FOUND = -1;
 
 NS_ASSUME_NONNULL_BEGIN
 

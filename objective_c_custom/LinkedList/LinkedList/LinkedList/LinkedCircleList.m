@@ -82,7 +82,7 @@
 
 - (id)removeObject:(id)object {
     NSInteger index = [self indexOfObject:object];
-    if (index == LINKEDLIST_ELEMETN_NOT_FOUND) {
+    if (index == LINKED_LIST_ELEMETN_NOT_FOUND) {
         return nil;
     } else {
         return [self removeObjectAtIndex:index];
@@ -134,7 +134,7 @@
             node = node.next;
         }
     }
-    return LINKEDLIST_ELEMETN_NOT_FOUND;
+    return LINKED_LIST_ELEMETN_NOT_FOUND;
 }
 
 - (NSInteger)count {

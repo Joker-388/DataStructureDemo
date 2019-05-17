@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static const NSInteger ELEMETN_NOT_FOUND = -1;
+static const NSInteger SINGLE_LINKED_LIST_ELEMETN_NOT_FOUND = -1;
 
 @interface SingleCircleLinkedListNode : NSObject
 
