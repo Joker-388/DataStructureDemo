@@ -15,6 +15,9 @@
 }
 
 #pragma mark - 添加一个新节点后平衡二叉树
+/*
+ 添加复杂度: O(logn)，仅需O(1)次旋转操作
+ */
 - (void)afterAddWithNewNode:(Node *)node {
     while ((node = node.parent)) {
         // 依次向上检查新添加节点的父节点是否平衡，如果是平衡状态，就更新整从新添加节点到根节点的所有节点的高度值
@@ -28,6 +31,9 @@
 }
 
 #pragma mark - 删除一个节点后平衡二叉树
+/*
+ 删除时旋转的复杂度: O(logn)，最多需要O(logn)次旋转
+ */
 - (void)afterRemoveWithNode:(Node *)node {
     while ((node = node.parent)) {
         if ([self isBalancedWithNode:node]) {

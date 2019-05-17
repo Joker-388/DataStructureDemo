@@ -12,6 +12,7 @@
 static BOOL const RED = false;
 static BOOL const BLACK = true;
 
+#pragma mark - 红黑树的性质
 /*
  1，节点 是 RED 或 BLACK
  2，根节点是 BLACK
@@ -29,7 +30,11 @@ static BOOL const BLACK = true;
  */
 
 
+#pragma mark - 添加一个新节点后平衡二叉树
 // 默认新添加的节点是红色节点
+/*
+ 添加时旋转的复杂度: O(logn)，仅需O(1)次旋转操作
+ */
 - (void)afterAddWithNewNode:(Node *)node {
     Node *parent = node.parent;
     
@@ -241,6 +246,11 @@ static BOOL const BLACK = true;
     }
 }
 
+#pragma mark - 删除一个节点后平衡二叉树
+/*
+ 删除时旋转的复杂度: O(logn)，最多需要O(1)次旋转
+ 经统计，红黑树的溢出递归次数很少，可以看成O(1)
+ */
 - (void)afterRemoveWithNode:(Node *)node {
     // 如果删除的节点是红色，或者用以取代删除节点的子节点是红色
     if ([self isRed:node]) {
