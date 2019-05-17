@@ -12,7 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class Node;
-typedef int(^compareBlock)(id e1, id e2);
 
 @interface BinaryTree<E> : NSObject<LevelOrderPrinterDelegate> {
 @protected
@@ -37,6 +36,11 @@ typedef int(^compareBlock)(id e1, id e2);
 - (NSMutableArray<E> *)inorderTraversal;
 /// 层序遍历
 - (NSMutableArray<E> *)levelOrderTraversal;
+
+
+/*
+ 翻转二叉树后，如果是二叉搜索树，需要重新设置比较规则。
+ */
 
 /// 翻转二叉树 递归
 - (void)invertByRecursion;

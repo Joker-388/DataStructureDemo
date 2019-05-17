@@ -45,30 +45,28 @@
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL 右旋转 grand
             NSLog(@"统一旋转:LL G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
-            [self rotateWithRoot:grand a:node.left b:node c:node.right d:parent e:parent.right f:grand g:grand.right];
+            [self rotateWithRoot:grand b:node c:node.right d:parent e:parent.right f:grand];
         } else { // LR
             NSLog(@"统一旋转:LR G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
-            [self rotateWithRoot:grand a:parent.left b:parent c:node.left d:node e:node.right f:grand g:grand.right];
+            [self rotateWithRoot:grand b:parent c:node.left d:node e:node.right f:grand];
         }
     } else { // R
         if (node.isLeftChild) { // RL
             NSLog(@"统一旋转:RL G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
-            [self rotateWithRoot:grand a:grand.left b:grand c:node.left d:node e:node.right f:parent g:parent.right];
+            [self rotateWithRoot:grand b:grand c:node.left d:node e:node.right f:parent];
         } else { // RR 左旋转 grand
             NSLog(@"统一旋转:RR G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
-            [self rotateWithRoot:grand a:grand.left b:grand c:parent.left d:parent e:node.left f:node g:node.right];
+            [self rotateWithRoot:grand b:grand c:parent.left d:parent e:node.left f:node];
         }
     }
 }
 
 - (void)rotateWithRoot:(Node *)root
-                     a:(Node *)a
                      b:(Node *)b
                      c:(Node *)c
                      d:(Node *)d
                      e:(Node *)e
-                     f:(Node *)f
-                     g:(Node *)g {
+                     f:(Node *)f {
     [super rotateWithRoot:root b:b c:c d:d e:e f:f];
     [self updateHeigthWithNode:b];
     [self updateHeigthWithNode:f];

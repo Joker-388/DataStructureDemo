@@ -24,6 +24,8 @@ typedef int(^compareBlock)(id e1, id e2);
 + (instancetype)new __unavailable;
 - (instancetype)initWithCompare:(_Nonnull compareBlock)compare;
 
+@property (nonatomic, strong) void(^rotateBlock)(void);
+
 /// 添加元素
 - (void)add:(E)element;
 /// 删除元素

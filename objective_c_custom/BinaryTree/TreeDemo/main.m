@@ -12,6 +12,8 @@
 #import "AVLTree.h"
 #import "RedBlackTree.h"
 
+
+
 NSString * getRandomStr() {
     char data[6];
     for (int i = 0; i < 6; i++) data[i] = (char)((i ? 'a' : 'A') + (arc4random_uniform(26)));
@@ -127,36 +129,40 @@ void testRedBlackTree() {
     BinarySearchTree<NSNumber *> *rb = [[RedBlackTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
         return e1.intValue - e2.intValue;
     }];
+
+    int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20};
     
-    BinarySearchTree<NSNumber *> *bst = [[BinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-        return e1.intValue - e2.intValue;
-    }];
-    
-    int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40};
     NSMutableArray *numbers = [NSMutableArray array];
     for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
         printf("%d ", nums[i]);
         [numbers addObject:[NSNumber numberWithInt:nums[i]]];
     }
+    
+    
+    __weak typeof(rb) weakrb = rb;
+    rb.rotateBlock = ^{
+        printf("\n%s\n\n", [[LevelOrderPrinter printStringWithTree:weakrb] UTF8String]);
+        printf("-------------------------------------------------------------------\n\n\n");
+    };
+    
     printf("\n--- Start Add ---\n\n");
     for (NSNumber *number in numbers) {
+        printf("添加元素: %d\n\n", number.intValue);
         [rb add:number];
-        [bst add:number];
-        printf("Add: %d\n\n", number.intValue);
-        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
-        printf("--- RedBlack ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
+        printf("--- 最终平衡后结果 ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
     
-    for (NSNumber *number in numbers) {
-        [rb remove:number];
-        [bst remove:number];
-        printf("Remove: %d\n\n", number.intValue);
-        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
-        printf("--- RedBlack ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
-        printf("-------------------------------------------------------------------\n\n\n");
-    }
-    
+//    for (NSNumber *number in numbers) {
+//        [rb remove:number];
+//        [bst remove:number];
+//    
+//        printf("Remove: %d\n\n", number.intValue);
+//        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
+//        printf("--- RedBlack ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
+//        printf("-------------------------------------------------------------------\n\n\n");
+//    }
+//    
 }
 
 int main(int argc, const char * argv[]) {

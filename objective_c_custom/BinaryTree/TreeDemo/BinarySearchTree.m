@@ -8,12 +8,29 @@
 
 #import "BinarySearchTree.h"
 
+@interface BinarySearchTree ()
+
+@property (nonatomic, assign) BOOL hasInvert;
+
+@end
+
 @implementation BinarySearchTree
 
 - (instancetype)initWithCompare:(compareBlock)compare {
     self = [super init];
     _compareBlock = compare;
     return self;
+}
+
+#pragma mark - 翻转后记录是否反转，用于维持翻转后的二叉搜索树能够正确的搜索节点
+- (void)invertByIteration {
+    [super invertByIteration];
+    self.hasInvert = !self.hasInvert;
+}
+
+- (void)invertByRecursion {
+    [super invertByIteration];
+    self.hasInvert = !self.hasInvert;
 }
 
 #pragma mark - 添加元素
@@ -24,6 +41,8 @@
         Node *newNode = [self createNodeWithElement:element parent:nil];
         _root = newNode;
         _size++;
+        printf("\n--- 平衡前 --- \n");
+        self.rotateBlock();
         [self afterAddWithNewNode:newNode];
         return;
     }
@@ -33,6 +52,7 @@
     int cmp = 0;
     while (node) {
         cmp = _compareBlock(element, node.element);
+        if (self.hasInvert) cmp = -cmp;
         parent = node;
         if (cmp < 0) {
             node = node.left;
@@ -50,6 +70,8 @@
     } else {
         parent.right = newNode;
     }
+    printf("\n--- 平衡前 --- \n");
+    self.rotateBlock();
     [self afterAddWithNewNode:newNode];
     _size++;
 }
@@ -93,9 +115,13 @@
         } else {
             node.parent.right = replacement;
         }
+        printf("\n--- 平衡前 --- \n");
+        self.rotateBlock();
         [self afterRemoveWithNode:replacement];
     } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
         _root = nil;
+        printf("\n--- 平衡前 --- \n");
+        self.rotateBlock();
         [self afterRemoveWithNode:node];
     } else { // 被删除的节点是叶子节点且不是根节点
         if (node == node.parent.left) {
@@ -103,6 +129,8 @@
         } else {
             node.parent.right = nil;
         }
+        printf("\n--- 平衡前 --- \n");
+        self.rotateBlock();
         [self afterRemoveWithNode:node];
     }
 }
@@ -121,6 +149,7 @@
     Node *node = _root;
     while (node) {
         int cmp = _compareBlock(element, node.element);
+        if (self.hasInvert) cmp = -cmp;
         if (!cmp) {
             return node;
         } else if (cmp > 0) {
@@ -134,6 +163,7 @@
 
 #pragma mark - 左旋转一个节点
 - (void)rotateLeft:(Node *)grand {
+    printf("\n--- 左旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);
     Node *parent = grand.right;
     Node *child = parent.left;
     grand.right = child;
@@ -143,6 +173,7 @@
 
 #pragma mark - 右旋转一个节点
 - (void)rotateRight:(Node *)grand {
+    printf("\n--- 右旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);
     Node *parent = grand.left;
     Node *child = parent.right;
     grand.left = child;
@@ -166,6 +197,8 @@
     
     parent.parent = grand.parent;
     grand.parent = parent;
+    
+    self.rotateBlock();
 }
 
 #pragma mark - 统一旋转
