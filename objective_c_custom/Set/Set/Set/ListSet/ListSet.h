@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 使用双向循环链表实现的集合
 @interface ListSet : Set
 
 @end

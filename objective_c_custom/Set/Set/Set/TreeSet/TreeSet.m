@@ -11,6 +11,9 @@
 
 @interface TreeSet ()
 
+/*
+ 二叉搜索树存在限制
+ */
 @property (nonatomic, strong) RedBlackTree *tree;
 
 @end
@@ -25,10 +28,18 @@
     [self.tree clear];
 }
 
+/*
+ 复杂度：O(logn)
+ 等同于红黑树的搜索
+ */
 - (BOOL)containsObject:(id)object {
     return [self.tree contains:object];
 }
 
+/*
+ 复杂度：O(logn)
+ 等同于红黑树的添加
+ */
 - (void)addObject:(id)object {
     if (!object) {
         return;
@@ -36,6 +47,10 @@
     [self.tree add:object];
 }
 
+/*
+ 复杂度：O(logn)
+ 等同于红黑树的移除
+ */
 - (void)removeObject:(id)object {
     [self.tree remove:object];
 }

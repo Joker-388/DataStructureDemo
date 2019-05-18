@@ -25,10 +25,18 @@
     [self.list removeAllObjects];
 }
 
+/*
+ 复杂度：O(N)
+ */
 - (BOOL)containsObject:(id)object {
     return [self.list containsObject:object];
 }
 
+/*
+ 复杂度：O(N)
+ 搜索：O(n)
+ 添加：O(1)
+ */
 - (void)addObject:(id)object {
     if (!object) {
         return;
@@ -41,6 +49,10 @@
     }
 }
 
+/*
+ 复杂度：O(n)
+ 删除内部需要先搜索：O(n)
+ */
 - (void)removeObject:(id)object {
     [self.list removeObject:object];
 }

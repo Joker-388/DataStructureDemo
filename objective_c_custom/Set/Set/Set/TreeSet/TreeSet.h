@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 使用红黑树实现的集合
 @interface TreeSet : Set
 
 @end

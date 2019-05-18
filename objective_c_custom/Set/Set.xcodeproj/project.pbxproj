@@ -71,6 +71,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0599A8F1228FDC39009A4CA9 /* Set */ = {
+			isa = PBXGroup;
+			children = (
+				0599A8F2228FDC47009A4CA9 /* Interface */,
+				0599A8F3228FDC58009A4CA9 /* ListSet */,
+				0599A8F4228FDC5F009A4CA9 /* TreeSet */,
+			);
+			path = Set;
+			sourceTree = "<group>";
+		};
+		0599A8F2228FDC47009A4CA9 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				F3106F7E228EB70D005C15CB /* Set.h */,
+				F3106F7F228EB70D005C15CB /* Set.m */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		0599A8F3228FDC58009A4CA9 /* ListSet */ = {
+			isa = PBXGroup;
+			children = (
+				F3106FA1228EBB7D005C15CB /* ListSet.h */,
+				F3106FA2228EBB7D005C15CB /* ListSet.m */,
+			);
+			path = ListSet;
+			sourceTree = "<group>";
+		};
+		0599A8F4228FDC5F009A4CA9 /* TreeSet */ = {
+			isa = PBXGroup;
+			children = (
+				F3106FA7228EC38C005C15CB /* TreeSet.h */,
+				F3106FA8228EC38C005C15CB /* TreeSet.m */,
+			);
+			path = TreeSet;
+			sourceTree = "<group>";
+		};
 		F3106F44228EB5A2005C15CB = {
 			isa = PBXGroup;
 			children = (
@@ -94,12 +131,7 @@
 				F3106F88228EBA1E005C15CB /* BinaryTree */,
 				F3106F81228EBA10005C15CB /* LinkedList */,
 				F3106F50228EB5A2005C15CB /* main.m */,
-				F3106F7E228EB70D005C15CB /* Set.h */,
-				F3106F7F228EB70D005C15CB /* Set.m */,
-				F3106FA1228EBB7D005C15CB /* ListSet.h */,
-				F3106FA2228EBB7D005C15CB /* ListSet.m */,
-				F3106FA7228EC38C005C15CB /* TreeSet.h */,
-				F3106FA8228EC38C005C15CB /* TreeSet.m */,
+				0599A8F1228FDC39009A4CA9 /* Set */,
 			);
 			path = Set;
 			sourceTree = "<group>";
@@ -148,9 +180,9 @@
 		F3106F8E228EBA1E005C15CB /* BinarySearchTree */ = {
 			isa = PBXGroup;
 			children = (
+				F3106F93228EBA1E005C15CB /* BinarySearchTree.h */,
 				F3106F8F228EBA1E005C15CB /* BinarySearchTree.m */,
 				F3106F90228EBA1E005C15CB /* RedBlackTree */,
-				F3106F93228EBA1E005C15CB /* BinarySearchTree.h */,
 				F3106F94228EBA1E005C15CB /* AVLTree */,
 			);
 			path = BinarySearchTree;
