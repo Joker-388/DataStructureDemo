@@ -38,7 +38,7 @@
 
 @interface LinkedCircleList ()
 
-@property (nonatomic, assign) NSInteger size;
+@property (nonatomic, assign) NSUInteger size;
 
 @end
 
@@ -48,7 +48,7 @@
     [self addObject:object addIndex:self.size];
 }
 
-- (void)addObject:(id)object addIndex:(NSInteger)index {
+- (void)addObject:(id)object addIndex:(NSUInteger)index {
     [self rangeCheckForAddWithIndex:index];
     // index == size 相当于 插入到表尾 或者 空链表添加第一个节点
     if (self.size == index) {
@@ -119,7 +119,7 @@
 - (NSInteger)indexOfObject:(id)object {
     if (!object) {
         LinkedCircleListNode *node = self.first;
-        for (int i = 0; i < self.size; i++) {
+        for (NSUInteger i = 0; i < self.size; i++) {
             if (!node.element) {
                 return i;
             }
@@ -127,7 +127,7 @@
         }
     } else {
         LinkedCircleListNode *node = self.first;
-        for (int i = 0; i < self.size; i++) {
+        for (NSUInteger i = 0; i < self.size; i++) {
             if ([object isEqual:node.element]) {
                 return i;
             }
@@ -137,15 +137,15 @@
     return LINKED_LIST_ELEMETN_NOT_FOUND;
 }
 
-- (NSInteger)count {
+- (NSUInteger)count {
     return self.size;
 }
 
-- (id)objectAtIndex:(NSInteger)index {
+- (id)objectAtIndex:(NSUInteger)index {
     return [self nodeWithIndex:index].element;
 }
 
-- (void)replaceObjectAtIndex:(NSInteger)index withObject:(id)object {
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object {
     LinkedCircleListNode *node = [self nodeWithIndex:index];
     node.element = object;
 }

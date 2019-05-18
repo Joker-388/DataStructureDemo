@@ -126,9 +126,7 @@ void testAVLTree() {
 }
 
 void testRedBlackTree() {
-    BinarySearchTree<NSNumber *> *rb = [[RedBlackTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-        return e1.intValue - e2.intValue;
-    }];
+    BinarySearchTree<NSNumber *> *rb = [RedBlackTree new];
 
     int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20};
     

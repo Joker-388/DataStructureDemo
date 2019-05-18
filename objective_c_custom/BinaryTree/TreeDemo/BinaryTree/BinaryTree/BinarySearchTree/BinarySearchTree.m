@@ -16,7 +16,7 @@
 
 @implementation BinarySearchTree
 
-- (instancetype)initWithCompare:(compareBlock)compare {
+- (instancetype)initWithCompare:(jkrbinarytree_compareBlock)compare {
     self = [super init];
     _compareBlock = compare;
     return self;
@@ -53,7 +53,7 @@
     Node *node = _root;
     int cmp = 0;
     while (node) {
-        cmp = _compareBlock(object, node.element);
+        cmp = [self compareWithValue1:object value2:node.element];
         if (self.hasInvert) cmp = -cmp;
         parent = node;
         if (cmp < 0) {
@@ -149,6 +149,15 @@
     
 }
 
+#pragma mark - 元素比较
+- (int)compareWithValue1:(id)value1 value2:(id)value2 {
+    if (_compareBlock) {
+        return _compareBlock(value1, value2);
+    } else {
+        return [value1 compare:value2];
+    }
+}
+
 #pragma mark - 是否包含元素
 - (BOOL)containsObject:(id)object  {
     return [self nodeWithObject:object] != nil;
@@ -158,7 +167,7 @@
 - (Node *)nodeWithObject:(id)object {
     Node *node = _root;
     while (node) {
-        int cmp = _compareBlock(object, node.element);
+        int cmp = [self compareWithValue1:object value2:node.element];
         if (self.hasInvert) cmp = -cmp;
         if (!cmp) {
             return node;

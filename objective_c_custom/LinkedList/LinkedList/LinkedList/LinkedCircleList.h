@@ -25,27 +25,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface LinkedCircleList<E> : NSObject
+@interface LinkedCircleList<ObjectType> : NSObject
 
 @property (nonatomic, strong, nullable) LinkedCircleListNode *first;
 @property (nonatomic, strong, nullable) LinkedCircleListNode *last;
 
-- (void)addObject:(nullable E)object;
-- (void)addObject:(nullable E)object addIndex:(NSInteger)index;
+- (void)addObject:(nullable ObjectType)object;
+- (void)addObject:(nullable ObjectType)object addIndex:(NSUInteger)index;
 
-- (E)removeObjectAtIndex:(NSInteger)index;
-- (E)removeObject:(nullable E)object;
+- (ObjectType)removeObjectAtIndex:(NSInteger)index;
+- (ObjectType)removeObject:(nullable ObjectType)object;
 
-- (E)firstObject;
+- (ObjectType)firstObject;
 - (void)removeLastObject;
 
-- (NSInteger)count;
-- (NSInteger)indexOfObject:(nullable E)object;
-- (BOOL)containsObject:(nullable E)object;
+- (NSUInteger)count;
+- (NSInteger)indexOfObject:(nullable ObjectType)object;
+- (BOOL)containsObject:(nullable ObjectType)object;
 - (void)removeAllObjects;
 
-- (E)objectAtIndex:(NSInteger)index;
-- (void)replaceObjectAtIndex:(NSInteger)index withObject:(E)object;
+- (ObjectType)objectAtIndex:(NSUInteger)index;
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(ObjectType)object;
 
 - (void)insertValue:(id)value inPropertyWithKey:(NSString *)key __unavailable;
 - (void)insertValue:(id)value atIndex:(NSUInteger)index inPropertyWithKey:(NSString *)key __unavailable;
