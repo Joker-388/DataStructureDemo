@@ -28,7 +28,7 @@ static const NSInteger SINGLE_LINKED_LIST_ELEMETN_NOT_FOUND = -1;
 
 @end
 
-
+/// 单向循环链表
 @interface SingleCircleLinkedList<ObjectType> : NSObject
 
 /// 头节点

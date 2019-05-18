@@ -108,7 +108,7 @@ void testAVLTree() {
         return e1.intValue - e2.intValue;
     }];
     
-    int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40, 25, 46, 23, 10, 41, 11, 1, 24, 16, 30, 21, 22, 8, 50, 28, 48, 12, 31, 35, 39, 14, 5, 47, 42, 15, 7, 18, 33, 36, 20, 44, 29, 49};
+    int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40, 25, 46, 23, 10, 41, 11, 1, 24};
     NSMutableArray *numbers = [NSMutableArray array];
     for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
         printf("%d ", nums[i]);
@@ -119,7 +119,7 @@ void testAVLTree() {
         [avl addObject:number];
         [bst addObject:number];
         printf("Add: %d\n\n", number.intValue);
-        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
+        printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
         printf("--- AVL ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
@@ -128,7 +128,7 @@ void testAVLTree() {
 void testRedBlackTree() {
     BinarySearchTree<NSNumber *> *rb = [RedBlackTree new];
 
-    int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20};
+    int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20,52,60};
     
     NSMutableArray *numbers = [NSMutableArray array];
     for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
@@ -151,12 +151,12 @@ void testRedBlackTree() {
         printf("-------------------------------------------------------------------\n\n\n");
     }
     
-    for (NSNumber *number in numbers) {
-        printf("Remove: %d\n\n", number.intValue);
-        [rb removeObject:number];
-        printf("--- 最终平衡后结果 ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
-        printf("-------------------------------------------------------------------\n\n\n");
-    }
+//    for (NSNumber *number in numbers) {
+//        printf("Remove: %d\n\n", number.intValue);
+//        [rb removeObject:number];
+//        printf("--- 最终平衡后结果 ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
+//        printf("-------------------------------------------------------------------\n\n\n");
+//    }
 }
 
 int main(int argc, const char * argv[]) {

@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+/// 双向循环链表
 @interface LinkedCircleList<ObjectType> : NSObject
 
 /// 头节点
