@@ -10,8 +10,8 @@
 
 @implementation AVLTree
 
-- (Node *)createNodeWithElement:(id)element parent:(Node *)parent {
-    return [[AVLNode alloc] initWithWithElement:element parent:parent];
+- (Node *)createNodeWithObject:(id)object parent:(Node *)parent {
+    return [[AVLNode alloc] initWithWithElement:object parent:parent];
 }
 
 #pragma mark - 添加一个新节点后平衡二叉树

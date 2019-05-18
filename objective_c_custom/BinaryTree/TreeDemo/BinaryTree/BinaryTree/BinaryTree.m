@@ -13,30 +13,30 @@ typedef void(^orderBlock)(id element);
 @implementation BinaryTree
 
 #pragma mark - 节点个数
-- (NSUInteger)size {
+- (NSUInteger)count {
     return _size;
 }
 
 #pragma mark - 二叉树是否为空
 - (BOOL)isEmpty {
-    return self.size == 0;
+    return _size == 0;
 }
 
 #pragma mark - 清空二叉树
-- (void)clear {
+- (void)removeAllObjects {
     _root = nil;
     _size = 0;
 }
 
 #pragma mark - 二叉树高度
-- (NSInteger)height {
-    NSInteger height = 0;
+- (NSUInteger)height {
+    NSUInteger height = 0;
     if (_root) {
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:_root];
         while (queue.count) {
             height++;
-            for (NSInteger i = 0, n = queue.count; i < n; i++) {
+            for (NSUInteger i = 0, n = queue.count; i < n; i++) {
                 Node *node = queue.firstObject;
                 [queue removeObjectAtIndex:0];
                 if (node.left) [queue addObject:node.left];
@@ -155,7 +155,7 @@ typedef void(^orderBlock)(id element);
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:node];
         while (queue.count) {
-            for (NSInteger i = 0, n = queue.count; i < n; i++) {
+            for (NSUInteger i = 0, n = queue.count; i < n; i++) {
                 Node *n = [queue firstObject];
                 block(n.element);
                 [queue removeObjectAtIndex:0];
@@ -194,7 +194,7 @@ typedef void(^orderBlock)(id element);
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:root];
         while (queue.count) {
-            for (NSInteger i = 0, n = queue.count; i < n; i++) {
+            for (NSUInteger i = 0, n = queue.count; i < n; i++) {
                 Node *node = [queue firstObject];
                 Node *tmp = node.left;
                 node.left = node.right;
@@ -274,11 +274,11 @@ typedef void(^orderBlock)(id element);
 }
 
 #pragma mark - 创建节点
-- (Node *)createNodeWithElement:(id)element parent:(Node *)parent {
+- (Node *)createNodeWithObject:(id)object parent:(Node *)parent {
     Node *node = [[Node alloc] init];
-    node.element = element;
+    node.element = object;
     node.parent = parent;
-    return node;;
+    return node;
 }
 
 #pragma mark - dealloc

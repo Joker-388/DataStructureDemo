@@ -29,7 +29,7 @@ void testBinarySearchTree() {
     
     NSArray<NSNumber *> *numbers = @[@7,@4,@2,@1,@3,@5,@6,@9,@8,@11,@10,@12];
     for (NSNumber *number in numbers) {
-        [tree add:number];
+        [tree addObject:number];
     }
     /// 打印二叉树
     NSLog(@"\n-------- 原二叉树 --------");
@@ -81,7 +81,7 @@ void testBinarySearchTree() {
     
     NSLog(@"\n二叉树高度: %zd", tree.height);
     
-    NSLog(@"\n二叉树节点个数: %zd", tree.size);
+    NSLog(@"\n二叉树节点个数: %zd", tree.count);
     
     /// 前序 7 4 2 1 3 5 9 8 11 10 12
     NSLog(@"\n前序 %@", tree.preorderTraversal);
@@ -96,7 +96,7 @@ void testBinarySearchTree() {
     NSLog(@"\n层序 %@", tree.levelOrderTraversal);
     
     /// 清空
-    [tree clear];
+    [tree removeAllObjects];
 }
 
 void testAVLTree() {
@@ -116,8 +116,8 @@ void testAVLTree() {
     }
     printf("\n--- Start Add ---\n\n");
     for (NSNumber *number in numbers) {
-        [avl add:number];
-        [bst add:number];
+        [avl addObject:number];
+        [bst addObject:number];
         printf("Add: %d\n\n", number.intValue);
         //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
         printf("--- AVL ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String]);
@@ -148,26 +148,24 @@ void testRedBlackTree() {
     printf("\n--- Start Add ---\n\n");
     for (NSNumber *number in numbers) {
         printf("添加元素: %d\n\n", number.intValue);
-        [rb add:number];
+        [rb addObject:number];
         printf("--- 最终平衡后结果 ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
     
-//    for (NSNumber *number in numbers) {
-//        [rb remove:number];
-//        [bst remove:number];
-//    
-//        printf("Remove: %d\n\n", number.intValue);
-//        //            printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:avl] UTF8String], [[LevelOrderPrinter printStringWithTree:bst] UTF8String]);
-//        printf("--- RedBlack ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
-//        printf("-------------------------------------------------------------------\n\n\n");
-//    }
-//    
+    for (NSNumber *number in numbers) {
+        printf("Remove: %d\n\n", number.intValue);
+        [rb removeObject:number];
+        printf("--- 最终平衡后结果 ---\n%s\n\n", [[LevelOrderPrinter printStringWithTree:rb] UTF8String]);
+        printf("-------------------------------------------------------------------\n\n\n");
+    }
 }
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         testRedBlackTree();
+//        testAVLTree();
+//        testBinarySearchTree();
     }
     
     return 0;

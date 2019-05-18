@@ -20,14 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 /// 节点个数
-- (NSUInteger)size;
+- (NSUInteger)count;
 /// 二叉树是否为空
 - (BOOL)isEmpty;
 /// 清空二叉树
-- (void)clear;
+- (void)removeAllObjects;;
 /// 二叉树高度
-- (NSInteger)height;
-
+- (NSUInteger)height;
 /// 前序遍历
 - (NSMutableArray<E> *)preorderTraversal;
 /// 后序遍历
@@ -36,24 +35,27 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableArray<E> *)inorderTraversal;
 /// 层序遍历
 - (NSMutableArray<E> *)levelOrderTraversal;
-
-
-/*
- 翻转二叉树后，如果是二叉搜索树，需要重新设置比较规则。
- */
-
 /// 翻转二叉树 递归
 - (void)invertByRecursion;
 /// 翻转二叉树 迭代
 - (void)invertByIteration;
-
 /// 前驱节点
 - (Node *)predecessorWithNode:(Node *)node;
 /// 后继节点
 - (Node *)successorWithNode:(Node *)node;
-
 /// 创建一个节点
-- (Node *)createNodeWithElement:(nonnull id)element parent:(nullable Node *)parent;
+- (Node *)createNodeWithObject:(nonnull id)object parent:(nullable Node *)parent;
+
+- (void)insertValue:(id)value inPropertyWithKey:(NSString *)key __unavailable;
+- (void)insertValue:(id)value atIndex:(NSUInteger)index inPropertyWithKey:(NSString *)key __unavailable;
+- (void)removeValueAtIndex:(NSUInteger)index fromPropertyWithKey:(NSString *)key __unavailable;
+- (void)addObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(nullable void *)context __unavailable;
+- (void)removeObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath __unavailable;
+- (void)removeObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath context:(nullable void *)context __unavailable;
+- (id)replacementObjectForCoder:(NSCoder *)aCoder __unavailable;
+- (id)replacementObjectForKeyedArchiver:(NSKeyedArchiver *)archiver __unavailable;
+- (void)replaceValueAtIndex:(NSUInteger)index inPropertyWithKey:(NSString *)key withValue:(id)value __unavailable;
+- (BOOL)respondsToSelector:(SEL)aSelector __unavailable;
 
 @end
 

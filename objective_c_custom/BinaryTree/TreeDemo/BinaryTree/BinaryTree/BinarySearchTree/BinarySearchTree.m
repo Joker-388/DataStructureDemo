@@ -34,11 +34,11 @@
 }
 
 #pragma mark - 添加元素
-- (void)add:(id)element {
-    [self elementNotNullCheck:element];
+- (void)addObject:(id)object {
+    [self elementNotNullCheck:object];
     
     if (!_root) {
-        Node *newNode = [self createNodeWithElement:element parent:nil];
+        Node *newNode = [self createNodeWithObject:object parent:nil];
         _root = newNode;
         _size++;
         if(self.rotateBlock) {
@@ -53,7 +53,7 @@
     Node *node = _root;
     int cmp = 0;
     while (node) {
-        cmp = _compareBlock(element, node.element);
+        cmp = _compareBlock(object, node.element);
         if (self.hasInvert) cmp = -cmp;
         parent = node;
         if (cmp < 0) {
@@ -61,12 +61,12 @@
         } else if (cmp > 0) {
             node = node.right;
         } else {
-            node.element = element;
+            node.element = object;
             return;
         }
     }
     
-    Node *newNode = [self createNodeWithElement:element parent:parent];
+    Node *newNode = [self createNodeWithObject:object parent:parent];
     if (cmp < 0) {
         parent.left = newNode;
     } else {
@@ -91,8 +91,8 @@
 }
 
 #pragma mark - 删除元素
-- (void)remove:(id)element {
-    [self removeWithNode:[self nodeWithElement:element]];
+- (void)removeObject:(id)object {
+    [self removeWithNode:[self nodeWithObject:object]];
 }
 
 #pragma mark - 删除节点
@@ -150,15 +150,15 @@
 }
 
 #pragma mark - 是否包含元素
-- (BOOL)contains:(id)element {
-    return [self nodeWithElement:element] != nil;
+- (BOOL)containsObject:(id)object  {
+    return [self nodeWithObject:object] != nil;
 }
 
 #pragma mark - 通过元素获取对应节点
-- (Node *)nodeWithElement:(id)element {
+- (Node *)nodeWithObject:(id)object {
     Node *node = _root;
     while (node) {
-        int cmp = _compareBlock(element, node.element);
+        int cmp = _compareBlock(object, node.element);
         if (self.hasInvert) cmp = -cmp;
         if (!cmp) {
             return node;

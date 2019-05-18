@@ -27,17 +27,17 @@ typedef int(^compareBlock)(id e1, id e2);
 @property (nonatomic, strong) void(^rotateBlock)(void);
 
 /// 添加元素
-- (void)add:(E)element;
+- (void)addObject:(nullable E)object;
 /// 删除元素
-- (void)remove:(E)element;
+- (void)removeObject:(E)object;
 /// 是否包含元素
-- (BOOL)contains:(E)element;
+- (BOOL)containsObject:(nullable E)object;
 /// 添加节点后的处理
 - (void)afterAddWithNewNode:(Node *)node;
 /// 删除节点后的处理
 - (void)afterRemoveWithNode:(Node *)node;
 /// 通过元素获取对应节点
-- (Node *)nodeWithElement:(id)element;
+- (Node *)nodeWithObject:(id)object;
 /// 删除节点
 - (void)removeWithNode:(Node *)node;
 /// 左旋转一个节点

@@ -21,11 +21,11 @@
 @implementation TreeSet
 
 - (NSUInteger)count {
-    return self.tree.size;
+    return self.tree.count;
 }
 
 - (void)removeAllObjects {
-    [self.tree clear];
+    [self.tree removeAllObjects];
 }
 
 /*
@@ -33,7 +33,7 @@
  等同于红黑树的搜索
  */
 - (BOOL)containsObject:(id)object {
-    return [self.tree contains:object];
+    return [self.tree containsObject:object];
 }
 
 /*
@@ -44,7 +44,7 @@
     if (!object) {
         return;
     }
-    [self.tree add:object];
+    [self.tree addObject:object];
 }
 
 /*
@@ -52,7 +52,7 @@
  等同于红黑树的移除
  */
 - (void)removeObject:(id)object {
-    [self.tree remove:object];
+    [self.tree removeObject:object];
 }
 
 - (NSMutableArray<id> *)traversal {

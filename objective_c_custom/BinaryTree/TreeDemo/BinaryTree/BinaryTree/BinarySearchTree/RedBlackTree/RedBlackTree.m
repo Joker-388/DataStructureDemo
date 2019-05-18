@@ -379,8 +379,8 @@ static BOOL const BLACK = true;
 }
 
 #pragma mark - 创建一个红黑节点
-- (Node *)createNodeWithElement:(id)element parent:(Node *)parent {
-    return [[RedBlackNode alloc] initWithElement:element parent:parent];
+- (Node *)createNodeWithObject:(id)object parent:(Node *)parent {
+    return [[RedBlackNode alloc] initWithElement:object parent:parent];
 }
 
 @end
