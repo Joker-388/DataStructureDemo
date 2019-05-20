@@ -1,16 +1,22 @@
 //
-//  BinaryTree.m
+//  JKRBinaryTree.m
 //  TreeDemo
 //
 //  Created by Joker on 2019/5/6.
 //  Copyright © 2019 Lucky. All rights reserved.
 //
 
-#import "BinaryTree.h"
+#import "JKRBinaryTree.h"
+#import "LevelOrderPrinter.h"
+#import "JKRBinaryTreeNode.h"
 
 typedef void(^orderBlock)(id element);
 
-@implementation BinaryTree
+@interface JKRBinaryTree ()<LevelOrderPrinterDelegate>
+
+@end
+
+@implementation JKRBinaryTree
 
 #pragma mark - 节点个数
 - (NSUInteger)size {
@@ -37,7 +43,7 @@ typedef void(^orderBlock)(id element);
         while (queue.count) {
             height++;
             for (NSInteger i = 0, n = queue.count; i < n; i++) {
-                Node *node = queue.firstObject;
+                JKRBinaryTreeNode *node = queue.firstObject;
                 [queue removeObjectAtIndex:0];
                 if (node.left) [queue addObject:node.left];
                 if (node.right) [queue addObject:node.right];
@@ -56,7 +62,7 @@ typedef void(^orderBlock)(id element);
     return elements;
 }
 
-- (void)preorderTraversal:(Node *)node block:(orderBlock)block{
+- (void)preorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block{
     //    if (node) {
     //        block(node.element);
     //        [self preOrderTraversal:node.left block:block];
@@ -66,7 +72,7 @@ typedef void(^orderBlock)(id element);
         NSMutableArray *stack = [NSMutableArray array];
         [stack addObject:node];
         while (stack.count) {
-            Node *n = [stack lastObject];
+            JKRBinaryTreeNode *n = [stack lastObject];
             block(n.element);
             [stack removeLastObject];
             if (n.right) {
@@ -88,7 +94,7 @@ typedef void(^orderBlock)(id element);
     return elements;
 }
 
-- (void)postorderTraversal:(Node *)node block:(orderBlock)block {
+- (void)postorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block {
     //    if (node) {
     //        [self postorderTraversal:node.left block:block];
     //        [self postorderTraversal:node.right block:block];
@@ -98,7 +104,7 @@ typedef void(^orderBlock)(id element);
         NSMutableArray *stack = [NSMutableArray array];
         [stack addObject:node];
         while (stack.count) {
-            Node *node = [stack lastObject];
+            JKRBinaryTreeNode *node = [stack lastObject];
             block(node.element);
             [stack removeLastObject];
             if (node.left) {
@@ -119,7 +125,7 @@ typedef void(^orderBlock)(id element);
     return elements;
 }
 
-- (void)inorderTraversal:(Node *)node block:(orderBlock)block {
+- (void)inorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block {
     //    if (node) {
     //        [self inorderTraversal:node.left block:block];
     //        block(node.element);
@@ -133,7 +139,7 @@ typedef void(^orderBlock)(id element);
                 node = node.left;
             }
             if (stack.count) {
-                Node *n = [stack lastObject];
+                JKRBinaryTreeNode *n = [stack lastObject];
                 block(n.element);
                 [stack removeLastObject];
                 node = n.right;
@@ -150,13 +156,13 @@ typedef void(^orderBlock)(id element);
     return elements;
 }
 
-- (void)levelOrderTraversal:(Node *)node block:(orderBlock)block {
+- (void)levelOrderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block {
     if (node) {
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:node];
         while (queue.count) {
             for (NSInteger i = 0, n = queue.count; i < n; i++) {
-                Node *n = [queue firstObject];
+                JKRBinaryTreeNode *n = [queue firstObject];
                 block(n.element);
                 [queue removeObjectAtIndex:0];
                 if (n.left) {
@@ -179,9 +185,9 @@ typedef void(^orderBlock)(id element);
     [self invertByIteration:_root];
 }
 
-- (void)invertByRecursion:(Node *)root {
+- (void)invertByRecursion:(JKRBinaryTreeNode *)root {
     if (root) {
-        Node *tmp = root.left;
+        JKRBinaryTreeNode *tmp = root.left;
         root.left = root.right;
         root.right = tmp;
         [self invertByRecursion:root.left];
@@ -189,14 +195,14 @@ typedef void(^orderBlock)(id element);
     }
 }
 
-- (void)invertByIteration:(Node *)root {
+- (void)invertByIteration:(JKRBinaryTreeNode *)root {
     if (root) {
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:root];
         while (queue.count) {
             for (NSInteger i = 0, n = queue.count; i < n; i++) {
-                Node *node = [queue firstObject];
-                Node *tmp = node.left;
+                JKRBinaryTreeNode *node = [queue firstObject];
+                JKRBinaryTreeNode *tmp = node.left;
                 node.left = node.right;
                 node.right = tmp;
                 [queue removeObjectAtIndex:0];
@@ -208,14 +214,14 @@ typedef void(^orderBlock)(id element);
 }
 
 #pragma mark - 节点的前驱节点
-- (Node *)predecessorWithNode:(Node *)node {
+- (JKRBinaryTreeNode *)predecessorWithNode:(JKRBinaryTreeNode *)node {
     if (!node) {
         return nil;
     }
     // 节点有左子树的情况下，前驱节点在它的左子树中
     if (node.left) {
         // 前驱节点是 node.left.right.right...
-        Node *p = node.left;
+        JKRBinaryTreeNode *p = node.left;
         while (p.right) {
             p = p.right;
         }
@@ -232,13 +238,13 @@ typedef void(^orderBlock)(id element);
 }
 
 #pragma mark - 节点的后继节点
-- (Node *)successorWithNode:(Node *)node {
+- (JKRBinaryTreeNode *)successorWithNode:(JKRBinaryTreeNode *)node {
     if (!node) {
         return nil;
     }
     
     if (node.right) {
-        Node *p = node.right;
+        JKRBinaryTreeNode *p = node.right;
         while (p.left) {
             p = p.left;
         }
@@ -258,12 +264,12 @@ typedef void(^orderBlock)(id element);
 }
 
 - (id)print_left:(id)node {
-    Node *n = (Node *)node;
+    JKRBinaryTreeNode *n = (JKRBinaryTreeNode *)node;
     return n.left;
 }
 
 - (id)print_right:(id)node {
-    Node *n = (Node *)node;
+    JKRBinaryTreeNode *n = (JKRBinaryTreeNode *)node;
     return n.right;
 }
 
@@ -274,8 +280,8 @@ typedef void(^orderBlock)(id element);
 }
 
 #pragma mark - 创建节点
-- (Node *)createNodeWithElement:(id)element parent:(Node *)parent {
-    Node *node = [[Node alloc] init];
+- (JKRBinaryTreeNode *)createNodeWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
+    JKRBinaryTreeNode *node = [[JKRBinaryTreeNode alloc] init];
     node.element = element;
     node.parent = parent;
     return node;;
@@ -286,42 +292,15 @@ typedef void(^orderBlock)(id element);
     NSLog(@"<%@: %p> dealloc", self.className, self);
 }
 
-@end
-
-@implementation Node
-
-- (BOOL)isLeaf {
-    return !self.left && !self.right;
-}
-
-- (BOOL)hasTwoChildren {
-    return self.left && self.right;
-}
-
-- (BOOL)isLeftChild {
-    return self.parent && self.parent.left == self;
-}
-
-- (BOOL)isRightChild {
-    return self.parent && self.parent.right == self;
-}
-
-- (Node *)sibling {
-    if ([self isLeftChild]) {
-        return self.parent.right;
-    }
-    if ([self isRightChild]) {
-        return self.parent.left;
-    }
-    return nil;
-}
-
-- (void)dealloc {
-//    NSLog(@"<%@: %p> dealloc", self.className, self);
-}
-
+#pragma mark - 格式化输出
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ (p: %@)", self.element, self.parent.element];
+    return [LevelOrderPrinter printStringWithTree:self];
+}
+
+- (void)printTree {
+    NSLog(@"%@", self);
 }
 
 @end
+
+

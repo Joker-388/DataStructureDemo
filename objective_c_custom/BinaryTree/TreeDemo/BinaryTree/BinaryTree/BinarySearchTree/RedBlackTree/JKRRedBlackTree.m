@@ -6,11 +6,10 @@
 //  Copyright © 2019 Lucky. All rights reserved.
 //
 
-#import "RedBlackTree.h"
+#import "JKRRedBlackTree.h"
+#import "JKRRedBlackTreeNode.h"
 
-@implementation RedBlackTree
-static BOOL const RED = false;
-static BOOL const BLACK = true;
+@implementation JKRRedBlackTree
 
 #pragma mark - 红黑树的性质
 /*
@@ -35,8 +34,8 @@ static BOOL const BLACK = true;
 /*
  添加时旋转的复杂度: O(logn)，仅需O(1)次旋转操作
  */
-- (void)afterAddWithNewNode:(Node *)node {
-    Node *parent = node.parent;
+- (void)afterAddWithNewNode:(JKRBinaryTreeNode *)node {
+    JKRBinaryTreeNode *parent = node.parent;
     
     // 添加的节点是根节点 或者 上溢出到达根节点
     if (!parent) {
@@ -69,9 +68,9 @@ static BOOL const BLACK = true;
     }
     
     // 叔父节点
-    Node *uncle = parent.sibling;
+    JKRBinaryTreeNode *uncle = parent.sibling;
     // 祖父节点
-    Node *grand = [self red:parent.parent];
+    JKRBinaryTreeNode *grand = [self red:parent.parent];
     
     
     // 叔父节点是红色的情况，B树节点上溢
@@ -266,14 +265,14 @@ static BOOL const BLACK = true;
  删除时旋转的复杂度: O(logn)，最多需要O(1)次旋转
  经统计，红黑树的溢出递归次数很少，可以看成O(1)
  */
-- (void)afterRemoveWithNode:(Node *)node {
+- (void)afterRemoveWithNode:(JKRBinaryTreeNode *)node {
     // 如果删除的节点是红色，或者用以取代删除节点的子节点是红色
     if ([self isRed:node]) {
         [self black:node];
         return;
     }
     
-    Node *parent = node.parent;
+    JKRBinaryTreeNode *parent = node.parent;
     // 删除的是根节点
     if (!parent) {
         return;
@@ -281,7 +280,7 @@ static BOOL const BLACK = true;
     
     // 删除的是黑色叶子节点，下溢，判定被删除的节点是左还是右
     BOOL left = !parent.left || node.isLeftChild;
-    Node *sibling = left ? parent.right : parent.left;
+    JKRBinaryTreeNode *sibling = left ? parent.right : parent.left;
     if (left) { // 被删除的节点在左边，兄弟节点在右边
         if ([self isRed:sibling]) { // 兄弟节点是红色
             [self black:sibling];
@@ -345,57 +344,43 @@ static BOOL const BLACK = true;
 }
 
 #pragma mark - 为一个节点染色
-- (Node *)dyeNode:(Node *)node color:(BOOL)color {
+- (JKRBinaryTreeNode *)dyeNode:(JKRBinaryTreeNode *)node color:(BOOL)color {
     if (!node) {
         return node;
     }
-    ((RedBlackNode *) node).color = color;
+    ((JKRRedBlackTreeNode *) node).color = color;
     return node;
 }
 
 #pragma mark - 将一个节点染成红色
-- (Node *)red:(Node *)node {
-    return [self dyeNode:node color:RED];
+- (JKRBinaryTreeNode *)red:(JKRBinaryTreeNode *)node {
+    return [self dyeNode:node color:RBT_Color_RED];
 }
 
 #pragma mark - 将一个节点染成黑色
-- (Node *)black:(Node *)node {
-    return [self dyeNode:node color:BLACK];
+- (JKRBinaryTreeNode *)black:(JKRBinaryTreeNode *)node {
+    return [self dyeNode:node color:RBT_Color_BLACK];
 }
 
 #pragma mark - 返回节点颜色
-- (BOOL)colorOf:(Node *)node {
-    return !node ? BLACK : ((RedBlackNode *)node).color;
+- (BOOL)colorOf:(JKRBinaryTreeNode *)node {
+    return !node ? RBT_Color_BLACK : ((JKRRedBlackTreeNode *)node).color;
 }
 
 #pragma mark - 节点是否为黑色
-- (BOOL)isBlack:(Node *)node {
-    return [self colorOf:node] == BLACK;
+- (BOOL)isBlack:(JKRBinaryTreeNode *)node {
+    return [self colorOf:node] == RBT_Color_BLACK;
 }
 
 #pragma mark - 节点是否为红色
-- (BOOL)isRed:(Node *)node {
-    return [self colorOf:node] == RED;
+- (BOOL)isRed:(JKRBinaryTreeNode *)node {
+    return [self colorOf:node] == RBT_Color_RED;
 }
 
 #pragma mark - 创建一个红黑节点
-- (Node *)createNodeWithElement:(id)element parent:(Node *)parent {
-    return [[RedBlackNode alloc] initWithElement:element parent:parent];
+- (JKRBinaryTreeNode *)createNodeWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
+    return [[JKRRedBlackTreeNode alloc] initWithElement:element parent:parent];
 }
 
 @end
 
-@implementation RedBlackNode
-
-- (instancetype)initWithElement:(id)element parent:(Node *)parent {
-    self = [super init];
-    self.element = element;
-    self.parent = parent;
-    return self;
-}
-
-- (NSString *)description {
-    return [NSString stringWithFormat:@"%@%@", self.color == RED ? @"R_" : @"", self.element];
-}
-
-@end

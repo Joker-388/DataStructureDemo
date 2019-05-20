@@ -1,24 +1,25 @@
 //
-//  AVLTree.m
+//  JKRAVLTree.m
 //  TreeDemo
 //
 //  Created by Joker on 2019/5/6.
 //  Copyright © 2019 Lucky. All rights reserved.
 //
 
-#import "AVLTree.h"
+#import "JKRAVLTree.h"
+#import "JKRAVLTreeNode.h"
 
-@implementation AVLTree
+@implementation JKRAVLTree
 
-- (Node *)createNodeWithElement:(id)element parent:(Node *)parent {
-    return [[AVLNode alloc] initWithWithElement:element parent:parent];
+- (JKRBinaryTreeNode *)createNodeWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
+    return [[JKRAVLTreeNode alloc] initWithWithElement:element parent:parent];
 }
 
 #pragma mark - 添加一个新节点后平衡二叉树
 /*
  添加复杂度: O(logn)，仅需O(1)次旋转操作
  */
-- (void)afterAddWithNewNode:(Node *)node {
+- (void)afterAddWithNewNode:(JKRBinaryTreeNode *)node {
     while ((node = node.parent)) {
         // 依次向上检查新添加节点的父节点是否平衡，如果是平衡状态，就更新整从新添加节点到根节点的所有节点的高度值
         if ([self isBalancedWithNode:node]) {
@@ -34,7 +35,7 @@
 /*
  删除时旋转的复杂度: O(logn)，最多需要O(logn)次旋转
  */
-- (void)afterRemoveWithNode:(Node *)node {
+- (void)afterRemoveWithNode:(JKRBinaryTreeNode *)node {
     while ((node = node.parent)) {
         if ([self isBalancedWithNode:node]) {
             [self updateHeigthWithNode:node];
@@ -45,9 +46,9 @@
 }
 
 #pragma mark - 统一旋转
-- (void)rebalance:(Node *)grand {
-    Node *parent = ((AVLNode *) grand).tallerChild;
-    Node *node = ((AVLNode *) parent).tallerChild;
+- (void)rebalance:(JKRBinaryTreeNode *)grand {
+    JKRBinaryTreeNode *parent = ((JKRAVLTreeNode *) grand).tallerChild;
+    JKRBinaryTreeNode *node = ((JKRAVLTreeNode *) parent).tallerChild;
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL 右旋转 grand
             NSLog(@"统一旋转:LL G:%@, P:%@, N:%@", grand.element, parent.element, node.element);
@@ -67,12 +68,12 @@
     }
 }
 
-- (void)rotateWithRoot:(Node *)root
-                     b:(Node *)b
-                     c:(Node *)c
-                     d:(Node *)d
-                     e:(Node *)e
-                     f:(Node *)f {
+- (void)rotateWithRoot:(JKRBinaryTreeNode *)root
+                     b:(JKRBinaryTreeNode *)b
+                     c:(JKRBinaryTreeNode *)c
+                     d:(JKRBinaryTreeNode *)d
+                     e:(JKRBinaryTreeNode *)e
+                     f:(JKRBinaryTreeNode *)f {
     [super rotateWithRoot:root b:b c:c d:d e:e f:f];
     [self updateHeigthWithNode:b];
     [self updateHeigthWithNode:f];
@@ -80,9 +81,9 @@
 }
 
 #pragma mark - 分情况旋转
-- (void)rebalanceByClass:(Node *)grand {
-    Node *parent = ((AVLNode *) grand).tallerChild;
-    Node *node = ((AVLNode *) parent).tallerChild;
+- (void)rebalanceByClass:(JKRBinaryTreeNode *)grand {
+    JKRBinaryTreeNode *parent = ((JKRAVLTreeNode *) grand).tallerChild;
+    JKRBinaryTreeNode *node = ((JKRAVLTreeNode *) parent).tallerChild;
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL 右旋转 grand
             [self rotateRight:grand];
@@ -100,60 +101,20 @@
     }
 }
 
-- (void)afterRotateWithGrand:(Node *)grand parent:(Node *)parent child:(Node *)child {
+- (void)afterRotateWithGrand:(JKRBinaryTreeNode *)grand parent:(JKRBinaryTreeNode *)parent child:(JKRBinaryTreeNode *)child {
     [super afterRotateWithGrand:grand parent:parent child:child];
     [self updateHeigthWithNode:grand];
     [self updateHeigthWithNode:parent];
 }
 
 #pragma mark - 节点是否平衡
-- (BOOL)isBalancedWithNode:(Node *)node {
-    return labs(((AVLNode *) node).balanceFactor) <= 1;
+- (BOOL)isBalancedWithNode:(JKRBinaryTreeNode *)node {
+    return labs(((JKRAVLTreeNode *) node).balanceFactor) <= 1;
 }
 
 #pragma mark - 更新节点高度
-- (void)updateHeigthWithNode:(Node *)node {
-    [((AVLNode *) node) updateHeight];
-}
-
-@end
-
-@implementation AVLNode
-
-- (instancetype)initWithWithElement:(id)element parent:(Node *)parent {
-    self = [super init];
-    self.height = 1;
-    self.element = element;
-    self.parent = parent;
-    return self;
-}
-
-- (NSInteger)balanceFactor {
-    NSInteger leftHeight = self.left ? ((AVLNode *)self.left).height : 0;
-    NSInteger rightHeight = self.right ? ((AVLNode *)self.right).height : 0;
-    return leftHeight - rightHeight;
-}
-
-- (void)updateHeight {
-    NSInteger leftHeight = self.left ? ((AVLNode *)self.left).height : 0;
-    NSInteger rightHeight = self.right ? ((AVLNode *)self.right).height : 0;
-    self.height = 1 + MAX(leftHeight, rightHeight);
-}
-
-- (Node *)tallerChild {
-    NSInteger leftHeight = self.left ? ((AVLNode *)self.left).height : 0;
-    NSInteger rightHeight = self.right ? ((AVLNode *)self.right).height : 0;
-    if (leftHeight > rightHeight) {
-        return self.left;
-    }
-    if (leftHeight < rightHeight) {
-        return self.right;
-    }
-    return self.isLeftChild ? self.left : self.right;
-}
-
-- (NSString *)description {
-    return [NSString stringWithFormat:@"%@ (p:%@) (h:%zd)", self.element, self.parent.element, self.height];
+- (void)updateHeigthWithNode:(JKRBinaryTreeNode *)node {
+    [((JKRAVLTreeNode *) node) updateHeight];
 }
 
 @end

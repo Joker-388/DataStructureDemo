@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		052132DD22788EA600AFCAE8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 052132DC22788EA600AFCAE8 /* main.m */; };
-		F3106E9E228E97F1005C15CB /* JKRTimeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106E9C228E97F1005C15CB /* JKRTimeTool.m */; };
 		F3106EAF228E97F8005C15CB /* LevelOrderPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA1228E97F8005C15CB /* LevelOrderPrinter.m */; };
-		F3106EB0228E97F8005C15CB /* BinaryTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA4228E97F8005C15CB /* BinaryTree.m */; };
-		F3106EB1228E97F8005C15CB /* BinarySearchTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA6228E97F8005C15CB /* BinarySearchTree.m */; };
-		F3106EB2228E97F8005C15CB /* RedBlackTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA8228E97F8005C15CB /* RedBlackTree.m */; };
-		F3106EB3228E97F8005C15CB /* AVLTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EAC228E97F8005C15CB /* AVLTree.m */; };
+		F3106EB0228E97F8005C15CB /* JKRBinaryTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA4228E97F8005C15CB /* JKRBinaryTree.m */; };
+		F3106EB1228E97F8005C15CB /* JKRBinarySearchTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA6228E97F8005C15CB /* JKRBinarySearchTree.m */; };
+		F3106EB2228E97F8005C15CB /* JKRRedBlackTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EA8228E97F8005C15CB /* JKRRedBlackTree.m */; };
+		F3106EB3228E97F8005C15CB /* JKRAVLTree.m in Sources */ = {isa = PBXBuildFile; fileRef = F3106EAC228E97F8005C15CB /* JKRAVLTree.m */; };
+		F3A380A12292465A00CC1261 /* JKRTimeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A3809F2292465A00CC1261 /* JKRTimeTool.m */; };
+		F3A380A42292490400CC1261 /* JKRBinaryTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A380A32292490400CC1261 /* JKRBinaryTreeNode.m */; };
+		F3A380A722924A3A00CC1261 /* JKRAVLTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A380A622924A3A00CC1261 /* JKRAVLTreeNode.m */; };
+		F3A380AA22924CB800CC1261 /* JKRRedBlackTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A380A922924CB800CC1261 /* JKRRedBlackTreeNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,18 +34,24 @@
 /* Begin PBXFileReference section */
 		052132D922788EA600AFCAE8 /* TreeDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TreeDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		052132DC22788EA600AFCAE8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F3106E9C228E97F1005C15CB /* JKRTimeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRTimeTool.m; sourceTree = "<group>"; };
-		F3106E9D228E97F1005C15CB /* JKRTimeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRTimeTool.h; sourceTree = "<group>"; };
 		F3106EA1228E97F8005C15CB /* LevelOrderPrinter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelOrderPrinter.m; sourceTree = "<group>"; };
 		F3106EA2228E97F8005C15CB /* LevelOrderPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelOrderPrinter.h; sourceTree = "<group>"; };
-		F3106EA4228E97F8005C15CB /* BinaryTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BinaryTree.m; sourceTree = "<group>"; };
-		F3106EA6228E97F8005C15CB /* BinarySearchTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BinarySearchTree.m; sourceTree = "<group>"; };
-		F3106EA8228E97F8005C15CB /* RedBlackTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedBlackTree.m; sourceTree = "<group>"; };
-		F3106EA9228E97F8005C15CB /* RedBlackTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedBlackTree.h; sourceTree = "<group>"; };
-		F3106EAA228E97F8005C15CB /* BinarySearchTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinarySearchTree.h; sourceTree = "<group>"; };
-		F3106EAC228E97F8005C15CB /* AVLTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVLTree.m; sourceTree = "<group>"; };
-		F3106EAD228E97F8005C15CB /* AVLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVLTree.h; sourceTree = "<group>"; };
-		F3106EAE228E97F8005C15CB /* BinaryTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryTree.h; sourceTree = "<group>"; };
+		F3106EA4228E97F8005C15CB /* JKRBinaryTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRBinaryTree.m; sourceTree = "<group>"; };
+		F3106EA6228E97F8005C15CB /* JKRBinarySearchTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRBinarySearchTree.m; sourceTree = "<group>"; };
+		F3106EA8228E97F8005C15CB /* JKRRedBlackTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRRedBlackTree.m; sourceTree = "<group>"; };
+		F3106EA9228E97F8005C15CB /* JKRRedBlackTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRRedBlackTree.h; sourceTree = "<group>"; };
+		F3106EAA228E97F8005C15CB /* JKRBinarySearchTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRBinarySearchTree.h; sourceTree = "<group>"; };
+		F3106EAC228E97F8005C15CB /* JKRAVLTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRAVLTree.m; sourceTree = "<group>"; };
+		F3106EAD228E97F8005C15CB /* JKRAVLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRAVLTree.h; sourceTree = "<group>"; };
+		F3106EAE228E97F8005C15CB /* JKRBinaryTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRBinaryTree.h; sourceTree = "<group>"; };
+		F3A3809F2292465A00CC1261 /* JKRTimeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRTimeTool.m; sourceTree = "<group>"; };
+		F3A380A02292465A00CC1261 /* JKRTimeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRTimeTool.h; sourceTree = "<group>"; };
+		F3A380A22292490400CC1261 /* JKRBinaryTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKRBinaryTreeNode.h; sourceTree = "<group>"; };
+		F3A380A32292490400CC1261 /* JKRBinaryTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRBinaryTreeNode.m; sourceTree = "<group>"; };
+		F3A380A522924A3A00CC1261 /* JKRAVLTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKRAVLTreeNode.h; sourceTree = "<group>"; };
+		F3A380A622924A3A00CC1261 /* JKRAVLTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRAVLTreeNode.m; sourceTree = "<group>"; };
+		F3A380A822924CB800CC1261 /* JKRRedBlackTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKRRedBlackTreeNode.h; sourceTree = "<group>"; };
+		F3A380A922924CB800CC1261 /* JKRRedBlackTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRRedBlackTreeNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,19 +85,10 @@
 			isa = PBXGroup;
 			children = (
 				052132DC22788EA600AFCAE8 /* main.m */,
+				F3A3809D2292465A00CC1261 /* Tool */,
 				F3106E9F228E97F8005C15CB /* BinaryTree */,
-				F3106E9B228E97F1005C15CB /* TimeTool */,
 			);
 			path = TreeDemo;
-			sourceTree = "<group>";
-		};
-		F3106E9B228E97F1005C15CB /* TimeTool */ = {
-			isa = PBXGroup;
-			children = (
-				F3106E9C228E97F1005C15CB /* JKRTimeTool.m */,
-				F3106E9D228E97F1005C15CB /* JKRTimeTool.h */,
-			);
-			path = TimeTool;
 			sourceTree = "<group>";
 		};
 		F3106E9F228E97F8005C15CB /* BinaryTree */ = {
@@ -103,8 +103,8 @@
 		F3106EA0228E97F8005C15CB /* Printer */ = {
 			isa = PBXGroup;
 			children = (
-				F3106EA1228E97F8005C15CB /* LevelOrderPrinter.m */,
 				F3106EA2228E97F8005C15CB /* LevelOrderPrinter.h */,
+				F3106EA1228E97F8005C15CB /* LevelOrderPrinter.m */,
 			);
 			path = Printer;
 			sourceTree = "<group>";
@@ -112,8 +112,10 @@
 		F3106EA3228E97F8005C15CB /* BinaryTree */ = {
 			isa = PBXGroup;
 			children = (
-				F3106EAE228E97F8005C15CB /* BinaryTree.h */,
-				F3106EA4228E97F8005C15CB /* BinaryTree.m */,
+				F3106EAE228E97F8005C15CB /* JKRBinaryTree.h */,
+				F3106EA4228E97F8005C15CB /* JKRBinaryTree.m */,
+				F3A380A22292490400CC1261 /* JKRBinaryTreeNode.h */,
+				F3A380A32292490400CC1261 /* JKRBinaryTreeNode.m */,
 				F3106EA5228E97F8005C15CB /* BinarySearchTree */,
 			);
 			path = BinaryTree;
@@ -122,8 +124,8 @@
 		F3106EA5228E97F8005C15CB /* BinarySearchTree */ = {
 			isa = PBXGroup;
 			children = (
-				F3106EAA228E97F8005C15CB /* BinarySearchTree.h */,
-				F3106EA6228E97F8005C15CB /* BinarySearchTree.m */,
+				F3106EAA228E97F8005C15CB /* JKRBinarySearchTree.h */,
+				F3106EA6228E97F8005C15CB /* JKRBinarySearchTree.m */,
 				F3106EAB228E97F8005C15CB /* AVLTree */,
 				F3106EA7228E97F8005C15CB /* RedBlackTree */,
 			);
@@ -133,8 +135,10 @@
 		F3106EA7228E97F8005C15CB /* RedBlackTree */ = {
 			isa = PBXGroup;
 			children = (
-				F3106EA9228E97F8005C15CB /* RedBlackTree.h */,
-				F3106EA8228E97F8005C15CB /* RedBlackTree.m */,
+				F3106EA9228E97F8005C15CB /* JKRRedBlackTree.h */,
+				F3106EA8228E97F8005C15CB /* JKRRedBlackTree.m */,
+				F3A380A822924CB800CC1261 /* JKRRedBlackTreeNode.h */,
+				F3A380A922924CB800CC1261 /* JKRRedBlackTreeNode.m */,
 			);
 			path = RedBlackTree;
 			sourceTree = "<group>";
@@ -142,10 +146,30 @@
 		F3106EAB228E97F8005C15CB /* AVLTree */ = {
 			isa = PBXGroup;
 			children = (
-				F3106EAD228E97F8005C15CB /* AVLTree.h */,
-				F3106EAC228E97F8005C15CB /* AVLTree.m */,
+				F3106EAD228E97F8005C15CB /* JKRAVLTree.h */,
+				F3106EAC228E97F8005C15CB /* JKRAVLTree.m */,
+				F3A380A522924A3A00CC1261 /* JKRAVLTreeNode.h */,
+				F3A380A622924A3A00CC1261 /* JKRAVLTreeNode.m */,
 			);
 			path = AVLTree;
+			sourceTree = "<group>";
+		};
+		F3A3809D2292465A00CC1261 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				F3A3809E2292465A00CC1261 /* TimeTool */,
+			);
+			name = Tool;
+			path = ../../Tool;
+			sourceTree = "<group>";
+		};
+		F3A3809E2292465A00CC1261 /* TimeTool */ = {
+			isa = PBXGroup;
+			children = (
+				F3A3809F2292465A00CC1261 /* JKRTimeTool.m */,
+				F3A380A02292465A00CC1261 /* JKRTimeTool.h */,
+			);
+			path = TimeTool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,13 +228,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F3106EB0228E97F8005C15CB /* BinaryTree.m in Sources */,
+				F3A380A42292490400CC1261 /* JKRBinaryTreeNode.m in Sources */,
+				F3106EB0228E97F8005C15CB /* JKRBinaryTree.m in Sources */,
+				F3A380A12292465A00CC1261 /* JKRTimeTool.m in Sources */,
+				F3A380A722924A3A00CC1261 /* JKRAVLTreeNode.m in Sources */,
 				F3106EAF228E97F8005C15CB /* LevelOrderPrinter.m in Sources */,
-				F3106E9E228E97F1005C15CB /* JKRTimeTool.m in Sources */,
-				F3106EB2228E97F8005C15CB /* RedBlackTree.m in Sources */,
-				F3106EB3228E97F8005C15CB /* AVLTree.m in Sources */,
-				F3106EB1228E97F8005C15CB /* BinarySearchTree.m in Sources */,
+				F3106EB2228E97F8005C15CB /* JKRRedBlackTree.m in Sources */,
+				F3106EB3228E97F8005C15CB /* JKRAVLTree.m in Sources */,
+				F3106EB1228E97F8005C15CB /* JKRBinarySearchTree.m in Sources */,
 				052132DD22788EA600AFCAE8 /* main.m in Sources */,
+				F3A380AA22924CB800CC1261 /* JKRRedBlackTreeNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

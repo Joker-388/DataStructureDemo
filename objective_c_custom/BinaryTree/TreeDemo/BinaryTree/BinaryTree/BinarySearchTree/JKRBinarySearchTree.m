@@ -1,22 +1,23 @@
 //
-//  BinarySearchTree.m
+//  JKRBinarySearchTree.m
 //  TreeDemo
 //
 //  Created by Lucky on 2019/4/30.
 //  Copyright © 2019 Lucky. All rights reserved.
 //
 
-#import "BinarySearchTree.h"
+#import "JKRBinarySearchTree.h"
+#import "JKRBinaryTreeNode.h"
 
-@interface BinarySearchTree ()
+@interface JKRBinarySearchTree ()
 
 @property (nonatomic, assign) BOOL hasInvert;
 
 @end
 
-@implementation BinarySearchTree
+@implementation JKRBinarySearchTree
 
-- (instancetype)initWithCompare:(compareBlock)compare {
+- (instancetype)initWithCompare:(binary_tree_compareBlock)compare {
     self = [super init];
     _compareBlock = compare;
     return self;
@@ -38,7 +39,7 @@
     [self elementNotNullCheck:element];
     
     if (!_root) {
-        Node *newNode = [self createNodeWithElement:element parent:nil];
+        JKRBinaryTreeNode *newNode = [self createNodeWithElement:element parent:nil];
         _root = newNode;
         _size++;
         if(self.rotateBlock) {
@@ -49,8 +50,8 @@
         return;
     }
     
-    Node *parent = _root;
-    Node *node = _root;
+    JKRBinaryTreeNode *parent = _root;
+    JKRBinaryTreeNode *node = _root;
     int cmp = 0;
     while (node) {
         cmp = _compareBlock(element, node.element);
@@ -66,7 +67,7 @@
         }
     }
     
-    Node *newNode = [self createNodeWithElement:element parent:parent];
+    JKRBinaryTreeNode *newNode = [self createNodeWithElement:element parent:parent];
     if (cmp < 0) {
         parent.left = newNode;
     } else {
@@ -80,7 +81,7 @@
     _size++;
 }
 
-- (void)afterAddWithNewNode:(Node *)node {
+- (void)afterAddWithNewNode:(JKRBinaryTreeNode *)node {
     
 }
 
@@ -96,20 +97,20 @@
 }
 
 #pragma mark - 删除节点
-- (void)removeWithNode:(Node *)node {
+- (void)removeWithNode:(JKRBinaryTreeNode *)node {
     if (!node) {
         return;
     }
     _size--;
     
     if (node.hasTwoChildren) {
-        Node *s = [self successorWithNode:node];
+        JKRBinaryTreeNode *s = [self successorWithNode:node];
         node.element = s.element;
         node = s;
     }
     
     // 实际被删除节点的子节点
-    Node *replacement = node.left ? node.left : node.right;
+    JKRBinaryTreeNode *replacement = node.left ? node.left : node.right;
     if (replacement) { // 被删除的节点度为1
         replacement.parent = node.parent;
         if (!node.parent) {
@@ -145,7 +146,7 @@
     }
 }
 
-- (void)afterRemoveWithNode:(Node *)node {
+- (void)afterRemoveWithNode:(JKRBinaryTreeNode *)node {
     
 }
 
@@ -155,8 +156,8 @@
 }
 
 #pragma mark - 通过元素获取对应节点
-- (Node *)nodeWithElement:(id)element {
-    Node *node = _root;
+- (JKRBinaryTreeNode *)nodeWithElement:(id)element {
+    JKRBinaryTreeNode *node = _root;
     while (node) {
         int cmp = _compareBlock(element, node.element);
         if (self.hasInvert) cmp = -cmp;
@@ -172,31 +173,31 @@
 }
 
 #pragma mark - 左旋转一个节点
-- (void)rotateLeft:(Node *)grand {
+- (void)rotateLeft:(JKRBinaryTreeNode *)grand {
     if(self.rotateBlock) {
         printf("\n--- 左旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);
     }
-    Node *parent = grand.right;
-    Node *child = parent.left;
+    JKRBinaryTreeNode *parent = grand.right;
+    JKRBinaryTreeNode *child = parent.left;
     grand.right = child;
     parent.left = grand;
     [self afterRotateWithGrand:grand parent:parent child:child];
 }
 
 #pragma mark - 右旋转一个节点
-- (void)rotateRight:(Node *)grand {
+- (void)rotateRight:(JKRBinaryTreeNode *)grand {
     if(self.rotateBlock) {
         printf("\n--- 右旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);        
     }
-    Node *parent = grand.left;
-    Node *child = parent.right;
+    JKRBinaryTreeNode *parent = grand.left;
+    JKRBinaryTreeNode *child = parent.right;
     grand.left = child;
     parent.right = grand;
     [self afterRotateWithGrand:grand parent:parent child:child];
 }
 
 #pragma mark - 旋转后处理
-- (void)afterRotateWithGrand:(Node *)grand parent:(Node *)parent child:(Node *)child {
+- (void)afterRotateWithGrand:(JKRBinaryTreeNode *)grand parent:(JKRBinaryTreeNode *)parent child:(JKRBinaryTreeNode *)child {
     if (grand.isLeftChild) {
         grand.parent.left = parent;
     } else if (grand.isRightChild) {
@@ -217,12 +218,12 @@
 }
 
 #pragma mark - 统一旋转
-- (void)rotateWithRoot:(Node *)root
-                     b:(Node *)b
-                     c:(Node *)c
-                     d:(Node *)d
-                     e:(Node *)e
-                     f:(Node *)f {
+- (void)rotateWithRoot:(JKRBinaryTreeNode *)root
+                     b:(JKRBinaryTreeNode *)b
+                     c:(JKRBinaryTreeNode *)c
+                     d:(JKRBinaryTreeNode *)d
+                     e:(JKRBinaryTreeNode *)e
+                     f:(JKRBinaryTreeNode *)f {
     d.parent = root.parent;
     if (root.isLeftChild) root.parent.left = d;
     else if (root.isRightChild) root.parent.right = d;
