@@ -25,7 +25,7 @@
         if ([self isBalancedWithNode:node]) {
             [self updateHeigthWithNode:node];
         } else { // 如果不平衡，就对这个高度最低的不平衡的点进行平衡
-            [self rebalance:node];
+            [self rebalanceByClass:node];
             break;
         }
     }
@@ -40,7 +40,7 @@
         if ([self isBalancedWithNode:node]) {
             [self updateHeigthWithNode:node];
         } else {
-            [self rebalance:node];
+            [self rebalanceByClass:node];
         }
     }
 }
@@ -86,16 +86,28 @@
     JKRBinaryTreeNode *node = ((JKRAVLTreeNode *) parent).tallerChild;
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL 右旋转 grand
+            if(self.debugPrint) {
+                printf("\n--- LL --- \n\n");
+            }
             [self rotateRight:grand];
         } else { // LR
+            if(self.debugPrint) {
+                printf("\n--- LR --- \n\n");
+            }
             [self rotateLeft:parent];
             [self rotateRight:grand];
         }
     } else { // R
         if (node.isLeftChild) { // RL
+            if(self.debugPrint) {
+                printf("\n--- RL --- \n\n");
+            }
             [self rotateRight:parent];
             [self rotateLeft:grand];
         } else { // RR 左旋转 grand
+            if(self.debugPrint) {
+                printf("\n--- RR --- \n\n");
+            }
             [self rotateLeft:grand];
         }
     }

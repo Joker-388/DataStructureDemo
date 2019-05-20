@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
     JKRBinaryTreeNode *_root;
 }
 
+/// 是否显示debug打印
+@property (nonatomic, assign) BOOL debugPrint;
+
 /// 节点个数
 - (NSUInteger)count;
 /// 二叉树是否为空
@@ -26,7 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAllObjects;
 /// 二叉树高度
 - (NSUInteger)height;
-
 /// 前序遍历
 - (NSMutableArray<E> *)preorderTraversal;
 /// 后序遍历
@@ -47,6 +49,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (JKRBinaryTreeNode *)createNodeWithElement:(nonnull id)element parent:(nullable JKRBinaryTreeNode *)parent;
 /// Log打印
 - (void)printTree;
+/// Print打印
+- (void)debugPrintTree;
+
 
 @end
 

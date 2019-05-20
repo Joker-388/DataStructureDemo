@@ -36,15 +36,18 @@
 
 #pragma mark - 添加元素
 - (void)addObject:(id)object {
+    if (self.debugPrint) {
+        printf("添加元素: %s\n\n", [[NSString stringWithFormat:@"%@", object] UTF8String]);
+    }
     [self elementNotNullCheck:object];
     
     if (!_root) {
         JKRBinaryTreeNode *newNode = [self createNodeWithElement:object parent:nil];
         _root = newNode;
         _size++;
-        if(self.rotateBlock) {
+        if(self.debugPrint) {
             printf("\n--- 平衡前 --- \n");
-            self.rotateBlock();
+            [self debugPrintTree];
         }
         [self afterAddWithNewNode:newNode];
         return;
@@ -72,9 +75,9 @@
     } else {
         parent.right = newNode;
     }
-    if(self.rotateBlock) {
+    if(self.debugPrint) {
         printf("\n--- 平衡前 --- \n");
-        self.rotateBlock();
+        [self debugPrintTree];
     }
     [self afterAddWithNewNode:newNode];
     _size++;
@@ -119,16 +122,16 @@
         } else {
             node.parent.right = replacement;
         }
-        if(self.rotateBlock) {
+        if(self.debugPrint) {
             printf("\n--- 平衡前 --- \n");
-            self.rotateBlock();
+            [self debugPrintTree];
         }
         [self afterRemoveWithNode:replacement];
     } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
         _root = nil;
-        if(self.rotateBlock) {
+        if(self.debugPrint) {
             printf("\n--- 平衡前 --- \n");
-            self.rotateBlock();
+            [self debugPrintTree];
         }
         [self afterRemoveWithNode:node];
     } else { // 被删除的节点是叶子节点且不是根节点
@@ -137,9 +140,9 @@
         } else {
             node.parent.right = nil;
         }
-        if(self.rotateBlock) {
+        if(self.debugPrint) {
             printf("\n--- 平衡前 --- \n");
-            self.rotateBlock();
+            [self debugPrintTree];
         }
         [self afterRemoveWithNode:node];
     }
@@ -182,7 +185,7 @@
 
 #pragma mark - 左旋转一个节点
 - (void)rotateLeft:(JKRBinaryTreeNode *)grand {
-    if(self.rotateBlock) {
+    if(self.debugPrint) {
         printf("\n--- 左旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);
     }
     JKRBinaryTreeNode *parent = grand.right;
@@ -194,7 +197,7 @@
 
 #pragma mark - 右旋转一个节点
 - (void)rotateRight:(JKRBinaryTreeNode *)grand {
-    if(self.rotateBlock) {
+    if(self.debugPrint) {
         printf("\n--- 右旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);        
     }
     JKRBinaryTreeNode *parent = grand.left;
@@ -220,8 +223,8 @@
     
     parent.parent = grand.parent;
     grand.parent = parent;
-    if(self.rotateBlock) {
-        self.rotateBlock();
+    if(self.debugPrint) {
+        [self debugPrintTree];
     }
 }
 

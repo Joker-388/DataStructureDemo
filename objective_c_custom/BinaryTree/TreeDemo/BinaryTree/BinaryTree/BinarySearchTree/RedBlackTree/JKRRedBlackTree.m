@@ -39,7 +39,7 @@
     
     // 添加的节点是根节点 或者 上溢出到达根节点
     if (!parent) {
-        if (self.rotateBlock) {
+        if (self.debugPrint) {
             printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
         }
         [self black:node];
@@ -61,7 +61,7 @@
       R_2
      */
     if ([self isBlack:parent]) {
-        if (self.rotateBlock) {
+        if (self.debugPrint) {
             printf("\n--- 不需要平衡 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
         }
         return;
@@ -75,7 +75,7 @@
     
     // 叔父节点是红色的情况，B树节点上溢
     if ([self isRed:uncle]) {
-        if(self.rotateBlock) {
+        if(self.debugPrint) {
             printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);            
         }
         /*
@@ -92,8 +92,8 @@
 
         [self black:parent];
         [self black:uncle];
-        if(self.rotateBlock) {
-            self.rotateBlock();
+        if(self.debugPrint) {
+            [self debugPrintTree];
         }
         // 把祖父节点当作是新添加的节点
         [self afterAddWithNewNode:grand];
@@ -103,7 +103,7 @@
     // 叔父节点不是红色
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL
-            if(self.rotateBlock) {
+            if(self.debugPrint) {
                 printf("\n--- LL --- \n\n");
             }
             /*
@@ -135,7 +135,7 @@
              */
             [self black:parent];
         } else { // LR
-            if(self.rotateBlock) {
+            if(self.debugPrint) {
                 printf("\n--- LR --- \n\n");
             }
             /*
@@ -181,7 +181,7 @@
         [self rotateRight:grand];
     } else { // R
         if (node.isLeftChild) { // RL
-            if(self.rotateBlock) {
+            if(self.debugPrint) {
                 printf("\n--- RL --- \n\n");
             }
             /*
@@ -224,7 +224,7 @@
             [self black:node];
             [self rotateRight:parent];
         } else { // RR
-            if(self.rotateBlock) {
+            if(self.debugPrint) {
                 printf("\n--- RR --- \n\n");
             }
             /*

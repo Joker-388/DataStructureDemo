@@ -299,6 +299,11 @@ typedef void(^orderBlock)(id element);
     NSLog(@"%@", self);
 }
 
+- (void)debugPrintTree {
+    printf("\n%s\n\n", [self.description UTF8String]);
+    printf("-------------------------------------------------------------------\n\n");
+}
+
 @end
 
 

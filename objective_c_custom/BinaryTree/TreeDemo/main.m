@@ -63,13 +63,8 @@ void testBinarySearchTree() {
 }
 
 void testAVLTree() {
-    JKRBinarySearchTree<NSNumber *> *avl = [[JKRAVLTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-        return e1.intValue - e2.intValue;
-    }];
-    
-    JKRBinarySearchTree<NSNumber *> *bst = [[JKRBinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-        return e1.intValue - e2.intValue;
-    }];
+    JKRBinarySearchTree<NSNumber *> *avl = [JKRAVLTree new];
+    avl.debugPrint = YES;
     
     int nums[] = {26, 32, 27, 38, 4, 9, 37, 45, 3, 6, 13, 2, 43, 40, 25, 46, 23, 10, 41, 11, 1, 24};
     NSMutableArray *numbers = [NSMutableArray array];
@@ -77,21 +72,16 @@ void testAVLTree() {
         printf("%d ", nums[i]);
         [numbers addObject:[NSNumber numberWithInt:nums[i]]];
     }
-    printf("\n--- Start Add ---\n\n");
+
     for (NSNumber *number in numbers) {
         [avl addObject:number];
-        [bst addObject:number];
-        printf("Add: %d\n\n", number.intValue);
-//        printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [avl.description UTF8String], [bst.description UTF8String]);
-        printf("--- AVL ---\n%s\n\n", [avl.description UTF8String]);
+        printf("--- 平衡后结果 ---\n%s\n\n", [avl.description UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
 }
 
 void testRedBlackTree() {
-    JKRBinarySearchTree<NSNumber *> *rb = [[JKRRedBlackTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
-        return e1.intValue - e2.intValue;
-    }];
+    JKRBinarySearchTree<NSNumber *> *rb = [JKRRedBlackTree new];
 
     int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20,52,60};
     
@@ -101,27 +91,21 @@ void testRedBlackTree() {
         [numbers addObject:[NSNumber numberWithInt:nums[i]]];
     }
     
-    
-    __weak typeof(rb) weakrb = rb;
-    rb.rotateBlock = ^{
-        printf("\n%s\n\n", [weakrb.description UTF8String]);
-        printf("-------------------------------------------------------------------\n\n\n");
-    };
+    rb.debugPrint = YES;
     
     printf("\n--- Start Add ---\n\n");
     for (NSNumber *number in numbers) {
-        printf("添加元素: %d\n\n", number.intValue);
         [rb addObject:number];
         printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
-        printf("-------------------------------------------------------------------\n\n\n");
+        printf("-------------------------------------------------------------------\n\n");
     }
     
-    for (NSNumber *number in numbers) {
-        printf("Remove: %d\n\n", number.intValue);
-        [rb removeObject:number];
-        printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
-        printf("-------------------------------------------------------------------\n\n\n");
-    }
+//    for (NSNumber *number in numbers) {
+//        printf("Remove: %d\n\n", number.intValue);
+//        [rb removeObject:number];
+//        printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
+//        printf("-------------------------------------------------------------------\n\n\n");
+//    }
 }
 
 int main(int argc, const char * argv[]) {

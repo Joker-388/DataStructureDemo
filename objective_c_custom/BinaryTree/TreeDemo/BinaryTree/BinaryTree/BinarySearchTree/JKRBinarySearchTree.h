@@ -19,8 +19,6 @@ typedef int(^jkrbinarytree_compareBlock)(id e1, id e2);
     jkrbinarytree_compareBlock _compareBlock;
 }
 
-- (instancetype)init __unavailable;
-+ (instancetype)new __unavailable;
 - (instancetype)initWithCompare:(_Nonnull jkrbinarytree_compareBlock)compare;
 
 @property (nonatomic, strong) void(^rotateBlock)(void);
