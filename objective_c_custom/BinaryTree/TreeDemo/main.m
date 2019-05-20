@@ -38,6 +38,17 @@ void testBinarySearchTree() {
     [tree invertByRecursion];
     [tree printTree];
     
+    NSLog(@"\n前序 %@", tree.preorderTraversal);
+    
+    /// 后序 1 3 2 5 4 8 10 12 11 9 7
+    NSLog(@"\n后序 %@", tree.postorderTraversal);
+    
+    /// 中序 1 2 3 4 5 7 8 9 10 11 12
+    NSLog(@"\n中序 %@", tree.inorderTraversal);
+    
+    /// 层序
+    NSLog(@"\n层序 %@", tree.levelOrderTraversal);
+    
     NSLog(@"\n-------- 迭代翻转 --------");
     [tree invertByIteration];
     [tree printTree];
@@ -157,8 +168,8 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
 //        testBinarySearchTree();
 //        testAVLTree();
-//        testRedBlackTree();
-        compare();
+        testRedBlackTree();
+//        compare();
     }
     
     return 0;

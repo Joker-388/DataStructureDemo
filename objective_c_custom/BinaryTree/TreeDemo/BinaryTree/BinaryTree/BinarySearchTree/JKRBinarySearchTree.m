@@ -58,7 +58,6 @@
     int cmp = 0;
     while (node) {
         cmp = [self compareWithValue1:object value2:node.element];
-        if (self.hasInvert) cmp = -cmp;
         parent = node;
         if (cmp < 0) {
             node = node.left;
@@ -152,15 +151,6 @@
     
 }
 
-#pragma mark - 元素比较
-- (int)compareWithValue1:(id)value1 value2:(id)value2 {
-    if (_compareBlock) {
-        return _compareBlock(value1, value2);
-    } else {
-        return [value1 compare:value2];
-    }
-}
-
 #pragma mark - 是否包含元素
 - (BOOL)containsObject:(id)object  {
     return [self nodeWithObject:object] != nil;
@@ -171,7 +161,6 @@
     JKRBinaryTreeNode *node = _root;
     while (node) {
         int cmp = [self compareWithValue1:object value2:node.element];
-        if (self.hasInvert) cmp = -cmp;
         if (!cmp) {
             return node;
         } else if (cmp > 0) {
@@ -181,6 +170,12 @@
         }
     }
     return nil;
+}
+
+#pragma mark - 元素比较
+- (int)compareWithValue1:(id)value1 value2:(id)value2 {
+    int result = _compareBlock ? _compareBlock(value1, value2) : [value1 compare:value2];
+    return self.hasInvert ? -result : result;
 }
 
 #pragma mark - 左旋转一个节点
