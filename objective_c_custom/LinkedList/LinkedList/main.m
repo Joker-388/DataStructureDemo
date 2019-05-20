@@ -44,6 +44,7 @@ void testLinkedCircleList() {
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         testLinkedCircleList();
+//        testSingleCircleLinkedLis();
     }
     return 0;
 }

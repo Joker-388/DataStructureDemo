@@ -19,24 +19,24 @@ typedef void(^orderBlock)(id element);
 @implementation JKRBinaryTree
 
 #pragma mark - 节点个数
-- (NSUInteger)size {
+- (NSUInteger)count {
     return _size;
 }
 
 #pragma mark - 二叉树是否为空
 - (BOOL)isEmpty {
-    return self.size == 0;
+    return _size == 0;
 }
 
 #pragma mark - 清空二叉树
-- (void)clear {
+- (void)removeAllObjects {
     _root = nil;
     _size = 0;
 }
 
 #pragma mark - 二叉树高度
-- (NSInteger)height {
-    NSInteger height = 0;
+- (NSUInteger)height {
+    NSUInteger height = 0;
     if (_root) {
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:_root];
@@ -274,8 +274,6 @@ typedef void(^orderBlock)(id element);
 }
 
 - (id)print_string:(id)node {
-//    Node *n = (Node *)node;
-//    return [NSString stringWithFormat:@"%@ (%@)", [n.element description], [n.parent.element description]];
     return [NSString stringWithFormat:@"%@", node];
 }
 
@@ -284,7 +282,7 @@ typedef void(^orderBlock)(id element);
     JKRBinaryTreeNode *node = [[JKRBinaryTreeNode alloc] init];
     node.element = element;
     node.parent = parent;
-    return node;;
+    return node;
 }
 
 #pragma mark - dealloc

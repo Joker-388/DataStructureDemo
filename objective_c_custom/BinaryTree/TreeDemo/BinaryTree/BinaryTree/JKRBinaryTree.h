@@ -19,13 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 /// 节点个数
-- (NSUInteger)size;
+- (NSUInteger)count;
 /// 二叉树是否为空
 - (BOOL)isEmpty;
 /// 清空二叉树
-- (void)clear;
+- (void)removeAllObjects;
 /// 二叉树高度
-- (NSInteger)height;
+- (NSUInteger)height;
 
 /// 前序遍历
 - (NSMutableArray<E> *)preorderTraversal;

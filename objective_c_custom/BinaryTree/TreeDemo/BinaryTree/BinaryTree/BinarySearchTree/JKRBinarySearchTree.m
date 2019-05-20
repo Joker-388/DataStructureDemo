@@ -17,7 +17,7 @@
 
 @implementation JKRBinarySearchTree
 
-- (instancetype)initWithCompare:(binary_tree_compareBlock)compare {
+- (instancetype)initWithCompare:(jkrbinarytree_compareBlock)compare {
     self = [super init];
     _compareBlock = compare;
     return self;
@@ -35,11 +35,11 @@
 }
 
 #pragma mark - 添加元素
-- (void)add:(id)element {
-    [self elementNotNullCheck:element];
+- (void)addObject:(id)object {
+    [self elementNotNullCheck:object];
     
     if (!_root) {
-        JKRBinaryTreeNode *newNode = [self createNodeWithElement:element parent:nil];
+        JKRBinaryTreeNode *newNode = [self createNodeWithElement:object parent:nil];
         _root = newNode;
         _size++;
         if(self.rotateBlock) {
@@ -54,7 +54,7 @@
     JKRBinaryTreeNode *node = _root;
     int cmp = 0;
     while (node) {
-        cmp = _compareBlock(element, node.element);
+        cmp = [self compareWithValue1:object value2:node.element];
         if (self.hasInvert) cmp = -cmp;
         parent = node;
         if (cmp < 0) {
@@ -62,12 +62,11 @@
         } else if (cmp > 0) {
             node = node.right;
         } else {
-            node.element = element;
+            node.element = object;
             return;
         }
     }
-    
-    JKRBinaryTreeNode *newNode = [self createNodeWithElement:element parent:parent];
+    JKRBinaryTreeNode *newNode = [self createNodeWithElement:object parent:parent];
     if (cmp < 0) {
         parent.left = newNode;
     } else {
@@ -92,8 +91,8 @@
 }
 
 #pragma mark - 删除元素
-- (void)remove:(id)element {
-    [self removeWithNode:[self nodeWithElement:element]];
+- (void)removeObject:(id)object {
+    [self removeWithNode:[self nodeWithObject:object]];
 }
 
 #pragma mark - 删除节点
@@ -150,16 +149,25 @@
     
 }
 
+#pragma mark - 元素比较
+- (int)compareWithValue1:(id)value1 value2:(id)value2 {
+    if (_compareBlock) {
+        return _compareBlock(value1, value2);
+    } else {
+        return [value1 compare:value2];
+    }
+}
+
 #pragma mark - 是否包含元素
-- (BOOL)contains:(id)element {
-    return [self nodeWithElement:element] != nil;
+- (BOOL)containsObject:(id)object  {
+    return [self nodeWithObject:object] != nil;
 }
 
 #pragma mark - 通过元素获取对应节点
-- (JKRBinaryTreeNode *)nodeWithElement:(id)element {
+- (JKRBinaryTreeNode *)nodeWithObject:(id)object {
     JKRBinaryTreeNode *node = _root;
     while (node) {
-        int cmp = _compareBlock(element, node.element);
+        int cmp = [self compareWithValue1:object value2:node.element];
         if (self.hasInvert) cmp = -cmp;
         if (!cmp) {
             return node;

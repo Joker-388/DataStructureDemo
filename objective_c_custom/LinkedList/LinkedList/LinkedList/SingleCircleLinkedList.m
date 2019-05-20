@@ -47,7 +47,7 @@
     [self addObject:object addIndex:self.size];
 }
 
-- (void)addObject:(id)object addIndex:(NSInteger)index {
+- (void)addObject:(id)object addIndex:(NSUInteger)index {
     [self rangeCheckForAddWithIndex:index];
     
     if (index == 0) {
@@ -70,7 +70,7 @@
     self.size++;
 }
 
-- (id)removeObjectAtIndex:(NSInteger)index {
+- (id)removeObjectAtIndex:(NSUInteger)index {
     [self rangeCheckWithIndex:index];
     SingleCircleLinkedListNode *node = self.first;
     if (index == 0) {
@@ -131,15 +131,15 @@
     return [self indexOfObject:object] != SINGLE_LINKED_LIST_ELEMETN_NOT_FOUND;
 }
 
-- (NSInteger)count {
+- (NSUInteger)count {
     return self.size;
 }
 
-- (id)objectAtIndex:(NSInteger)index {
+- (id)objectAtIndex:(NSUInteger)index {
     return [self nodeWithIndex:index].element;
 }
 
-- (void)replaceObjectAtIndex:(NSInteger)index withObject:(id)object {
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)object {
     SingleCircleLinkedListNode *node = [self nodeWithIndex:index];
     node.element = object;
 }
