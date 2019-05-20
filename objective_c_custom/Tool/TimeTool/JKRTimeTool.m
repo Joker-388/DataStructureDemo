@@ -14,7 +14,7 @@
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     block();
     CFAbsoluteTime linkTime = (CFAbsoluteTimeGetCurrent() - startTime);
-    NSLog(@"耗时: %.2f ms", linkTime * 1000.0);
+    NSLog(@"耗时: %.3f s", linkTime);
 }
 
 @end

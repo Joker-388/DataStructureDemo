@@ -10,7 +10,7 @@
 #import "JKRBinarySearchTree.h"
 #import "JKRAVLTree.h"
 #import "JKRRedBlackTree.h"
-
+#import "JKRTimeTool.h"
 
 
 NSString * getRandomStr() {
@@ -108,11 +108,57 @@ void testRedBlackTree() {
 //    }
 }
 
+void compare() {
+    NSMutableArray *data = [NSMutableArray array];
+    for (int i = 0; i < 10000; i++) {
+//        [data addObject:getRandomStr()];
+        [data addObject:[NSNumber numberWithInteger:i]];
+    }
+    
+    @autoreleasepool {
+        [JKRTimeTool teskCodeWithBlock:^{
+            JKRBinarySearchTree *tree = [JKRBinarySearchTree new];
+            for (int i = 0; i < data.count; i++) {
+                [tree addObject:data[i]];
+            }
+            for (int i = 0; i < data.count; i++) {
+                [tree removeObject:data[i]];
+            }
+        }];
+    }
+    
+    @autoreleasepool {
+        [JKRTimeTool teskCodeWithBlock:^{
+            JKRBinarySearchTree *tree = [JKRAVLTree new];
+            for (int i = 0; i < data.count; i++) {
+                [tree addObject:data[i]];
+            }
+            for (int i = 0; i < data.count; i++) {
+                [tree removeObject:data[i]];
+            }
+        }];
+    }
+    
+    @autoreleasepool {
+        [JKRTimeTool teskCodeWithBlock:^{
+            JKRBinarySearchTree *tree = [JKRRedBlackTree new];
+            for (int i = 0; i < data.count; i++) {
+                [tree addObject:data[i]];
+            }
+            for (int i = 0; i < data.count; i++) {
+                [tree removeObject:data[i]];
+            }
+        }];
+    }
+    
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 //        testBinarySearchTree();
 //        testAVLTree();
-        testRedBlackTree();
+//        testRedBlackTree();
+        compare();
     }
     
     return 0;
