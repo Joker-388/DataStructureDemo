@@ -82,8 +82,8 @@ void testAVLTree() {
         [avl addObject:number];
         [bst addObject:number];
         printf("Add: %d\n\n", number.intValue);
-        printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [avl.description UTF8String], [bst.description UTF8String]);
-//        printf("--- AVL ---\n%s\n\n", [avl.description UTF8String]);
+//        printf("--- AVL ---\n%s\n\n --- BST ---\n%s\n\n", [avl.description UTF8String], [bst.description UTF8String]);
+        printf("--- AVL ---\n%s\n\n", [avl.description UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
 }
@@ -127,7 +127,7 @@ void testRedBlackTree() {
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 //        testBinarySearchTree();
-//                testAVLTree();
+//        testAVLTree();
         testRedBlackTree();
     }
     

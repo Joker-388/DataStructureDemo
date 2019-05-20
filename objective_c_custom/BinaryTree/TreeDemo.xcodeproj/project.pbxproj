@@ -166,8 +166,8 @@
 		F3A3809E2292465A00CC1261 /* TimeTool */ = {
 			isa = PBXGroup;
 			children = (
-				F3A3809F2292465A00CC1261 /* JKRTimeTool.m */,
 				F3A380A02292465A00CC1261 /* JKRTimeTool.h */,
+				F3A3809F2292465A00CC1261 /* JKRTimeTool.m */,
 			);
 			path = TimeTool;
 			sourceTree = "<group>";
