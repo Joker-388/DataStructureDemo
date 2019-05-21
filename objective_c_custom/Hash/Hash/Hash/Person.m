@@ -20,6 +20,7 @@
 /// 作为key，决定哈希表中的索引值
 - (NSUInteger)hash {
     NSUInteger hashCode = self.age;
+    // 奇素数 hashCode * 31 == (hashCode<<5) - hashCode
     hashCode = (hashCode<<5) - hashCode + [self.name hash];
     return hashCode;
 }
