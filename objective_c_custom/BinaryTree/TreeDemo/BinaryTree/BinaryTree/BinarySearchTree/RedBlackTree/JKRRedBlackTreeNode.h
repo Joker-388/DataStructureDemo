@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL color;
 
-- (instancetype)initWithElement:(id)element parent:(JKRBinaryTreeNode *)parent;
+- (instancetype)initWithObject:(id)object parent:(JKRBinaryTreeNode *)parent;
 
 @end
 

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 节点高度
 @property (nonatomic, assign) NSInteger height;
 
-- (instancetype)initWithWithElement:(id)element parent:(JKRBinaryTreeNode *)parent;
+- (instancetype)initWithObject:(id)object parent:(JKRBinaryTreeNode *)parent;
 /// 平衡因子
 - (NSInteger)balanceFactor;
 /// 更新节点高度

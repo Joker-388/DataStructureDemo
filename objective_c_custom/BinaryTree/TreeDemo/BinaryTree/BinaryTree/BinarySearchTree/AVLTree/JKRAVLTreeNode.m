@@ -10,10 +10,10 @@
 
 @implementation JKRAVLTreeNode
 
-- (instancetype)initWithWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
+- (instancetype)initWithObject:(id)object parent:(JKRBinaryTreeNode *)parent {
     self = [super init];
     self.height = 1;
-    self.element = element;
+    self.object = object;
     self.parent = parent;
     return self;
 }
@@ -43,7 +43,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ (p:%@) (h:%zd)", self.element, self.parent.element, self.height];
+    return [NSString stringWithFormat:@"%@ (p:%@) (h:%zd)", self.object, self.parent.object, self.height];
 }
 
 @end

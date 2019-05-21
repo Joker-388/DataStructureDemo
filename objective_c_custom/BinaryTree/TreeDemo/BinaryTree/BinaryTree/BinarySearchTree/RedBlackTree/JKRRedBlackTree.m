@@ -378,8 +378,8 @@
 }
 
 #pragma mark - 创建一个红黑节点
-- (JKRBinaryTreeNode *)createNodeWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
-    return [[JKRRedBlackTreeNode alloc] initWithElement:element parent:parent];
+- (JKRBinaryTreeNode *)createNodeWithObject:(id)object parent:(JKRBinaryTreeNode *)parent {
+    return [[JKRRedBlackTreeNode alloc] initWithObject:object parent:parent];
 }
 
 @end

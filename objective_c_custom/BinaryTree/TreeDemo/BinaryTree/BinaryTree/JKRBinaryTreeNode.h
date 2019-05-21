@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JKRBinaryTreeNode : NSObject
 
-@property (nonatomic, strong, nonnull) id element;
+@property (nonatomic, strong, nonnull) id object;
 @property (nonatomic, strong, nullable) JKRBinaryTreeNode *left;
 @property (nonatomic, strong, nullable) JKRBinaryTreeNode *right;
 @property (nonatomic, weak, nullable) JKRBinaryTreeNode *parent;

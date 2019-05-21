@@ -10,15 +10,15 @@
 
 @implementation JKRRedBlackTreeNode
 
-- (instancetype)initWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
+- (instancetype)initWithObject:(id)object parent:(JKRBinaryTreeNode *)parent {
     self = [super init];
-    self.element = element;
+    self.object = object;
     self.parent = parent;
     return self;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@%@", self.color == RBT_Color_RED ? @"R_" : @"", self.element];
+    return [NSString stringWithFormat:@"%@%@", self.color == RBT_Color_RED ? @"R_" : @"", self.object];
 }
 
 @end

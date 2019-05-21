@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Person.h"
+#import "JKRHashMap.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -43,16 +44,24 @@ int main(int argc, const char * argv[]) {
         //
         //        NSLog(@"%d", [person0 isEqual:person1]);
         
-        id array[10] = {};
+//        id array[10] = {};
+//        {
+//            Person *p = [Person new];
+//
+//            array[5] = p;
+//        }
+//
+//        NSLog(@"%@", array[5]);
+//
+//        NSLog(@"end");
+        
+        JKRHashMap *map = [JKRHashMap new];
         {
-            Person *p = [Person new];
-            
-            array[5] = p;
+            Person *person = [Person new];
+            [map setObject:person forKey:nil];
         }
+        NSLog(@"%zd", map.count);
         
-        NSLog(@"%@", array[5]);
-        
-        NSLog(@"end");
         
     }
     return 0;

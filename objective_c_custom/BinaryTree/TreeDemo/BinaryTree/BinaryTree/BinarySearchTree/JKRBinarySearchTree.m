@@ -42,7 +42,7 @@
     [self elementNotNullCheck:object];
     
     if (!_root) {
-        JKRBinaryTreeNode *newNode = [self createNodeWithElement:object parent:nil];
+        JKRBinaryTreeNode *newNode = [self createNodeWithObject:object parent:nil];
         _root = newNode;
         _size++;
         if(self.debugPrint) {
@@ -57,18 +57,18 @@
     JKRBinaryTreeNode *node = _root;
     NSInteger cmp = 0;
     while (node) {
-        cmp = [self compareWithValue1:object value2:node.element];
+        cmp = [self compareWithValue1:object value2:node.object];
         parent = node;
         if (cmp < 0) {
             node = node.left;
         } else if (cmp > 0) {
             node = node.right;
         } else {
-            node.element = object;
+            node.object = object;
             return;
         }
     }
-    JKRBinaryTreeNode *newNode = [self createNodeWithElement:object parent:parent];
+    JKRBinaryTreeNode *newNode = [self createNodeWithObject:object parent:parent];
     if (cmp < 0) {
         parent.left = newNode;
     } else {
@@ -106,7 +106,7 @@
     
     if (node.hasTwoChildren) {
         JKRBinaryTreeNode *s = [self successorWithNode:node];
-        node.element = s.element;
+        node.object = s.object;
         node = s;
     }
     
@@ -160,7 +160,7 @@
 - (JKRBinaryTreeNode *)nodeWithObject:(id)object {
     JKRBinaryTreeNode *node = _root;
     while (node) {
-        NSInteger cmp = [self compareWithValue1:object value2:node.element];
+        NSInteger cmp = [self compareWithValue1:object value2:node.object];
         if (!cmp) {
             return node;
         } else if (cmp > 0) {
@@ -190,7 +190,7 @@
 #pragma mark - 左旋转一个节点
 - (void)rotateLeft:(JKRBinaryTreeNode *)grand {
     if(self.debugPrint) {
-        printf("\n--- 左旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);
+        printf("\n--- 左旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.object] UTF8String]);
     }
     JKRBinaryTreeNode *parent = grand.right;
     JKRBinaryTreeNode *child = parent.left;
@@ -202,7 +202,7 @@
 #pragma mark - 右旋转一个节点
 - (void)rotateRight:(JKRBinaryTreeNode *)grand {
     if(self.debugPrint) {
-        printf("\n--- 右旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.element] UTF8String]);        
+        printf("\n--- 右旋转 --- %s \n", [[NSString stringWithFormat:@"%@", grand.object] UTF8String]);        
     }
     JKRBinaryTreeNode *parent = grand.left;
     JKRBinaryTreeNode *child = parent.right;

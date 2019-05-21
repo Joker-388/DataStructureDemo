@@ -138,7 +138,7 @@ typedef void(^orderBlock)(id element);
         [stack addObject:node];
         while (stack.count && !*stop) {
             JKRBinaryTreeNode *n = [stack lastObject];
-            block(n.element);
+            block(n.object);
             [stack removeLastObject];
             if (n.right) {
                 [stack addObject:n.right];
@@ -173,7 +173,7 @@ typedef void(^orderBlock)(id element);
         [self postorderTraversal:node.left block:block stop:stop];
         [self postorderTraversal:node.right block:block stop:stop];
         if (*stop) return;
-        block(node.element);
+        block(node.object);
     }
 //    if (node) {
 //        NSMutableArray *stack = [NSMutableArray array];
@@ -227,7 +227,7 @@ typedef void(^orderBlock)(id element);
             }
             if (stack.count) {
                 JKRBinaryTreeNode *n = [stack lastObject];
-                block(n.element);
+                block(n.object);
                 [stack removeLastObject];
                 node = n.right;
             }
@@ -260,7 +260,7 @@ typedef void(^orderBlock)(id element);
             for (NSInteger i = 0, n = queue.count; i < n; i++) {
                 if (*stop) return;
                 JKRBinaryTreeNode *n = [queue firstObject];
-                block(n.element);
+                block(n.object);
                 [queue removeObjectAtIndex:0];
                 if (n.left) {
                     [queue addObject:n.left];
@@ -375,9 +375,9 @@ typedef void(^orderBlock)(id element);
 }
 
 #pragma mark - 创建节点
-- (JKRBinaryTreeNode *)createNodeWithElement:(id)element parent:(JKRBinaryTreeNode *)parent {
+- (JKRBinaryTreeNode *)createNodeWithObject:(id)object parent:(JKRBinaryTreeNode *)parent {
     JKRBinaryTreeNode *node = [[JKRBinaryTreeNode alloc] init];
-    node.element = element;
+    node.object = object;
     node.parent = parent;
     return node;
 }

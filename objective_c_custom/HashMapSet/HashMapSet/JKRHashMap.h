@@ -1,36 +1,21 @@
 //
-//  JKRTreeMap.h
-//  TreeMapSet
+//  JKRHashMap.h
+//  HashMapSet
 //
-//  Created by Lucky on 2019/5/18.
-//  Copyright © 2019 Lucky. All rights reserved.
+//  Created by Joker on 2019/5/21.
+//  Copyright © 2019 Joker. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef int(^jkrmap_compareBlock)(id e1, id e2);
-
-/*
- 红黑树实现Map
- 基于红黑树的性质，添加的元素必须具有可比较性
- */
-
-@class JKRTreeMapNode;
-
-@interface JKRTreeMap<__covariant KeyType, __covariant ObjectType> : NSObject {
+@interface JKRHashMap<__covariant KeyType, __covariant ObjectType> : NSObject {
 @protected
     /// 节点个数
     NSUInteger _size;
-    /// 跟节点
-    JKRTreeMapNode *_root;
-    /// 比较器
-    jkrmap_compareBlock _compareBlock;
 }
 
-/// 通过比较器初始化，如果不使用则默认通过添加元素的compare方法比较
-- (instancetype)initWithCompare:(_Nonnull jkrmap_compareBlock)compare;
 /// 元素个数
 - (NSUInteger)count;
 /// 清空所有元素

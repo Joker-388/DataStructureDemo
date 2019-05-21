@@ -41,7 +41,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ (p: %@)", self.element, self.parent.element];
+    return [NSString stringWithFormat:@"%@ (p: %@)", self.object, self.parent.object];
 }
 
 @end
