@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Person.h"
 #import "JKRBinarySearchTree.h"
 #import "JKRAVLTree.h"
 #import "JKRRedBlackTree.h"
 #import "JKRTimeTool.h"
-
 
 NSString * getRandomStr() {
     char data[6];
@@ -22,7 +22,7 @@ NSString * getRandomStr() {
 }
 
 void testBinarySearchTree() {
-    JKRBinarySearchTree<NSNumber *> *tree = [[JKRBinarySearchTree alloc] initWithCompare:^int(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
+    JKRBinarySearchTree<NSNumber *> *tree = [[JKRBinarySearchTree alloc] initWithCompare:^NSInteger(NSNumber *  _Nonnull e1, NSNumber *  _Nonnull e2) {
         return e1.intValue - e2.intValue;
     }];
     
@@ -129,26 +129,28 @@ void testAVLTree() {
 }
 
 void testRedBlackTree() {
-    JKRBinarySearchTree<NSNumber *> *rb = [JKRRedBlackTree new];
+    JKRBinarySearchTree<Person *> *rb = [[JKRRedBlackTree alloc] initWithCompare:^NSInteger(Person *  _Nonnull e1, Person *  _Nonnull e2) {
+        return e1.age - e2.age;
+    }];
     rb.debugPrint = YES;
     int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20,52,60};
     
-    NSMutableArray *numbers = [NSMutableArray array];
+    NSMutableArray *persons = [NSMutableArray array];
     for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
         printf("%d ", nums[i]);
-        [numbers addObject:[NSNumber numberWithInt:nums[i]]];
+        [persons addObject:[Person personWithAge:nums[i]]];
     }
     
-    for (NSNumber *number in numbers) {
-        printf("Add: %d\n\n", number.intValue);
-        [rb addObject:number];
+    for (Person *person in persons) {
+        printf("Add: %zd\n\n", person.age);
+        [rb addObject:person];
         printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
     
-    for (NSNumber *number in numbers) {
-        printf("Remove: %d\n\n", number.intValue);
-        [rb removeObject:number];
+    for (Person *person in persons) {
+        printf("Remove: %zd\n\n", person.age);
+        [rb removeObject:person];
         printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
         printf("-------------------------------------------------------------------\n\n\n");
     }
@@ -206,6 +208,5 @@ int main(int argc, const char * argv[]) {
         testRedBlackTree();
 //        compare();
     }
-    
     return 0;
 }

@@ -17,6 +17,7 @@
 		F3A380A42292490400CC1261 /* JKRBinaryTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A380A32292490400CC1261 /* JKRBinaryTreeNode.m */; };
 		F3A380A722924A3A00CC1261 /* JKRAVLTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A380A622924A3A00CC1261 /* JKRAVLTreeNode.m */; };
 		F3A380AA22924CB800CC1261 /* JKRRedBlackTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A380A922924CB800CC1261 /* JKRRedBlackTreeNode.m */; };
+		F3D0B62B2293D08A00D6D23E /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B62A2293D08A00D6D23E /* Person.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,8 @@
 		F3A380A622924A3A00CC1261 /* JKRAVLTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRAVLTreeNode.m; sourceTree = "<group>"; };
 		F3A380A822924CB800CC1261 /* JKRRedBlackTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKRRedBlackTreeNode.h; sourceTree = "<group>"; };
 		F3A380A922924CB800CC1261 /* JKRRedBlackTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRRedBlackTreeNode.m; sourceTree = "<group>"; };
+		F3D0B6292293D08A00D6D23E /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		F3D0B62A2293D08A00D6D23E /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				052132DC22788EA600AFCAE8 /* main.m */,
+				F3D0B6292293D08A00D6D23E /* Person.h */,
+				F3D0B62A2293D08A00D6D23E /* Person.m */,
 				F3A3809D2292465A00CC1261 /* Tool */,
 				F3106E9F228E97F8005C15CB /* BinaryTree */,
 			);
@@ -230,6 +235,7 @@
 			files = (
 				F3A380A42292490400CC1261 /* JKRBinaryTreeNode.m in Sources */,
 				F3106EB0228E97F8005C15CB /* JKRBinaryTree.m in Sources */,
+				F3D0B62B2293D08A00D6D23E /* Person.m in Sources */,
 				F3A380A12292465A00CC1261 /* JKRTimeTool.m in Sources */,
 				F3A380A722924A3A00CC1261 /* JKRAVLTreeNode.m in Sources */,
 				F3106EAF228E97F8005C15CB /* LevelOrderPrinter.m in Sources */,

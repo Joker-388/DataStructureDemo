@@ -55,7 +55,7 @@
     
     JKRBinaryTreeNode *parent = _root;
     JKRBinaryTreeNode *node = _root;
-    int cmp = 0;
+    NSInteger cmp = 0;
     while (node) {
         cmp = [self compareWithValue1:object value2:node.element];
         parent = node;
@@ -88,7 +88,7 @@
 
 - (void)elementNotNullCheck:(id)element {
     if (!element) {
-        NSAssert(NO, @"element must not be null");
+        NSAssert(NO, @"object must not be null!");
     }
 }
 
@@ -160,7 +160,7 @@
 - (JKRBinaryTreeNode *)nodeWithObject:(id)object {
     JKRBinaryTreeNode *node = _root;
     while (node) {
-        int cmp = [self compareWithValue1:object value2:node.element];
+        NSInteger cmp = [self compareWithValue1:object value2:node.element];
         if (!cmp) {
             return node;
         } else if (cmp > 0) {
@@ -173,8 +173,17 @@
 }
 
 #pragma mark - 元素比较
-- (int)compareWithValue1:(id)value1 value2:(id)value2 {
-    int result = _compareBlock ? _compareBlock(value1, value2) : [value1 compare:value2];
+- (NSInteger)compareWithValue1:(id)value1 value2:(id)value2 {
+    NSInteger result = 0;
+    if (_compareBlock) {
+        result = _compareBlock(value1, value2);
+    } else if ([value1 respondsToSelector:@selector(binaryTreeCompare:)]) {
+        result = [value1 binaryTreeCompare:value2];
+    } else if ([value1 respondsToSelector:@selector(compare:)]){
+        result = [value1 compare:value2];
+    } else {
+        NSAssert(NO, @"object can not compare!");
+    }
     return self.hasInvert ? -result : result;
 }
 
