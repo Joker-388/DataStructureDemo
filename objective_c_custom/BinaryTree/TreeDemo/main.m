@@ -26,48 +26,85 @@ void testBinarySearchTree() {
         return e1.intValue - e2.intValue;
     }];
     
-    NSArray<NSNumber *> *numbers = @[@7,@4,@2,@1,@3,@5,@6,@9,@8,@11,@10,@12];
+    NSSet *set;
+    [set enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        
+    }];
+    [set allObjects];
+    
+    int nums[] = {7,4,2,1,3,5,9,8,11,10,12};
+    NSMutableArray *numbers = [NSMutableArray array];
+    for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
+        printf("%d ", nums[i]);
+        [numbers addObject:[NSNumber numberWithInt:nums[i]]];
+    }
+    printf("\n");
+    
     for (NSNumber *number in numbers) {
         [tree addObject:number];
     }
+    
     /// 打印二叉树
     NSLog(@"\n-------- 原二叉树 --------");
     [tree printTree];
     
-    NSLog(@"\n-------- 递归翻转 --------");
-    [tree invertByRecursion];
-    [tree printTree];
-    
-    NSLog(@"\n前序 %@", tree.preorderTraversal);
-    
-    /// 后序 1 3 2 5 4 8 10 12 11 9 7
-    NSLog(@"\n后序 %@", tree.postorderTraversal);
-    
-    /// 中序 1 2 3 4 5 7 8 9 10 11 12
-    NSLog(@"\n中序 %@", tree.inorderTraversal);
-    
-    /// 层序
-    NSLog(@"\n层序 %@", tree.levelOrderTraversal);
-    
-    NSLog(@"\n-------- 迭代翻转 --------");
-    [tree invertByIteration];
-    [tree printTree];
+//    NSLog(@"\n-------- 递归翻转 --------");
+//    [tree invertByRecursion];
+//    [tree printTree];
+//
+//    NSLog(@"\n前序 %@", tree.preorderTraversal);
+//
+//    /// 后序 1 3 2 5 4 8 10 12 11 9 7
+//    NSLog(@"\n后序 %@", tree.postorderTraversal);
+//
+//    /// 中序 1 2 3 4 5 7 8 9 10 11 12
+//    NSLog(@"\n中序 %@", tree.inorderTraversal);
+//
+//    /// 层序
+//    NSLog(@"\n层序 %@", tree.levelOrderTraversal);
+//
+//    NSLog(@"\n-------- 迭代翻转 --------");
+//    [tree invertByIteration];
+//    [tree printTree];
     
     NSLog(@"\n二叉树高度: %zd", tree.height);
     
     NSLog(@"\n二叉树节点个数: %zd", tree.count);
-    
     /// 前序 7 4 2 1 3 5 9 8 11 10 12
-    NSLog(@"\n前序 %@", tree.preorderTraversal);
+    NSLog(@"\n前序 %@", [tree allObjectsWithTraversalType:JKRBinaryTreeTraversalTypePreorder]);
+    [tree enumerateObjectsWithTraversalType:JKRBinaryTreeTraversalTypePreorder usingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isEqual:@4]) {
+            *stop = YES;
+        }
+        NSLog(@"%@", obj);
+    }];
     
     /// 后序 1 3 2 5 4 8 10 12 11 9 7
-    NSLog(@"\n后序 %@", tree.postorderTraversal);
-    
+    NSLog(@"\n后序 %@", [tree allObjectsWithTraversalType:JKRBinaryTreeTraversalTypePostorder]);
+    [tree enumerateObjectsWithTraversalType:JKRBinaryTreeTraversalTypePostorder usingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isEqual:@4]) {
+            *stop = YES;
+        }
+        NSLog(@"%@", obj);
+    }];
+
     /// 中序 1 2 3 4 5 7 8 9 10 11 12
-    NSLog(@"\n中序 %@", tree.inorderTraversal);
-    
-    /// 层序
-    NSLog(@"\n层序 %@", tree.levelOrderTraversal);
+    NSLog(@"\n中序 %@", [tree allObjectsWithTraversalType:JKRBinaryTreeTraversalTypeInorder]);
+    [tree enumerateObjectsWithTraversalType:JKRBinaryTreeTraversalTypeInorder usingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isEqual:@4]) {
+            *stop = YES;
+        }
+        NSLog(@"%@", obj);
+    }];
+
+    /// 层序 7 4 9 2 5 8 11 1 3 10 12
+    NSLog(@"\n层序 %@", [tree allObjectsWithTraversalType:JKRBinaryTreeTraversalTypeLevelOrder]);
+    [tree enumerateObjectsWithTraversalType:JKRBinaryTreeTraversalTypeLevelOrder usingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isEqual:@11]) {
+            *stop = YES;
+        }
+        NSLog(@"%@", obj);
+    }];
     
     /// 清空
     [tree removeAllObjects];
@@ -93,7 +130,7 @@ void testAVLTree() {
 
 void testRedBlackTree() {
     JKRBinarySearchTree<NSNumber *> *rb = [JKRRedBlackTree new];
-
+    rb.debugPrint = YES;
     int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20,52,60};
     
     NSMutableArray *numbers = [NSMutableArray array];
@@ -102,21 +139,19 @@ void testRedBlackTree() {
         [numbers addObject:[NSNumber numberWithInt:nums[i]]];
     }
     
-    rb.debugPrint = YES;
-    
-    printf("\n--- Start Add ---\n\n");
     for (NSNumber *number in numbers) {
+        printf("Add: %d\n\n", number.intValue);
         [rb addObject:number];
         printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
-        printf("-------------------------------------------------------------------\n\n");
+        printf("-------------------------------------------------------------------\n\n\n");
     }
     
-//    for (NSNumber *number in numbers) {
-//        printf("Remove: %d\n\n", number.intValue);
-//        [rb removeObject:number];
-//        printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
-//        printf("-------------------------------------------------------------------\n\n\n");
-//    }
+    for (NSNumber *number in numbers) {
+        printf("Remove: %d\n\n", number.intValue);
+        [rb removeObject:number];
+        printf("--- 最终平衡后结果 ---\n%s\n\n", [rb.description UTF8String]);
+        printf("-------------------------------------------------------------------\n\n\n");
+    }
 }
 
 void compare() {

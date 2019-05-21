@@ -10,14 +10,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, JKRBinaryTreeTraversalType) {
+    JKRBinaryTreeTraversalTypePreorder = 1,
+    JKRBinaryTreeTraversalTypeInorder,
+    JKRBinaryTreeTraversalTypePostorder,
+    JKRBinaryTreeTraversalTypeLevelOrder
+};
+
 @class JKRBinaryTreeNode;
 
-@interface JKRBinaryTree<E> : NSObject {
+@interface JKRBinaryTree<ObjectType> : NSObject {
 @protected
     NSUInteger _size;
     JKRBinaryTreeNode *_root;
 }
-
 /// 是否显示debug打印
 @property (nonatomic, assign) BOOL debugPrint;
 
@@ -29,14 +35,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAllObjects;
 /// 二叉树高度
 - (NSUInteger)height;
-/// 前序遍历
-- (NSMutableArray<E> *)preorderTraversal;
-/// 后序遍历
-- (NSMutableArray<E> *)postorderTraversal;
-/// 中序遍历
-- (NSMutableArray<E> *)inorderTraversal;
-/// 层序遍历
-- (NSMutableArray<E> *)levelOrderTraversal;
+
+/// 获取所有元素（默认中序遍历）
+- (NSMutableArray<ObjectType> *)allObjects;
+/// 获取所有元素（指定二叉树遍历方式）
+- (NSMutableArray<ObjectType> *)allObjectsWithTraversalType:(JKRBinaryTreeTraversalType)traversalType;
+/// 枚举元素（默认中序遍历）
+- (void)enumerateObjectsUsingBlock:(void (^)(ObjectType obj, BOOL *stop))block;
+/// 枚举元素（指定二叉树遍历方式）
+- (void)enumerateObjectsWithTraversalType:(JKRBinaryTreeTraversalType)traversalType usingBlock:(void (^)(ObjectType obj, BOOL *stop))block;
+
 /// 翻转二叉树 递归
 - (void)invertByRecursion;
 /// 翻转二叉树 迭代

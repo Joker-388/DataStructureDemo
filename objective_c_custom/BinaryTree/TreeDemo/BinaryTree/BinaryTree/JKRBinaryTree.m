@@ -53,16 +53,81 @@ typedef void(^orderBlock)(id element);
     return height;
 }
 
-#pragma mark - 二叉树遍历
+
+
+#pragma mark - 获取所有元素（默认中序遍历）
+- (NSMutableArray *)allObjects {
+    return [self inorderTraversal];
+}
+
+#pragma mark -获取所有元素（指定二叉树遍历方式）
+- (NSMutableArray *)allObjectsWithTraversalType:(JKRBinaryTreeTraversalType)traversalType {
+    switch (traversalType) {
+        case JKRBinaryTreeTraversalTypePreorder:
+            return [self preorderTraversal];
+            break;
+        case JKRBinaryTreeTraversalTypeInorder:
+            return [self inorderTraversal];
+            break;
+        case JKRBinaryTreeTraversalTypePostorder:
+            return [self postorderTraversal];
+            break;
+        case JKRBinaryTreeTraversalTypeLevelOrder:
+            return [self levelOrderTraversal];
+            break;
+        default:
+            return [self inorderTraversal];
+            break;
+    }
+}
+
+#pragma mark - 枚举元素（默认中序遍历）
+- (void)enumerateObjectsUsingBlock:(void (^)(id _Nonnull, BOOL * _Nonnull))block {
+    [self enumerateObjectsWithInorderTraversalUsingBlock:block];
+}
+
+#pragma mark - 枚举元素（指定二叉树遍历方式）
+- (void)enumerateObjectsWithTraversalType:(JKRBinaryTreeTraversalType)traversalType usingBlock:(void (^)(id _Nonnull, BOOL * _Nonnull))block {
+    switch (traversalType) {
+        case JKRBinaryTreeTraversalTypePreorder:
+            [self enumerateObjectsWithPreorderTraversalUsingBlock:block];
+            break;
+        case JKRBinaryTreeTraversalTypeInorder:
+            [self enumerateObjectsWithInorderTraversalUsingBlock:block];
+            break;
+        case JKRBinaryTreeTraversalTypePostorder:
+            [self enumerateObjectsWithPostorderTraversalUsingBlock:block];
+            break;
+        case JKRBinaryTreeTraversalTypeLevelOrder:
+            [self enumerateObjectsWithLevelOrderTraversalUsingBlock:block];
+            break;
+        default:
+            [self enumerateObjectsWithInorderTraversalUsingBlock:block];
+            break;
+    }
+}
+
+#pragma mark - 前序遍历
+/*
+ 非自平衡的二叉搜索树，前序遍历会按照添加节点的顺序输出，AVL树、红黑树则不是
+ */
 - (NSMutableArray *)preorderTraversal {
+    __block BOOL stop = NO;
     NSMutableArray *elements = [NSMutableArray array];
     [self preorderTraversal:_root block:^(id element) {
         [elements addObject:element];
-    }];
+    } stop:&stop];
     return elements;
 }
 
-- (void)preorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block{
+- (void)enumerateObjectsWithPreorderTraversalUsingBlock:(void (^)(id _Nonnull, BOOL * _Nonnull))block {
+    __block BOOL stop = NO;
+    [self preorderTraversal:_root block:^(id element) {
+        block(element, &stop);
+    } stop:&stop];
+}
+
+- (void)preorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block stop:(BOOL *)stop {
     //    if (node) {
     //        block(node.element);
     //        [self preOrderTraversal:node.left block:block];
@@ -71,7 +136,7 @@ typedef void(^orderBlock)(id element);
     if (node) {
         NSMutableArray *stack = [NSMutableArray array];
         [stack addObject:node];
-        while (stack.count) {
+        while (stack.count && !*stop) {
             JKRBinaryTreeNode *n = [stack lastObject];
             block(n.element);
             [stack removeLastObject];
@@ -85,47 +150,69 @@ typedef void(^orderBlock)(id element);
     }
 }
 
+#pragma mark - 后序遍历
 - (NSMutableArray *)postorderTraversal {
+    __block BOOL stop = NO;
     NSMutableArray *elements = [NSMutableArray array];
     [self postorderTraversal:_root block:^(id element) {
-        //        [elements addObject:element];
-        [elements insertObject:element atIndex:0];
-    }];
+        [elements addObject:element];
+//        [elements insertObject:element atIndex:0];
+    } stop:&stop];
     return elements;
 }
 
-- (void)postorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block {
-    //    if (node) {
-    //        [self postorderTraversal:node.left block:block];
-    //        [self postorderTraversal:node.right block:block];
-    //        block(node.element);
-    //    }
-    if (node) {
-        NSMutableArray *stack = [NSMutableArray array];
-        [stack addObject:node];
-        while (stack.count) {
-            JKRBinaryTreeNode *node = [stack lastObject];
-            block(node.element);
-            [stack removeLastObject];
-            if (node.left) {
-                [stack addObject:node.left];
-            }
-            if (node.right) {
-                [stack addObject:node.right];
-            }
-        }
-    }
+- (void)enumerateObjectsWithPostorderTraversalUsingBlock:(void (^)(id _Nonnull, BOOL * _Nonnull))block {
+    __block BOOL stop = NO;
+    [self postorderTraversal:_root block:^(id element) {
+        block(element, &stop);
+    } stop:&stop];
 }
 
+- (void)postorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block stop:(BOOL *)stop {
+    if (node && !*stop) {
+        [self postorderTraversal:node.left block:block stop:stop];
+        [self postorderTraversal:node.right block:block stop:stop];
+        if (*stop) return;
+        block(node.element);
+    }
+//    if (node) {
+//        NSMutableArray *stack = [NSMutableArray array];
+//        [stack addObject:node];
+//        while (stack.count && !*stop) {
+//            JKRBinaryTreeNode *node = [stack lastObject];
+//            block(node.element);
+//            [stack removeLastObject];
+//            if (node.left) {
+//                [stack addObject:node.left];
+//            }
+//            if (node.right) {
+//                [stack addObject:node.right];
+//            }
+//        }
+//    }
+}
+
+#pragma mark - 中序遍历
+/*
+ 二叉搜索树中序遍历，会按照定义的比较规则升序或者降序输出
+ */
 - (NSMutableArray *)inorderTraversal {
+    __block BOOL stop = NO;
     NSMutableArray *elements = [NSMutableArray array];
     [self inorderTraversal:_root block:^(id element) {
         [elements addObject:element];
-    }];
+    } stop:&stop];
     return elements;
 }
 
-- (void)inorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block {
+- (void)enumerateObjectsWithInorderTraversalUsingBlock:(void (^)(id _Nonnull, BOOL * _Nonnull))block {
+    __block BOOL stop = NO;
+    [self inorderTraversal:_root block:^(id element) {
+        block(element, &stop);
+    } stop:&stop];
+}
+
+- (void)inorderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block stop:(BOOL *)stop {
     //    if (node) {
     //        [self inorderTraversal:node.left block:block];
     //        block(node.element);
@@ -144,24 +231,34 @@ typedef void(^orderBlock)(id element);
                 [stack removeLastObject];
                 node = n.right;
             }
-        } while(stack.count || node);
+        } while((stack.count || node) && !*stop);
     }
 }
 
+#pragma mark - 层序遍历
 - (NSMutableArray *)levelOrderTraversal {
+    __block BOOL stop = NO;
     NSMutableArray *elements = [NSMutableArray array];
     [self levelOrderTraversal:_root block:^(id element) {
         [elements addObject:element];
-    }];
+    } stop:&stop];
     return elements;
 }
 
-- (void)levelOrderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block {
+- (void)enumerateObjectsWithLevelOrderTraversalUsingBlock:(void (^)(id _Nonnull, BOOL * _Nonnull))block {
+    __block BOOL stop = NO;
+    [self levelOrderTraversal:_root block:^(id element) {
+        block(element, &stop);
+    } stop:&stop];
+}
+
+- (void)levelOrderTraversal:(JKRBinaryTreeNode *)node block:(orderBlock)block stop:(BOOL *)stop {
     if (node) {
         NSMutableArray *queue = [NSMutableArray array];
         [queue addObject:node];
-        while (queue.count) {
+        while (queue.count && !*stop) {
             for (NSInteger i = 0, n = queue.count; i < n; i++) {
+                if (*stop) return;
                 JKRBinaryTreeNode *n = [queue firstObject];
                 block(n.element);
                 [queue removeObjectAtIndex:0];

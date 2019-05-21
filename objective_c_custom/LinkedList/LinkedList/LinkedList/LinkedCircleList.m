@@ -15,6 +15,7 @@
     self.element = element;
     self.next = next;
     self.prev = prev;
+    
     return self;
 }
 
