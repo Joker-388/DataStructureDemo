@@ -254,18 +254,18 @@
         NSMutableArray<PrintNode *> *rowNodes = [NSMutableArray array];
         BOOL notNull = false;
         for (PrintNode *node in preRowNodes) {
-            if ([node isKindOfClass:[NSNull class]]) {
+            if ([node isEqual:[NSNull null]]) {
                 [rowNodes addObject:(PrintNode *)[NSNull new]];
                 [rowNodes addObject:(PrintNode *)[NSNull new]];
             } else {
                 PrintNode *left = [self addNodeWithNodes:rowNodes btNode:[self.tree print_left:node.btNode]];
-                if (![left isKindOfClass:[NSNull class]]) {
+                if (![left isEqual:[NSNull null]]) {
                     node.left = left;
                     left.parent = node;
                     notNull = true;
                 }
                 PrintNode *right = [self addNodeWithNodes:rowNodes btNode:[self.tree print_right:node.btNode]];
-                if (![right isKindOfClass:[NSNull class]]) {
+                if (![right isEqual:[NSNull null]]) {
                     node.right = right;
                     right.parent = node;
                     notNull = true;
@@ -306,7 +306,7 @@
             }
             rowLength += cornerSpace;
             PrintNode *node = rowNodes[j];
-            if (![node isKindOfClass:[NSNull class]]) {
+            if (![node isEqual:[NSNull null]]) {
                 // 居中
                 int deltaX = (self.maxWidth - node.width) >> 1;
                 node.x = rowLength + deltaX;
@@ -318,7 +318,7 @@
         // 移除所有空节点
         NSMutableArray *removeRows = [NSMutableArray array];
         for (int m = 0; m < rowNodes.count; m++) {
-            if ([rowNodes[m] isKindOfClass:[NSNull class]]) [removeRows addObject:rowNodes[m]];
+            if ([rowNodes[m] isEqual:[NSNull null]]) [removeRows addObject:rowNodes[m]];
         }
         [rowNodes removeObjectsInArray:removeRows];
     }

@@ -10,6 +10,13 @@
 
 @implementation JKRBinaryTreeNode
 
+- (instancetype)initWithObject:(id)object parent:(JKRBinaryTreeNode *)parent {
+    self = [super init];
+    self.object = object;
+    self.parent = parent;
+    return self;
+}
+
 - (BOOL)isLeaf {
     return !self.left && !self.right;
 }

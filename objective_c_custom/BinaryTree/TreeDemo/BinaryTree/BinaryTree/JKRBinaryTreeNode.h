@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) JKRBinaryTreeNode *right;
 @property (nonatomic, weak, nullable) JKRBinaryTreeNode *parent;
 
+- (instancetype)initWithObject:(id)object parent:(JKRBinaryTreeNode *)parent;
+
 /// 是否是叶子节点
 - (BOOL)isLeaf;
 /// 是否有度为2

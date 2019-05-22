@@ -376,10 +376,7 @@ typedef void(^orderBlock)(id element);
 
 #pragma mark - 创建节点
 - (JKRBinaryTreeNode *)createNodeWithObject:(id)object parent:(JKRBinaryTreeNode *)parent {
-    JKRBinaryTreeNode *node = [[JKRBinaryTreeNode alloc] init];
-    node.object = object;
-    node.parent = parent;
-    return node;
+    return [[JKRBinaryTreeNode alloc] initWithObject:object parent:parent];
 }
 
 #pragma mark - dealloc

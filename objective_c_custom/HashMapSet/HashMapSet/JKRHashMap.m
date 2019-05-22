@@ -1,23 +1,26 @@
 //
-//  JKRTreeMap.m
-//  TreeMapSet
+//  JKRHashMap.m
+//  HashMapSet
 //
-//  Created by Lucky on 2019/5/18.
-//  Copyright © 2019 Lucky. All rights reserved.
+//  Created by Joker on 2019/5/21.
+//  Copyright © 2019 Joker. All rights reserved.
 //
 
-#import "JKRTreeMap.h"
+#import "JKRHashMap.h"
+#import "Person.h"
+#import "JKRArray.h"
 
-@interface JKRTreeMapNode : NSObject
+@interface JKRHasMapNode : NSObject
 
+@property (nonatomic, assign) NSUInteger keyHashCode;
 @property (nonatomic, assign) BOOL color;
 @property (nonatomic, strong, nonnull) id key;
 @property (nonatomic, strong, nonnull) id value;
-@property (nonatomic, strong, nullable) JKRTreeMapNode *left;
-@property (nonatomic, strong, nullable) JKRTreeMapNode *right;
-@property (nonatomic, weak, nullable) JKRTreeMapNode *parent;
+@property (nonatomic, strong, nullable) JKRHasMapNode *left;
+@property (nonatomic, strong, nullable) JKRHasMapNode *right;
+@property (nonatomic, weak, nullable) JKRHasMapNode *parent;
 
-- (instancetype)initWithKey:(id)key value:(id)value parent:(JKRTreeMapNode *)parent;
+- (instancetype)initWithKey:(id)key value:(id)value parent:(JKRHasMapNode *)parent;
 /// 是否是叶子节点
 - (BOOL)isLeaf;
 /// 是否有度为2
@@ -27,170 +30,118 @@
 /// 是否是父节点的右子树
 - (BOOL)isRightChild;
 /// 返回兄弟节点
-- (JKRTreeMapNode *)sibling;
+- (JKRHasMapNode *)sibling;
 
 @end
 
+@interface JKRHashMap ()
 
-@implementation JKRTreeMap
+@property (nonatomic, strong) JKRArray *array;
 
-static BOOL const RED = false;
-static BOOL const BLACK = true;
+@end
 
-- (instancetype)initWithCompare:(jkrmap_compareBlock)compare {
+@implementation JKRHashMap
+
+static BOOL const HASH_MAP_COLOR_RED = false;
+static BOOL const HASH_MAP_COLOR_BLACK = true;
+static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
+
+- (instancetype)init {
     self = [super init];
-    _compareBlock = compare;
+    self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
     return self;
 }
 
-#pragma mark - 添加元素
-- (void)setObject:(id)object forKey:(id)key {
-    [self keyNotNullCheck:key];
-    
-    if (!_root) {
-        JKRTreeMapNode *newNode = [[JKRTreeMapNode alloc] initWithKey:key value:object parent:nil];
-        _root = newNode;
-        _size++;
-        [self afterAddWithNewNode:newNode];
-        return;
-    }
-    
-    JKRTreeMapNode *parent = _root;
-    JKRTreeMapNode *node = _root;
-    int cmp = 0;
-    while (node) {
-        cmp = [self compareWithKey1:key key2:node.key];
-        parent = node;
-        if (cmp < 0) {
-            node = node.left;
-        } else if (cmp > 0) {
-            node = node.right;
-        } else {
-            node.value = object;
-            return;
-        }
-    }
-    
-    JKRTreeMapNode *newNode = [[JKRTreeMapNode alloc] initWithKey:key value:object parent:parent];
-    if (cmp < 0) {
-        parent.left = newNode;
-    } else {
-        parent.right = newNode;
-    }
-
-    [self afterAddWithNewNode:newNode];
-    _size++;
+- (void)removeAllObjects {
+    _size = 0;
+    self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
 }
 
-#pragma mark - 通过key删除元素
+- (void)setObject:(id)object forKey:(id)key {
+    NSUInteger index = [self indexWithKey:key];
+    JKRHasMapNode *root = [self.array objectAtIndex:index];
+    if ([root isEqual:[NSNull new]]) {
+        root = [[JKRHasMapNode alloc] initWithKey:key value:object parent:nil];
+        [self.array setObject:root AtIndex:index];
+        [self afterAddWithNewNode:root];
+        _size++;
+    } else {
+        if (!root) {
+            JKRHasMapNode *newNode = [[JKRHasMapNode alloc] initWithKey:key value:object parent:nil];
+            root = newNode;
+            _size++;
+            [self afterAddWithNewNode:newNode];
+            return;
+        }
+        
+        JKRHasMapNode *parent = root;
+        JKRHasMapNode *node = root;
+        int cmp = 0;
+        do {
+            cmp = 1;
+            parent = node;
+            if (cmp < 0) {
+                node = node.left;
+            } else if (cmp > 0) {
+                node = node.right;
+            } else {
+                node.value = object;
+                return;
+            }
+        } while (root);
+        
+        JKRHasMapNode *newNode = [[JKRHasMapNode alloc] initWithKey:key value:object parent:parent];
+        if (cmp < 0) {
+            parent.left = newNode;
+        } else {
+            parent.right = newNode;
+        }
+        
+        [self afterAddWithNewNode:newNode];
+    }
+}
+
+- (id)objectForKey:(id)key {
+    JKRHasMapNode *node = [self nodeWithKey:key];
+    return node ? node.value : nil;
+}
+
+- (BOOL)containsKey:(id)key {
+    return [self nodeWithKey:key] != nil;
+}
+
+- (BOOL)containsObject:(id)object {
+    return NO;
+}
+
 - (void)removeObjectForKey:(id)key {
     [self removeWithNode:[self nodeWithKey:key]];
 }
 
-#pragma mark - 清空
-- (void)removeAllObjects {
-    _root = nil;
-    _size = 0;
-}
-
-#pragma mark - 返回元素个数
 - (NSUInteger)count {
     return _size;
 }
 
-#pragma mark - 通过key获取值
-- (id)objectForKey:(id)key {
-    JKRTreeMapNode *node = [self nodeWithKey:key];
-    return node ? node.value : nil;
-}
-
-#pragma mark - 是否包含key
-- (BOOL)containsKey:(id)key {
-     return [self nodeWithKey:key] != nil;
-}
-
-#pragma mark - 是否包含值
-- (BOOL)containsObject:(id)object {
-    if (!_root) {
-        return false;
-    }
-    
-    NSMutableArray *queue = [NSMutableArray array];
-    [queue addObject:_root];
-    while (queue.count) {
-        for (NSUInteger i = 0, n = queue.count; i < n; i++) {
-            JKRTreeMapNode *n = [queue firstObject];
-            if ([self comparyValueWithValue1:object value2:n.value]) return YES;
-            [queue removeObjectAtIndex:0];
-            if (n.left) {
-                [queue addObject:n.left];
-            }
-            if (n.right) {
-                [queue addObject:n.right];
-            }
-        }
-    }
-    return false;
-}
-
-#pragma mark - 枚举
-- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id _Nonnull, id _Nonnull, BOOL * _Nonnull))block {
-    if (!_root) {
-        return;
-    }
-    
-    BOOL stop = NO;
-    
-    NSMutableArray *stack = [NSMutableArray array];
-    JKRTreeMapNode *node = _root;
-    do {
-        while (node) {
-            [stack addObject:node];
-            node = node.left;
-        }
-        if (stack.count) {
-            JKRTreeMapNode *n = [stack lastObject];
-            block(n.key, n.value, &stop);
-            [stack removeLastObject];
-            node = n.right;
-        }
-    } while((stack.count || node) && !stop);
-}
-
-#pragma mark - key比较
-- (int)compareWithKey1:(id)key1 key2:(id)key2 {
-    if (_compareBlock) {
-        return _compareBlock(key1, key2);
-    } else {
-        return [key1 compare:key2];
-    }
-}
-
-#pragma mark - value比较
-- (BOOL)comparyValueWithValue1:(id)value1 value2:(id)value2 {
-    return !value1 ? !value2 : [value1 isEqual:value2];
-}
-
-#pragma mark - 删除节点
-- (void)removeWithNode:(JKRTreeMapNode *)node {
+- (void)removeWithNode:(JKRHasMapNode *)node {
     if (!node) {
         return;
     }
     _size--;
     
     if (node.hasTwoChildren) {
-        JKRTreeMapNode *s = [self successorWithNode:node];
+        JKRHasMapNode *s = [self successorWithNode:node];
         node.key = s.key;
         node.value = s.value;
         node = s;
     }
     
     // 实际被删除节点的子节点
-    JKRTreeMapNode *replacement = node.left ? node.left : node.right;
+    JKRHasMapNode *replacement = node.left ? node.left : node.right;
+    NSUInteger index = [self indexWithNode:replacement];
     if (replacement) { // 被删除的节点度为1
         replacement.parent = node.parent;
         if (!node.parent) {
-            _root = replacement;
+            [self.array setObject:replacement AtIndex:index];
         } else if (node == node.parent.left) {
             node.parent.left = replacement;
         } else {
@@ -198,7 +149,7 @@ static BOOL const BLACK = true;
         }
         [self afterRemoveWithNode:replacement];
     } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
-        _root = nil;
+        [self.array setObject:nil AtIndex:0];
         [self afterRemoveWithNode:node];
     } else { // 被删除的节点是叶子节点且不是根节点
         if (node == node.parent.left) {
@@ -210,59 +161,14 @@ static BOOL const BLACK = true;
     }
 }
 
-#pragma mark - 节点的后继节点
-- (JKRTreeMapNode *)successorWithNode:(JKRTreeMapNode *)node {
-    if (!node) {
-        return nil;
-    }
-    
-    if (node.right) {
-        JKRTreeMapNode *p = node.right;
-        while (p.left) {
-            p = p.left;
-        }
-        return p;
-    }
-    
-    while (node.parent && node == node.parent.right) {
-        node = node.parent;
-    }
-    
-    return node.parent;
-}
-
-#pragma mark - 通过key获得节点
-- (JKRTreeMapNode *)nodeWithKey:(id)key {
-    JKRTreeMapNode *node = _root;
-    while (node) {
-        int cmp = [self compareWithKey1:key key2:node.key];
-        if (!cmp) {
-            return node;
-        } else if (cmp > 0) {
-            node = node.right;
-        } else {
-            node = node.left;
-        }
-    }
-    return nil;
-}
-
-#pragma mark - key空判断
-- (void)keyNotNullCheck:(id)key {
-    if (!key) {
-        NSAssert(NO, @"element must not be null");
-    }
-}
-
-#pragma mark - 删除后维持平衡
-- (void)afterRemoveWithNode:(JKRTreeMapNode *)node {
+- (void)afterRemoveWithNode:(JKRHasMapNode *)node {
     // 如果删除的节点是红色，或者用以取代删除节点的子节点是红色
     if ([self isRed:node]) {
         [self black:node];
         return;
     }
     
-    JKRTreeMapNode *parent = node.parent;
+    JKRHasMapNode *parent = node.parent;
     // 删除的是根节点
     if (!parent) {
         return;
@@ -270,7 +176,7 @@ static BOOL const BLACK = true;
     
     // 删除的是黑色叶子节点，下溢，判定被删除的节点是左还是右
     BOOL left = !parent.left || node.isLeftChild;
-    JKRTreeMapNode *sibling = left ? parent.right : parent.left;
+    JKRHasMapNode *sibling = left ? parent.right : parent.left;
     if (left) { // 被删除的节点在左边，兄弟节点在右边
         if ([self isRed:sibling]) { // 兄弟节点是红色
             [self black:sibling];
@@ -333,24 +239,44 @@ static BOOL const BLACK = true;
     }
 }
 
-#pragma mark - 添加后维持平衡
-- (void)afterAddWithNewNode:(JKRTreeMapNode *)node {
-    JKRTreeMapNode *parent = node.parent;
+#pragma mark - 节点的后继节点
+- (JKRHasMapNode *)successorWithNode:(JKRHasMapNode *)node {
+    if (!node) {
+        return nil;
+    }
+    
+    if (node.right) {
+        JKRHasMapNode *p = node.right;
+        while (p.left) {
+            p = p.left;
+        }
+        return p;
+    }
+    
+    while (node.parent && node == node.parent.right) {
+        node = node.parent;
+    }
+    
+    return node.parent;
+}
+
+- (void)afterAddWithNewNode:(JKRHasMapNode *)node {
+    JKRHasMapNode *parent = node.parent;
     
     // 添加的节点是根节点 或者 上溢出到达根节点
     if (!parent) {
         [self black:node];
         return;
     }
-
+    
     if ([self isBlack:parent]) {
         return;
     }
     
     // 叔父节点
-    JKRTreeMapNode *uncle = parent.sibling;
+    JKRHasMapNode *uncle = parent.sibling;
     // 祖父节点
-    JKRTreeMapNode *grand = [self red:parent.parent];
+    JKRHasMapNode *grand = [self red:parent.parent];
     
     
     // 叔父节点是红色的情况，B树节点上溢
@@ -383,31 +309,31 @@ static BOOL const BLACK = true;
 }
 
 #pragma mark - 左旋转一个节点
-- (void)rotateLeft:(JKRTreeMapNode *)grand {
-    JKRTreeMapNode *parent = grand.right;
-    JKRTreeMapNode *child = parent.left;
+- (void)rotateLeft:(JKRHasMapNode *)grand {
+    JKRHasMapNode *parent = grand.right;
+    JKRHasMapNode *child = parent.left;
     grand.right = child;
     parent.left = grand;
     [self afterRotateWithGrand:grand parent:parent child:child];
 }
 
 #pragma mark - 右旋转一个节点
-- (void)rotateRight:(JKRTreeMapNode *)grand {
-    JKRTreeMapNode *parent = grand.left;
-    JKRTreeMapNode *child = parent.right;
+- (void)rotateRight:(JKRHasMapNode *)grand {
+    JKRHasMapNode *parent = grand.left;
+    JKRHasMapNode *child = parent.right;
     grand.left = child;
     parent.right = grand;
     [self afterRotateWithGrand:grand parent:parent child:child];
 }
 
 #pragma mark - 旋转后处理
-- (void)afterRotateWithGrand:(JKRTreeMapNode *)grand parent:(JKRTreeMapNode *)parent child:(JKRTreeMapNode *)child {
+- (void)afterRotateWithGrand:(JKRHasMapNode *)grand parent:(JKRHasMapNode *)parent child:(JKRHasMapNode *)child {
     if (grand.isLeftChild) {
         grand.parent.left = parent;
     } else if (grand.isRightChild) {
         grand.parent.right = parent;
     } else {
-        _root = parent;
+        [self.array setObject:parent AtIndex:[self indexWithNode:grand]];
     }
     
     if (child) {
@@ -419,7 +345,7 @@ static BOOL const BLACK = true;
 }
 
 #pragma mark - 为一个节点染色
-- (JKRTreeMapNode *)dyeNode:(JKRTreeMapNode *)node color:(BOOL)color {
+- (JKRHasMapNode *)dyeNode:(JKRHasMapNode *)node color:(BOOL)color {
     if (!node) {
         return node;
     }
@@ -428,44 +354,59 @@ static BOOL const BLACK = true;
 }
 
 #pragma mark - 将一个节点染成红色
-- (JKRTreeMapNode *)red:(JKRTreeMapNode *)node {
-    return [self dyeNode:node color:RED];
+- (JKRHasMapNode *)red:(JKRHasMapNode *)node {
+    return [self dyeNode:node color:HASH_MAP_COLOR_RED];
 }
 
 #pragma mark - 将一个节点染成黑色
-- (JKRTreeMapNode *)black:(JKRTreeMapNode *)node {
-    return [self dyeNode:node color:BLACK];
+- (JKRHasMapNode *)black:(JKRHasMapNode *)node {
+    return [self dyeNode:node color:HASH_MAP_COLOR_BLACK];
 }
 
 #pragma mark - 返回节点颜色
-- (BOOL)colorOf:(JKRTreeMapNode *)node {
-    return !node ? BLACK : node.color;
+- (BOOL)colorOf:(JKRHasMapNode *)node {
+    return !node ? HASH_MAP_COLOR_BLACK : node.color;
 }
 
 #pragma mark - 节点是否为黑色
-- (BOOL)isBlack:(JKRTreeMapNode *)node {
-    return [self colorOf:node] == BLACK;
+- (BOOL)isBlack:(JKRHasMapNode *)node {
+    return [self colorOf:node] == HASH_MAP_COLOR_BLACK;
 }
 
 #pragma mark - 节点是否为红色
-- (BOOL)isRed:(JKRTreeMapNode *)node {
-    return [self colorOf:node] == RED;
+- (BOOL)isRed:(JKRHasMapNode *)node {
+    return [self colorOf:node] == HASH_MAP_COLOR_RED;
 }
 
-- (void)dealloc {
-    NSLog(@"<%@: %p> dealloc", self.className, self);
+- (NSUInteger)indexWithKey:(id)key {
+    if (!key) {
+        return 0;
+    }
+    NSUInteger hash = [key hash];
+    return (hash ^ (hash >> 16)) & (self.array.length - 1);
 }
 
+- (NSUInteger)indexWithNode:(JKRHasMapNode *)node {
+    NSUInteger hash = node.hash;
+    return (hash ^ (hash >> 16)) & (self.array.length - 1);
+}
+
+- (JKRHasMapNode *)nodeWithKey:(id)key {
+    NSUInteger index = [self indexWithKey:key];
+    JKRHasMapNode *root = [self.array objectAtIndex:index];
+    return root;
+}
 
 @end
 
-@implementation JKRTreeMapNode
+@implementation JKRHasMapNode
 
-- (instancetype)initWithKey:(id)key value:(id)value parent:(JKRTreeMapNode *)parent {
+- (instancetype)initWithKey:(id)key value:(id)value parent:(JKRHasMapNode *)parent {
     self = [super init];
     self.key = key;
     self.value = value;
     self.parent = parent;
+    self.keyHashCode = key ? [key hash] : 0;
     return self;
 }
 
@@ -485,7 +426,7 @@ static BOOL const BLACK = true;
     return self.parent && self.parent.right == self;
 }
 
-- (JKRTreeMapNode *)sibling {
+- (JKRHasMapNode *)sibling {
     if ([self isLeftChild]) {
         return self.parent.right;
     }
@@ -496,7 +437,7 @@ static BOOL const BLACK = true;
 }
 
 - (void)dealloc {
-//    NSLog(@"<%@: %p> dealloc", self.className, self);
+    //    NSLog(@"<%@: %p> dealloc", self.className, self);
 }
 
 @end

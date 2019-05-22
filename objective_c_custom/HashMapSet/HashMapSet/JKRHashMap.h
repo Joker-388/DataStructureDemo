@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 删除元素
 - (void)removeObjectForKey:(KeyType)key;
 /// 添加一个元素
-- (void)setObject:(nullable ObjectType)object forKey:(KeyType <NSCopying>)key;
+- (void)setObject:(nullable ObjectType)object forKey:(KeyType)key;
 /// 获取元素
 - (nullable ObjectType)objectForKey:(KeyType)key;
 /// 是否包含元素

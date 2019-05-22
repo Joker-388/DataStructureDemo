@@ -10,6 +10,16 @@
 #import "Person.h"
 #import "JKRHashMap.h"
 
+#import "JKRArray.h"
+
+NSString * getRandomStr() {
+    char data[6];
+    for (int i = 0; i < 6; i++) data[i] = (char)((i ? 'a' : 'A') + (arc4random_uniform(26)));
+    NSString *randomStr = [[NSString alloc] initWithBytes:data length:6 encoding:NSUTF8StringEncoding];
+    NSString *string = [NSString stringWithFormat:@"%@",randomStr];
+    return string;
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
@@ -47,22 +57,87 @@ int main(int argc, const char * argv[]) {
 //        id array[10] = {};
 //        {
 //            Person *p = [Person new];
-//
+//            array[3] = p;
 //            array[5] = p;
+//            array[0] = p;
 //        }
-//
-//        NSLog(@"%@", array[5]);
+        
+//        NSMutableArray *b = [NSMutableArray arrayWithLength:18];
+//        b[5] = [Person new];
+//        b[18] = [NSObject new];
+//        NSLog(@"%d", 1<<4);
 //
 //        NSLog(@"end");
         
-        JKRHashMap *map = [JKRHashMap new];
+//        JKRHashMap *map = [JKRHashMap new];
+//        {
+//            Person *person = [Person new];
+//            [map setObject:person forKey:nil];
+//        }
+//        NSLog(@"%zd", map.count);
+        
+//        NSMutableArray *mutArr = [NSMutableArray array];
+//        for (int i = 0; i < 1000; i++) {
+//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                NSMutableArray *strArr = mutArr;
+//                [strArr addObject:@"i"];
+//            });
+//        }
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSMutableArray *strArr = mutArr;
+//            for (int i = 0; i < 1000; i++) {
+//                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                    [strArr addObject:@"i"];
+//                });
+//            }
+//            NSLog(@"%zd", mutArr.count);
+//        });
+//
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            for (int i = 0; i < 1000; i++) {
+//                NSMutableArray *strArr = mutArr;
+//                [strArr addObject:@"i"];
+//            }
+//        });
+        
+        
+//        JKRHashMap *map = [JKRHashMap new];
+//        for (NSUInteger i = 0; i < 30; i++) {
+//            Person *p = [Person new];
+//            p.age = i + 1;
+//            p.name = getRandomStr();
+//            [map setObject:[NSNumber numberWithInteger:i] forKey:p];
+//        }
+//
+//        NSLog(@"111111111111");
+        
+        JKRArray *array = [[JKRArray alloc] initWithLength:4];
+        
         {
-            Person *person = [Person new];
-            [map setObject:person forKey:nil];
+            Person *p = [Person new];
+            p.name = @"Joker";
+            p.age = 12;
+            [array setObject:p AtIndex:3];
         }
-        NSLog(@"%zd", map.count);
         
+        {
+            Person *p = [Person new];
+            p.name = @"Rose";
+            p.age = 12;
+            [array setObject:p AtIndex:2];
+        }
         
+        [array setObject:nil AtIndex:3];
+        
+//        [array removeObjectAtIndex:3];
+        
+//        array = [JKRArray arrayWithLength:8];
+        
+        Person *p1 = [array objectAtIndex:3];
+        NSLog(@"%@", p1);
+        Person *p2 = [array objectAtIndex:2];
+        NSLog(@"%@", p2);
     }
     return 0;
 }
