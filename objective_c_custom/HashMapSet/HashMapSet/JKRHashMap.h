@@ -23,13 +23,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 删除元素
 - (void)removeObjectForKey:(KeyType)key;
 /// 添加一个元素
-- (void)setObject:(nullable ObjectType)object forKey:(KeyType)key;
+- (void)setObject:(nullable ObjectType)object forKey:(nullable KeyType)key;
 /// 获取元素
-- (nullable ObjectType)objectForKey:(KeyType)key;
+- (nullable ObjectType)objectForKey:(nullable KeyType)key;
 /// 是否包含元素
 - (BOOL)containsObject:(nullable ObjectType)object;
 /// 是否包含key
-- (BOOL)containsKey:(KeyType)key;
+- (BOOL)containsKey:(nullable KeyType)key;
 /// 遍历所有元素，stop为停止遍历标记
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(KeyType key, ObjectType obj, BOOL *stop))block;
 

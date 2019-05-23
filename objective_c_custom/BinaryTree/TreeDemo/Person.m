@@ -18,7 +18,7 @@
 
 - (BOOL)isEqual:(id)object {
     if (self == object) return YES;
-    if (!object || ![object isKindOfClass:[Person class]])return NO;
+    if (!object || ![object isMemberOfClass:[Person class]])return NO;
     return self.age == ((Person *)object).age && (self.name ? [self.name isEqualToString:((Person *)object).name] : !((Person *)object).name);
 }
 

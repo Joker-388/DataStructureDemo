@@ -10,6 +10,8 @@
 #import "Person.h"
 #import "JKRHashMap.h"
 #import "NSObject+JKRDataStructure.h"
+#import "SubKey1.h"
+#import "SubKey2.h"
 
 #import "JKRArray.h"
 
@@ -19,6 +21,94 @@ NSString * getRandomStr() {
     NSString *randomStr = [[NSString alloc] initWithBytes:data length:6 encoding:NSUTF8StringEncoding];
     NSString *string = [NSString stringWithFormat:@"%@",randomStr];
     return string;
+}
+
+void check(BOOL pass, NSString *errorString) {
+    if (!pass) {
+        NSLog(@"!!! 发现错误 !!! :%@", errorString);
+    }
+}
+
+void test2() {
+    JKRHashMap *map = [JKRHashMap new];
+    for (NSUInteger i = 1; i <= 20; i++) {
+        [map setObject:[NSNumber numberWithInteger:i] forKey:[[Key alloc] initWithValue:i]];
+    }
+    for (NSUInteger i = 5; i <= 7; i++) {
+        [map setObject:[NSNumber numberWithInteger:i + 5]  forKey:[[Key alloc] initWithValue:i]];
+    }
+    
+    check(map.count == 20, [NSString stringWithFormat:@"20 : %zd", map.count]);
+    check([[map objectForKey:[[Key alloc] initWithValue:4]] integerValue] == 4, [NSString stringWithFormat:@"4 : %@", [map objectForKey:[[Key alloc] initWithValue:4]]]);
+    check([[map objectForKey:[[Key alloc] initWithValue:5]] integerValue] == 10, [NSString stringWithFormat:@"10 : %@", [map objectForKey:[[Key alloc] initWithValue:5]]]);
+    check([[map objectForKey:[[Key alloc] initWithValue:6]] integerValue] == 11, [NSString stringWithFormat:@"11 : %@", [map objectForKey:[[Key alloc] initWithValue:6]]]);
+    check([[map objectForKey:[[Key alloc] initWithValue:7]] integerValue] == 12, [NSString stringWithFormat:@"12 : %@", [map objectForKey:[[Key alloc] initWithValue:7]]]);
+}
+
+void test3() {
+    JKRHashMap *map = [JKRHashMap new];
+    [map setObject:@1 forKey:nil];
+    [map setObject:@2 forKey:[NSObject new]];
+    [map setObject:@3 forKey:@"jack"];
+    [map setObject:@4 forKey:@10];
+    [map setObject:@5 forKey:[NSObject new]];
+    [map setObject:@6 forKey:@"jack"];
+    [map setObject:@7 forKey:@10];
+    [map setObject:@8 forKey:nil];
+    [map setObject:nil forKey:@10];
+    check(map.count == 5, [NSString stringWithFormat:@"20 : %zd", map.count]);
+    check([[map objectForKey:nil] integerValue] == 8, @"");
+    check([[map objectForKey:@"jack"] integerValue] == 6, @"");
+    check([map objectForKey:@10] == nil, @"");
+    check([map objectForKey:[NSObject new]] == nil, @"");
+    check([map containsKey:@10], @"");
+    check([map containsKey:nil], @"");
+    check([map containsObject:nil], @"");
+    check([map containsObject:@1] == false, @"");
+}
+
+void test4() {
+    JKRHashMap *map = [JKRHashMap new];
+    [map setObject:@1 forKey:@"jack"];
+    [map setObject:@2 forKey:@"rose"];
+    [map setObject:@3 forKey:@"jim"];
+    [map setObject:@4 forKey:@"jake"];
+    for (NSUInteger i = 1; i <= 10; i++) {
+        [map setObject:[NSNumber numberWithInteger:i] forKey:[NSString stringWithFormat:@"test%zd", i]];
+        [map setObject:[NSNumber numberWithInteger:i] forKey:[[Key alloc] initWithValue:i]];
+    }
+    
+    for (NSUInteger i = 5; i <= 7; i++) {
+        Key *key = [[Key alloc] initWithValue:i];
+        NSNumber *number = [map objectForKey:key];
+        check(number.integerValue == i, @"");
+        [map removeObjectForKey:key];
+    }
+ 
+    for (NSUInteger i = 1; i <= 3; i++) {
+        [map setObject:[NSNumber numberWithInteger:i + 5] forKey:[[Key alloc] initWithValue:i]];
+    }
+    
+    check(map.count == 21, @"");
+    check([[map objectForKey:[[Key alloc] initWithValue:1]] integerValue] == 6, @"");
+    check([[map objectForKey:[[Key alloc] initWithValue:2]] integerValue] == 7, @"");
+    check([[map objectForKey:[[Key alloc] initWithValue:3]] integerValue] == 8, @"");
+    check([[map objectForKey:[[Key alloc] initWithValue:4]] integerValue] == 4, @"");
+    check([map objectForKey:[[Key alloc] initWithValue:5]] == nil, @"");
+    check([map objectForKey:[[Key alloc] initWithValue:6]] == nil, @"");
+    check([map objectForKey:[[Key alloc] initWithValue:7]] == nil, @"");
+    check([[map objectForKey:[[Key alloc] initWithValue:8]] integerValue] == 8, @"");
+}
+
+void test5() {
+    JKRHashMap *map = [JKRHashMap new];
+    for (NSUInteger i = 1; i <= 20; i++) {
+        [map setObject:[NSNumber numberWithInteger:i] forKey:[[SubKey1 alloc] initWithValue:i]];
+    }
+    [map setObject:[NSNumber numberWithInteger:5] forKey:[[SubKey2 alloc] initWithValue:1]];
+    check([[map objectForKey:[[SubKey1 alloc] initWithValue:1]] integerValue] == 5, @"");
+    check([[map objectForKey:[[SubKey2 alloc] initWithValue:1]] integerValue] == 5, @"");
+    check(map.count == 20, @"");
 }
 
 int main(int argc, const char * argv[]) {
@@ -142,19 +232,22 @@ int main(int argc, const char * argv[]) {
 //        }
 //        NSLog(@"打印 %@", array);
         
-        JKRHashMap *map = [JKRHashMap new];
-        for (NSInteger i = 0; i < 100; i++) {
-            [map setObject:[NSString stringWithFormat:@"%zd", i] forKey:[NSNumber numberWithInteger:i / 10]];
-//            [map setObject:[NSNumber numberWithInteger:i] forKey:getRandomStr()];
-        }
+//        JKRHashMap *map = [JKRHashMap new];
+//        for (NSInteger i = 0; i < 100; i++) {
+//            [map setObject:[NSString stringWithFormat:@"%zd", i] forKey:[NSNumber numberWithInteger:i / 10]];
+////            [map setObject:[NSNumber numberWithInteger:i] forKey:getRandomStr()];
+//        }
+//
+//        NSLog(@"%@", map);
+//
+//        for (NSInteger i = 0; i < 100; i++) {
+//            NSLog(@"%@", [map objectForKey:[NSNumber numberWithInteger:i]]);
+//        }
         
-        NSLog(@"%@", map);
-        
-        for (NSInteger i = 0; i < 100; i++) {
-            NSLog(@"%@", [map objectForKey:[NSNumber numberWithInteger:i]]);
-        }
-        
-        
+        test2();
+        test3();
+        test4();
+        test5();
     }
     return 0;
 }

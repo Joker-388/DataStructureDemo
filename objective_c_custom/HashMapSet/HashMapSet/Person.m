@@ -13,7 +13,7 @@
 /// 作为key，hash冲突时，key是否相等，哈希值相等的两个Person对象，isEqual不一定返回YES
 - (BOOL)isEqual:(id)object {
     if (self == object) return YES;
-    if (!object || ![object isKindOfClass:[Person class]])return NO;
+    if (!object || ![object isMemberOfClass:[Person class]])return NO;
     return self.age == ((Person *)object).age && (self.name ? [self.name isEqualToString:((Person *)object).name] : !((Person *)object).name);
 }
 

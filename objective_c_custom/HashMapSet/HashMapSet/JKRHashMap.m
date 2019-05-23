@@ -93,7 +93,7 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
             cmp = 1;
         } else if (h1 < h2) {
             cmp = -1;
-        } else if ([k1 isEqual:k2]) {
+        } else if (k1 == k2 || [k1 isEqual:k2]) {
             cmp = 0;
         } else if (k1 && k2 && [k1 class] == [k2 class] && [k1 respondsToSelector:@selector(compare:)] && (cmp = [k1 compare:k2])) {
             
@@ -147,16 +147,10 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
         [queue addObject:self.array[i]];
         while (queue.count) {
             JKRHasMapNode *node = queue.firstObject;
-            if ([object isEqual:node.value]) {
-                return YES;
-            }
+            if (object == node.value || [object isEqual:node.value]) return YES;
             [queue removeObjectAtIndex:0];
-            if (node.left) {
-                [queue addObject:node.left];
-            }
-            if (node.right) {
-                [queue addObject:node.right];
-            }
+            if (node.left) [queue addObject:node.left];
+            if (node.right) [queue addObject:node.right];
         }
     }
     
@@ -477,7 +471,7 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
             node = node.right;
         } else if (hash1 < hash2) {
             node = node.left;
-        } else if ([key isEqual:key2]) {
+        } else if (key == key2 || [key isEqual:key2]) {
             return node;
         } else if (key && key2 && [key class] == [key2 class] && [key respondsToSelector:@selector(compare:)] && (cmp = [key compare:key2])) {
             node = cmp > 0 ? node.right : node.left;
