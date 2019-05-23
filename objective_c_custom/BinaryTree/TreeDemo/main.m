@@ -204,8 +204,8 @@ void compare() {
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 //        testBinarySearchTree();
-//        testAVLTree();
-        testRedBlackTree();
+        testAVLTree();
+//        testRedBlackTree();
 //        compare();
     }
     return 0;

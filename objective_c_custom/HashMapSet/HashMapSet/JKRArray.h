@@ -10,11 +10,27 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JKRArray<ObjectType> : NSObject
+@interface JKRArray<ObjectType> : NSObject<NSFastEnumeration>  {
+@protected
+    void ** _array;
+    NSUInteger _length;
+}
 
-+ (instancetype)arrayWithLength:(NSUInteger)length;
+- (instancetype)init __unavailable;
++ (instancetype)new __unavailable;
+
++ (instancetype)arrayWithLength:(NSUInteger)length;  
 - (instancetype)initWithLength:(NSUInteger)length;
 - (NSUInteger)length;
+
+- (void)setObject:(nullable ObjectType)object AtIndex:(NSUInteger)index;
+- (nullable ObjectType)objectAtIndex:(NSUInteger)index;
+- (void)removeObjectAtIndex:(NSUInteger)index;
+- (NSUInteger)indexOfObject:(nullable ObjectType)object;
+- (BOOL)containsObject:(ObjectType)object;
+- (void)enumerateObjectsUsingBlock:(void (^)(_Nullable ObjectType obj, NSUInteger idx, BOOL *stop))block;
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id  _Nullable __unsafe_unretained [_Nullable])buffer count:(NSUInteger)len;
 - (_Nullable ObjectType)objectAtIndexedSubscript:(NSUInteger)idx;
 - (void)setObject:(_Nullable ObjectType)obj atIndexedSubscript:(NSUInteger)idx;
 

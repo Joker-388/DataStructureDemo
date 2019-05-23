@@ -111,23 +111,33 @@ int main(int argc, const char * argv[]) {
 //        }
 //
 //        NSLog(@"111111111111");
-        
-        JKRArray<Person *> *array = [[JKRArray alloc] initWithLength:4];
-        {
-            Person *p = [Person new];
-            p.name = @"Joker";
-            p.age = 12;
-            array[3] = p;
-            array[3] = p;
-        }
-        {
-            Person *p = [Person new];
-            p.name = @"Rose";
-            p.age = 12;
-            array[2] = p;
-        }
-        array[3] = nil;
-        NSLog(@"%@", array);
+
+
+//        JKRArray<Person *> *array = [[JKRArray alloc] initWithLength:4];
+//        for (NSUInteger i = 0; i < 4; i++) {
+//            Person *p = [Person new];
+//            p.name = getRandomStr();
+//            p.age = i;
+//            array[i] = p;
+//        }
+//        array[3] = nil;
+//        NSLog(@"打印 %@", array);
+//        NSLog(@"%zd", [array indexOfObject:nil]);
+
+//        for (Person *person in array) {
+//            NSLog(@"for 遍历: %@",  person);
+//        }
+//
+//        for (NSUInteger i = 0; i < 4; i++) {
+//            NSLog(@"取值 array[%zd]: %@", i, array[i]);
+//        }
+//        NSLog(@"打印 %@", array);
+
+//        for (NSUInteger i = 0; i < 4; i++) {
+//            NSLog(@"置空 array[%zd]: nil", i, nil);
+//            array[i] = nil;
+//        }
+//        NSLog(@"打印 %@", array);
     }
     return 0;
 }
