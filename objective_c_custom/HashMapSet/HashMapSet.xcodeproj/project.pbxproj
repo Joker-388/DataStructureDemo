@@ -11,6 +11,8 @@
 		F3D0B6542293EABE00D6D23E /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6532293EABE00D6D23E /* Person.m */; };
 		F3D0B6622293F08300D6D23E /* JKRHashMap.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6612293F08300D6D23E /* JKRHashMap.m */; };
 		F3D0B6AF2295354700D6D23E /* JKRArray.mm in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6AE2295354700D6D23E /* JKRArray.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F3D0B6B2229689F600D6D23E /* NSObject+JKRDataStructure.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6B1229689F600D6D23E /* NSObject+JKRDataStructure.m */; };
+		F3D0B6B92296960D00D6D23E /* LevelOrderPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6B72296960C00D6D23E /* LevelOrderPrinter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +36,10 @@
 		F3D0B6612293F08300D6D23E /* JKRHashMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRHashMap.m; sourceTree = "<group>"; };
 		F3D0B6AD2295354700D6D23E /* JKRArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKRArray.h; sourceTree = "<group>"; };
 		F3D0B6AE2295354700D6D23E /* JKRArray.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = JKRArray.mm; sourceTree = "<group>"; };
+		F3D0B6B0229689F600D6D23E /* NSObject+JKRDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+JKRDataStructure.h"; sourceTree = "<group>"; };
+		F3D0B6B1229689F600D6D23E /* NSObject+JKRDataStructure.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JKRDataStructure.m"; sourceTree = "<group>"; };
+		F3D0B6B72296960C00D6D23E /* LevelOrderPrinter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelOrderPrinter.m; sourceTree = "<group>"; };
+		F3D0B6B82296960C00D6D23E /* LevelOrderPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelOrderPrinter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,8 +79,21 @@
 				F3D0B6612293F08300D6D23E /* JKRHashMap.m */,
 				F3D0B6AD2295354700D6D23E /* JKRArray.h */,
 				F3D0B6AE2295354700D6D23E /* JKRArray.mm */,
+				F3D0B6B0229689F600D6D23E /* NSObject+JKRDataStructure.h */,
+				F3D0B6B1229689F600D6D23E /* NSObject+JKRDataStructure.m */,
+				F3D0B6B62296960C00D6D23E /* Printer */,
 			);
 			path = HashMapSet;
+			sourceTree = "<group>";
+		};
+		F3D0B6B62296960C00D6D23E /* Printer */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6B82296960C00D6D23E /* LevelOrderPrinter.h */,
+				F3D0B6B72296960C00D6D23E /* LevelOrderPrinter.m */,
+			);
+			name = Printer;
+			path = ../../BinaryTree/TreeDemo/BinaryTree/Printer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,8 +152,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3D0B6B92296960D00D6D23E /* LevelOrderPrinter.m in Sources */,
 				F3D0B6542293EABE00D6D23E /* Person.m in Sources */,
 				F3D0B6622293F08300D6D23E /* JKRHashMap.m in Sources */,
+				F3D0B6B2229689F600D6D23E /* NSObject+JKRDataStructure.m in Sources */,
 				F3D0B6AF2295354700D6D23E /* JKRArray.mm in Sources */,
 				F3D0B64C2293EA7200D6D23E /* main.m in Sources */,
 			);

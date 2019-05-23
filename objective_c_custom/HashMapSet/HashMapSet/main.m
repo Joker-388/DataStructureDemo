@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 #import "JKRHashMap.h"
+#import "NSObject+JKRDataStructure.h"
 
 #import "JKRArray.h"
 
@@ -113,12 +114,14 @@ int main(int argc, const char * argv[]) {
 //        NSLog(@"111111111111");
 
 
+        
 //        JKRArray<Person *> *array = [[JKRArray alloc] initWithLength:4];
 //        for (NSUInteger i = 0; i < 4; i++) {
 //            Person *p = [Person new];
 //            p.name = getRandomStr();
 //            p.age = i;
 //            array[i] = p;
+//            NSLog(@"%zd", p.jkr_addressIdentity);
 //        }
 //        array[3] = nil;
 //        NSLog(@"打印 %@", array);
@@ -138,6 +141,20 @@ int main(int argc, const char * argv[]) {
 //            array[i] = nil;
 //        }
 //        NSLog(@"打印 %@", array);
+        
+        JKRHashMap *map = [JKRHashMap new];
+        for (NSInteger i = 0; i < 100; i++) {
+            [map setObject:[NSString stringWithFormat:@"%zd", i] forKey:[NSNumber numberWithInteger:i / 10]];
+//            [map setObject:[NSNumber numberWithInteger:i] forKey:getRandomStr()];
+        }
+        
+        NSLog(@"%@", map);
+        
+        for (NSInteger i = 0; i < 100; i++) {
+            NSLog(@"%@", [map objectForKey:[NSNumber numberWithInteger:i]]);
+        }
+        
+        
     }
     return 0;
 }

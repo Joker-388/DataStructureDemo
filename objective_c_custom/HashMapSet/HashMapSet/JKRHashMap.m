@@ -9,6 +9,8 @@
 #import "JKRHashMap.h"
 #import "Person.h"
 #import "JKRArray.h"
+#import "NSObject+JKRDataStructure.h"
+#import "LevelOrderPrinter.h"
 
 @interface JKRHasMapNode : NSObject
 
@@ -34,6 +36,13 @@
 
 @end
 
+@interface JKRHashTempTree : NSObject<LevelOrderPrinterDelegate>
+
+@property (nonatomic, strong) JKRHasMapNode *root;
+- (instancetype)initWithRoot:(JKRHasMapNode *)root;
+
+@end
+
 @interface JKRHashMap ()
 
 @property (nonatomic, strong) JKRArray *array;
@@ -44,7 +53,7 @@
 
 static BOOL const HASH_MAP_COLOR_RED = false;
 static BOOL const HASH_MAP_COLOR_BLACK = true;
-static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
+static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
 
 - (instancetype)init {
     self = [super init];
@@ -60,45 +69,65 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
 - (void)setObject:(id)object forKey:(id)key {
     NSUInteger index = [self indexWithKey:key];
     JKRHasMapNode *root = self.array[index];
-    if ([root isEqual:[NSNull new]]) {
+    if (!root) {
         root = [[JKRHasMapNode alloc] initWithKey:key value:object parent:nil];
         self.array[index] = root;
-        [self afterAddWithNewNode:root];
         _size++;
-    } else {
-        if (!root) {
-            JKRHasMapNode *newNode = [[JKRHasMapNode alloc] initWithKey:key value:object parent:nil];
-            root = newNode;
-            _size++;
-            [self afterAddWithNewNode:newNode];
+        [self afterAddWithNewNode:root];
+        return;
+    }
+    
+    JKRHasMapNode *parent = root;
+    JKRHasMapNode *node = root;
+    NSInteger cmp = 0;
+    id k1 = key;
+    NSUInteger h1 = k1 ? [k1 hash] : 0;
+    JKRHasMapNode *result = nil;
+    BOOL searched = false;
+    
+    do {
+        parent = node;
+        id k2 = node.key;
+        NSUInteger h2 = node.keyHashCode;
+        if (h1 > h2) {
+            cmp = 1;
+        } else if (h1 < h2) {
+            cmp = -1;
+        } else if ([k1 isEqual:k2]) {
+            cmp = 0;
+        } else if (k1 && k2 && [k1 class] == [k2 class] && [k1 respondsToSelector:@selector(compare:)] && (cmp = [k1 compare:k2])) {
+            
+        } else if (searched) {
+            cmp = [k1 jkr_addressIdentity] - [k2 jkr_addressIdentity];
+        } else {
+            if ((node.left && (result = [self nodeWithNode:node.left key:k1])) || (node.right && (result = [self nodeWithNode:node.right key:k1]))) {
+                node = result;
+                cmp = 0;
+            } else {
+                searched = true;
+                cmp = [k1 jkr_addressIdentity] - [k2 jkr_addressIdentity];
+            }
+        }
+        
+        if (cmp < 0) {
+            node = node.left;
+        } else if (cmp > 0) {
+            node = node.right;
+        } else {
+            node.key = key;
+            node.value = object;
             return;
         }
-        
-        JKRHasMapNode *parent = root;
-        JKRHasMapNode *node = root;
-        int cmp = 0;
-        do {
-            cmp = 1;
-            parent = node;
-            if (cmp < 0) {
-                node = node.left;
-            } else if (cmp > 0) {
-                node = node.right;
-            } else {
-                node.value = object;
-                return;
-            }
-        } while (root);
-        
-        JKRHasMapNode *newNode = [[JKRHasMapNode alloc] initWithKey:key value:object parent:parent];
-        if (cmp < 0) {
-            parent.left = newNode;
-        } else {
-            parent.right = newNode;
-        }
-        
-        [self afterAddWithNewNode:newNode];
+    } while (node);
+    
+    JKRHasMapNode *newNode = [[JKRHasMapNode alloc] initWithKey:key value:object parent:parent];
+    if (cmp < 0) {
+        parent.left = newNode;
+    } else {
+        parent.right = newNode;
     }
+    _size++;
+    [self afterAddWithNewNode:newNode];
 }
 
 - (id)objectForKey:(id)key {
@@ -301,6 +330,7 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
     return node.parent;
 }
 
+#pragma mark - 添加后平衡
 - (void)afterAddWithNewNode:(JKRHasMapNode *)node {
     JKRHasMapNode *parent = node.parent;
     
@@ -310,15 +340,12 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
         return;
     }
     
-    if ([self isBlack:parent]) {
-        return;
-    }
+    if ([self isBlack:parent]) return;
     
     // 叔父节点
     JKRHasMapNode *uncle = parent.sibling;
     // 祖父节点
     JKRHasMapNode *grand = [self red:parent.parent];
-    
     
     // 叔父节点是红色的情况，B树节点上溢
     if ([self isRed:uncle]) {
@@ -428,15 +455,57 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
 }
 
 - (NSUInteger)indexWithNode:(JKRHasMapNode *)node {
-    NSUInteger hash = node.hash;
+    NSUInteger hash = node.keyHashCode;
     return (hash ^ (hash >> 16)) & (self.array.length - 1);
 }
 
-#pragma mark - 未完成
+#pragma mark - 通过key获取节点
 - (JKRHasMapNode *)nodeWithKey:(id)key {
     NSUInteger index = [self indexWithKey:key];
     JKRHasMapNode *root = self.array[index];
-    return root;
+    return root ? [self nodeWithNode:root key:key] : nil;
+}
+
+- (JKRHasMapNode *)nodeWithNode:(JKRHasMapNode *)node key:(id)key {
+    NSUInteger hash1 = key ? [key hash] : 0;
+    JKRHasMapNode *result = nil;
+    NSInteger cmp = 0;
+    while (node) {
+        id key2 = node.key;
+        NSUInteger hash2 = node.keyHashCode;
+        if (hash1 > hash2) {
+            node = node.right;
+        } else if (hash1 < hash2) {
+            node = node.left;
+        } else if ([key isEqual:key2]) {
+            return node;
+        } else if (key && key2 && [key class] == [key2 class] && [key respondsToSelector:@selector(compare:)] && (cmp = [key compare:key2])) {
+            node = cmp > 0 ? node.right : node.left;
+        } else if (node.right && (result = [self nodeWithNode:node.right key:key])) {
+            return result;
+        } else {
+            node = node.left;
+        }
+    }
+    return nil;
+}
+
+- (NSString *)description {
+    NSMutableString *string = [NSMutableString string];
+    [string appendString:[NSString stringWithFormat:@"<%@, %p>: \ncount:%zd\n{\n", self.className, self, _size]];
+    [self.array enumerateObjectsUsingBlock:^(JKRHasMapNode*  _Nullable node, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx) {
+            [string appendString:@"\n----------------------------------------------\n"];
+        }
+        if (node) {
+            JKRHashTempTree *tree = [[JKRHashTempTree alloc] initWithRoot:node];
+            [string appendString:[LevelOrderPrinter printStringWithTree:tree]];
+        } else {
+            [string appendString:@"   "];
+            [string appendString:@"Null"];
+        }
+    }];
+    return string;
 }
 
 @end
@@ -482,4 +551,37 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
     //    NSLog(@"<%@: %p> dealloc", self.className, self);
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@: %@", self.key, self.value];
+}
+
 @end
+
+@implementation JKRHashTempTree
+
+- (instancetype)initWithRoot:(JKRHasMapNode *)root {
+    self = [super init];
+    self.root = root;
+    return self;
+}
+
+- (id)print_root {
+    return self.root;
+}
+
+- (id)print_left:(id)node {
+    JKRHasMapNode *n = (JKRHasMapNode *)node;
+    return n.left;
+}
+
+- (id)print_right:(id)node {
+    JKRHasMapNode *n = (JKRHasMapNode *)node;
+    return n.right;
+}
+
+- (id)print_string:(id)node {
+    return [NSString stringWithFormat:@"%@", node];
+}
+
+@end
+
