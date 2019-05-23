@@ -26,11 +26,11 @@
 }
 
 - (void)dealloc {
-    NSLog(@"<%@: %p> dealloc", self.className, self);
+    NSLog(@"%@ dealloc", self);
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p> : %@, %zd", self.className, self, self.name, self.age];
+    return [NSString stringWithFormat:@"<%@: %p>: %@, %zd", self.className, self, self.name, self.age];
 }
 
 @end

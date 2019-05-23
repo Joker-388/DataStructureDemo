@@ -10,15 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JKRArray : NSObject
+@interface JKRArray<ObjectType> : NSObject
 
 + (instancetype)arrayWithLength:(NSUInteger)length;
 - (instancetype)initWithLength:(NSUInteger)length;
-
 - (NSUInteger)length;
-- (void)setObject:(nullable NSObject *)object AtIndex:(NSUInteger)index;
-- (nullable id)objectAtIndex:(NSUInteger)index;
-- (void)removeObjectAtIndex:(NSUInteger)index;
+- (_Nullable ObjectType)objectAtIndexedSubscript:(NSUInteger)idx;
+- (void)setObject:(_Nullable ObjectType)obj atIndexedSubscript:(NSUInteger)idx;
 
 @end
 

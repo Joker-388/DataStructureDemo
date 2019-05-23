@@ -59,10 +59,10 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
 
 - (void)setObject:(id)object forKey:(id)key {
     NSUInteger index = [self indexWithKey:key];
-    JKRHasMapNode *root = [self.array objectAtIndex:index];
+    JKRHasMapNode *root = self.array[index];
     if ([root isEqual:[NSNull new]]) {
         root = [[JKRHasMapNode alloc] initWithKey:key value:object parent:nil];
-        [self.array setObject:root AtIndex:index];
+        self.array[index] = root;
         [self afterAddWithNewNode:root];
         _size++;
     } else {
@@ -111,7 +111,48 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
 }
 
 - (BOOL)containsObject:(id)object {
+    if (_size == 0) return NO;
+    NSMutableArray *queue = [NSMutableArray array];
+    for (NSUInteger i = 0; i < self.array.length; i++) {
+        if (self.array[i] == nil) continue;
+        [queue addObject:self.array[i]];
+        while (queue.count) {
+            JKRHasMapNode *node = queue.firstObject;
+            if ([object isEqual:node.value]) {
+                return YES;
+            }
+            [queue removeObjectAtIndex:0];
+            if (node.left) {
+                [queue addObject:node.left];
+            }
+            if (node.right) {
+                [queue addObject:node.right];
+            }
+        }
+    }
+    
     return NO;
+}
+
+- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id _Nonnull, id _Nonnull, BOOL * _Nonnull))block {
+    if (_size == 0) return;
+    BOOL stop = NO;
+    NSMutableArray *queue = [NSMutableArray array];
+    for (NSUInteger i = 0; i < self.array.length && !stop; i++) {
+        if (self.array[i] == nil) continue;
+        [queue addObject:self.array[i]];
+        while (queue.count && !stop) {
+            JKRHasMapNode *node = queue.firstObject;
+            block(node.key, node.value, &stop);
+            [queue removeObjectAtIndex:0];
+            if (node.left) {
+                [queue addObject:node.left];
+            }
+            if (node.right) {
+                [queue addObject:node.right];
+            }
+        }
+    }
 }
 
 - (void)removeObjectForKey:(id)key {
@@ -141,7 +182,7 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
     if (replacement) { // 被删除的节点度为1
         replacement.parent = node.parent;
         if (!node.parent) {
-            [self.array setObject:replacement AtIndex:index];
+            self.array[index] = replacement;
         } else if (node == node.parent.left) {
             node.parent.left = replacement;
         } else {
@@ -149,7 +190,7 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
         }
         [self afterRemoveWithNode:replacement];
     } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
-        [self.array setObject:nil AtIndex:0];
+        self.array[0] = nil;
         [self afterRemoveWithNode:node];
     } else { // 被删除的节点是叶子节点且不是根节点
         if (node == node.parent.left) {
@@ -333,7 +374,7 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
     } else if (grand.isRightChild) {
         grand.parent.right = parent;
     } else {
-        [self.array setObject:parent AtIndex:[self indexWithNode:grand]];
+        self.array[[self indexWithNode:grand]] = parent;
     }
     
     if (child) {
@@ -391,9 +432,10 @@ static int const HASH_MAP_DEAFULT_CAPACITY = 1>>4;
     return (hash ^ (hash >> 16)) & (self.array.length - 1);
 }
 
+#pragma mark - 未完成
 - (JKRHasMapNode *)nodeWithKey:(id)key {
     NSUInteger index = [self indexWithKey:key];
-    JKRHasMapNode *root = [self.array objectAtIndex:index];
+    JKRHasMapNode *root = self.array[index];
     return root;
 }
 

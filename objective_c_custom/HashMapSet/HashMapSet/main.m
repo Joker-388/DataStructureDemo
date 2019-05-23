@@ -112,32 +112,22 @@ int main(int argc, const char * argv[]) {
 //
 //        NSLog(@"111111111111");
         
-        JKRArray *array = [[JKRArray alloc] initWithLength:4];
-        
+        JKRArray<Person *> *array = [[JKRArray alloc] initWithLength:4];
         {
             Person *p = [Person new];
             p.name = @"Joker";
             p.age = 12;
-            [array setObject:p AtIndex:3];
+            array[3] = p;
+            array[3] = p;
         }
-        
         {
             Person *p = [Person new];
             p.name = @"Rose";
             p.age = 12;
-            [array setObject:p AtIndex:2];
+            array[2] = p;
         }
-        
-        [array setObject:nil AtIndex:3];
-        
-//        [array removeObjectAtIndex:3];
-        
-//        array = [JKRArray arrayWithLength:8];
-        
-        Person *p1 = [array objectAtIndex:3];
-        NSLog(@"%@", p1);
-        Person *p2 = [array objectAtIndex:2];
-        NSLog(@"%@", p2);
+        array[3] = nil;
+        NSLog(@"%@", array);
     }
     return 0;
 }
