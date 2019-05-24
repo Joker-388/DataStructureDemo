@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JKRHashMap<__covariant KeyType, __covariant ObjectType> : NSObject {
+@interface JKRHashMap<KeyType, ObjectType> : NSObject {
 @protected
     /// 节点个数
     NSUInteger _size;
@@ -32,6 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsKey:(nullable KeyType)key;
 /// 遍历所有元素，stop为停止遍历标记
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(KeyType key, ObjectType obj, BOOL *stop))block;
+
+@end
+
+@interface JKRHashMap<KeyType, ObjectType> (JKRExtendedHashMap)
+
+- (nullable ObjectType)objectForKeyedSubscript:(nullable KeyType)key;
+- (void)setObject:(nullable ObjectType)obj forKeyedSubscript:(nullable KeyType)key;
 
 @end
 

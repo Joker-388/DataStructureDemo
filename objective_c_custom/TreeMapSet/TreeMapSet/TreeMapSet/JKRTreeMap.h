@@ -19,7 +19,7 @@ typedef int(^jkrmap_compareBlock)(id e1, id e2);
 
 @class JKRTreeMapNode;
 
-@interface JKRTreeMap<__covariant KeyType, __covariant ObjectType> : NSObject {
+@interface JKRTreeMap<KeyType, ObjectType> : NSObject {
 @protected
     /// 节点个数
     NSUInteger _size;
@@ -45,8 +45,14 @@ typedef int(^jkrmap_compareBlock)(id e1, id e2);
 - (BOOL)containsObject:(nullable ObjectType)object;
 /// 是否包含key
 - (BOOL)containsKey:(KeyType)key;
-/// 遍历所有元素，stop为停止遍历标记
+
+@end
+
+@interface JKRTreeMap<KeyType, ObjectType> (JKRExtendedTreeMap)
+
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(KeyType key, ObjectType obj, BOOL *stop))block;
+- (nullable ObjectType)objectForKeyedSubscript:(nullable KeyType)key;
+- (void)setObject:(nullable ObjectType)obj forKeyedSubscript:(nullable KeyType)key;
 
 @end
 

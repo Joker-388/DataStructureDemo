@@ -7,8 +7,21 @@
 //
 
 #import "Person.h"
+#import "JKRArray.h"
+
+@interface Person ()
+
+@property (nonatomic, strong) JKRArray *array;
+
+@end
 
 @implementation Person
+
+- (instancetype)init {
+    self = [super init];
+
+    return self;
+}
 
 /// 作为key，hash冲突时，key是否相等，哈希值相等的两个Person对象，isEqual不一定返回YES
 - (BOOL)isEqual:(id)object {

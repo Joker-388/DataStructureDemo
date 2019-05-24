@@ -16,6 +16,9 @@
 		F3D0B6BC2296B55600D6D23E /* Key.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6BB2296B55600D6D23E /* Key.m */; };
 		F3D0B6C22296B61500D6D23E /* SubKey1.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6C12296B61500D6D23E /* SubKey1.m */; };
 		F3D0B6C52296B6BC00D6D23E /* SubKey2.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6C42296B6BC00D6D23E /* SubKey2.m */; };
+		F3D0B6CA2297891E00D6D23E /* JKRTimeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6C82297891D00D6D23E /* JKRTimeTool.m */; };
+		F3D0B6D122978B3700D6D23E /* JKRTreeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6CE22978B3600D6D23E /* JKRTreeMap.m */; };
+		F3D0B6D222978B3700D6D23E /* JKRTreeSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6CF22978B3600D6D23E /* JKRTreeSet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +52,12 @@
 		F3D0B6C12296B61500D6D23E /* SubKey1.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubKey1.m; sourceTree = "<group>"; };
 		F3D0B6C32296B6BC00D6D23E /* SubKey2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubKey2.h; sourceTree = "<group>"; };
 		F3D0B6C42296B6BC00D6D23E /* SubKey2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubKey2.m; sourceTree = "<group>"; };
+		F3D0B6C82297891D00D6D23E /* JKRTimeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRTimeTool.m; sourceTree = "<group>"; };
+		F3D0B6C92297891D00D6D23E /* JKRTimeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRTimeTool.h; sourceTree = "<group>"; };
+		F3D0B6CD22978B3600D6D23E /* JKRTreeSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRTreeSet.h; sourceTree = "<group>"; };
+		F3D0B6CE22978B3600D6D23E /* JKRTreeMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRTreeMap.m; sourceTree = "<group>"; };
+		F3D0B6CF22978B3600D6D23E /* JKRTreeSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKRTreeSet.m; sourceTree = "<group>"; };
+		F3D0B6D022978B3600D6D23E /* JKRTreeMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKRTreeMap.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +71,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F3A6FA2422979D2000B9A4E8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6522293EABE00D6D23E /* Person.h */,
+				F3D0B6532293EABE00D6D23E /* Person.m */,
+				F3D0B6BA2296B55600D6D23E /* Key.h */,
+				F3D0B6BB2296B55600D6D23E /* Key.m */,
+				F3D0B6C02296B61500D6D23E /* SubKey1.h */,
+				F3D0B6C12296B61500D6D23E /* SubKey1.m */,
+				F3D0B6C32296B6BC00D6D23E /* SubKey2.h */,
+				F3D0B6C42296B6BC00D6D23E /* SubKey2.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F3A6FA2522979DC100B9A4E8 /* HashMapSet */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6602293F08300D6D23E /* JKRHashMap.h */,
+				F3D0B6612293F08300D6D23E /* JKRHashMap.m */,
+				F3D0B6AD2295354700D6D23E /* JKRArray.h */,
+				F3D0B6AE2295354700D6D23E /* JKRArray.mm */,
+				F3D0B6B0229689F600D6D23E /* NSObject+JKRDataStructure.h */,
+				F3D0B6B1229689F600D6D23E /* NSObject+JKRDataStructure.m */,
+			);
+			path = HashMapSet;
+			sourceTree = "<group>";
+		};
 		F3D0B63F2293EA7200D6D23E = {
 			isa = PBXGroup;
 			children = (
@@ -82,20 +119,10 @@
 			isa = PBXGroup;
 			children = (
 				F3D0B64B2293EA7200D6D23E /* main.m */,
-				F3D0B6522293EABE00D6D23E /* Person.h */,
-				F3D0B6532293EABE00D6D23E /* Person.m */,
-				F3D0B6BA2296B55600D6D23E /* Key.h */,
-				F3D0B6BB2296B55600D6D23E /* Key.m */,
-				F3D0B6C02296B61500D6D23E /* SubKey1.h */,
-				F3D0B6C12296B61500D6D23E /* SubKey1.m */,
-				F3D0B6C32296B6BC00D6D23E /* SubKey2.h */,
-				F3D0B6C42296B6BC00D6D23E /* SubKey2.m */,
-				F3D0B6602293F08300D6D23E /* JKRHashMap.h */,
-				F3D0B6612293F08300D6D23E /* JKRHashMap.m */,
-				F3D0B6AD2295354700D6D23E /* JKRArray.h */,
-				F3D0B6AE2295354700D6D23E /* JKRArray.mm */,
-				F3D0B6B0229689F600D6D23E /* NSObject+JKRDataStructure.h */,
-				F3D0B6B1229689F600D6D23E /* NSObject+JKRDataStructure.m */,
+				F3A6FA2522979DC100B9A4E8 /* HashMapSet */,
+				F3A6FA2422979D2000B9A4E8 /* Model */,
+				F3D0B6CC22978B3600D6D23E /* TreeMapSet */,
+				F3D0B6C62297891D00D6D23E /* Tool */,
 				F3D0B6B62296960C00D6D23E /* Printer */,
 			);
 			path = HashMapSet;
@@ -109,6 +136,36 @@
 			);
 			name = Printer;
 			path = ../../BinaryTree/TreeDemo/BinaryTree/Printer;
+			sourceTree = "<group>";
+		};
+		F3D0B6C62297891D00D6D23E /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6C72297891D00D6D23E /* TimeTool */,
+			);
+			name = Tool;
+			path = ../../Tool;
+			sourceTree = "<group>";
+		};
+		F3D0B6C72297891D00D6D23E /* TimeTool */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6C82297891D00D6D23E /* JKRTimeTool.m */,
+				F3D0B6C92297891D00D6D23E /* JKRTimeTool.h */,
+			);
+			path = TimeTool;
+			sourceTree = "<group>";
+		};
+		F3D0B6CC22978B3600D6D23E /* TreeMapSet */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6D022978B3600D6D23E /* JKRTreeMap.h */,
+				F3D0B6CE22978B3600D6D23E /* JKRTreeMap.m */,
+				F3D0B6CD22978B3600D6D23E /* JKRTreeSet.h */,
+				F3D0B6CF22978B3600D6D23E /* JKRTreeSet.m */,
+			);
+			name = TreeMapSet;
+			path = ../../TreeMapSet/TreeMapSet/TreeMapSet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,11 +226,14 @@
 			files = (
 				F3D0B6C22296B61500D6D23E /* SubKey1.m in Sources */,
 				F3D0B6B92296960D00D6D23E /* LevelOrderPrinter.m in Sources */,
+				F3D0B6D222978B3700D6D23E /* JKRTreeSet.m in Sources */,
 				F3D0B6BC2296B55600D6D23E /* Key.m in Sources */,
 				F3D0B6542293EABE00D6D23E /* Person.m in Sources */,
 				F3D0B6622293F08300D6D23E /* JKRHashMap.m in Sources */,
 				F3D0B6B2229689F600D6D23E /* NSObject+JKRDataStructure.m in Sources */,
+				F3D0B6CA2297891E00D6D23E /* JKRTimeTool.m in Sources */,
 				F3D0B6AF2295354700D6D23E /* JKRArray.mm in Sources */,
+				F3D0B6D122978B3700D6D23E /* JKRTreeMap.m in Sources */,
 				F3D0B64C2293EA7200D6D23E /* main.m in Sources */,
 				F3D0B6C52296B6BC00D6D23E /* SubKey2.m in Sources */,
 			);

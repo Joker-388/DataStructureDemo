@@ -67,10 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				F3D0B6382293EA2700D6D23E /* main.m */,
-				F3D0B6572293EAED00D6D23E /* JKRTreeMap.h */,
-				F3D0B6582293EAED00D6D23E /* JKRTreeMap.m */,
-				F3D0B6552293EAED00D6D23E /* JKRTreeSet.h */,
-				F3D0B6562293EAED00D6D23E /* JKRTreeSet.m */,
+				F3D0B6CB22978B2300D6D23E /* TreeMapSet */,
 				F3D0B65B2293EB1B00D6D23E /* Tool */,
 			);
 			path = TreeMapSet;
@@ -92,6 +89,17 @@
 				F3D0B65E2293EB1B00D6D23E /* JKRTimeTool.h */,
 			);
 			path = TimeTool;
+			sourceTree = "<group>";
+		};
+		F3D0B6CB22978B2300D6D23E /* TreeMapSet */ = {
+			isa = PBXGroup;
+			children = (
+				F3D0B6572293EAED00D6D23E /* JKRTreeMap.h */,
+				F3D0B6582293EAED00D6D23E /* JKRTreeMap.m */,
+				F3D0B6552293EAED00D6D23E /* JKRTreeSet.h */,
+				F3D0B6562293EAED00D6D23E /* JKRTreeSet.m */,
+			);
+			path = TreeMapSet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

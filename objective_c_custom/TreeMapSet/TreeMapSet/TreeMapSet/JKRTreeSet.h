@@ -30,7 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addObject:(ObjectType)object;
 /// 是否包含元素
 - (BOOL)containsObject:(ObjectType)object;
-/// 遍历所有元素，stop为停止遍历标记
+
+@end
+
+@interface JKRTreeSet<ObjectType> (JKRExtendedTreeSet)
+
 - (void)enumerateObjectsUsingBlock:(void (^)(ObjectType obj, BOOL *stop))block;
 
 @end

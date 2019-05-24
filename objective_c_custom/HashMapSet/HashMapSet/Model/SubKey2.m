@@ -20,4 +20,8 @@
     return [(Key *)object value] == self.value;
 }
 
+- (void)dealloc {
+//    NSLog(@"<%@, %p>: dealloc", self.className, self);
+}
+
 @end

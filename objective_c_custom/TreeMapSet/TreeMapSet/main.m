@@ -62,14 +62,13 @@ void test2() {
         JKRTreeMap *map = [JKRTreeMap new];
         NSMutableArray *allStrings = allFileStrings();
         [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSNumber *count = [map objectForKey:obj];
+            NSNumber *count = map[obj];
             if (count) {
                 count = [NSNumber numberWithInteger:count.integerValue+1];
             } else {
                 count = [NSNumber numberWithInteger:1];
             }
-            
-            [map setObject:count forKey:obj];
+            map[obj] = count;
         }];
         NSLog(@"Map 计算不重复单词数量 %zd", map.count);
     }];

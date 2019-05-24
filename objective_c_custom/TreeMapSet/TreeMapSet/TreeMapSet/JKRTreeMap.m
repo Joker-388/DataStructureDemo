@@ -43,7 +43,7 @@ static BOOL const BLACK = true;
     return self;
 }
 
-#pragma mark - 添加元素
+#pragma mark - 添加节点
 - (void)setObject:(id)object forKey:(id)key {
     [self keyNotNullCheck:key];
     
@@ -80,6 +80,45 @@ static BOOL const BLACK = true;
 
     [self afterAddWithNewNode:newNode];
     _size++;
+}
+
+#pragma mark - 删除节点
+- (void)removeWithNode:(JKRTreeMapNode *)node {
+    if (!node) {
+        return;
+    }
+    _size--;
+    
+    if (node.hasTwoChildren) {
+        JKRTreeMapNode *s = [self successorWithNode:node];
+        node.key = s.key;
+        node.value = s.value;
+        node = s;
+    }
+    
+    // 实际被删除节点的子节点
+    JKRTreeMapNode *replacement = node.left ? node.left : node.right;
+    if (replacement) { // 被删除的节点度为1
+        replacement.parent = node.parent;
+        if (!node.parent) {
+            _root = replacement;
+        } else if (node == node.parent.left) {
+            node.parent.left = replacement;
+        } else {
+            node.parent.right = replacement;
+        }
+        [self afterRemoveWithNode:replacement];
+    } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
+        _root = nil;
+        [self afterRemoveWithNode:node];
+    } else { // 被删除的节点是叶子节点且不是根节点
+        if (node == node.parent.left) {
+            node.parent.left = nil;
+        } else {
+            node.parent.right = nil;
+        }
+        [self afterRemoveWithNode:node];
+    }
 }
 
 #pragma mark - 通过key删除元素
@@ -171,44 +210,7 @@ static BOOL const BLACK = true;
     return !value1 ? !value2 : [value1 isEqual:value2];
 }
 
-#pragma mark - 删除节点
-- (void)removeWithNode:(JKRTreeMapNode *)node {
-    if (!node) {
-        return;
-    }
-    _size--;
-    
-    if (node.hasTwoChildren) {
-        JKRTreeMapNode *s = [self successorWithNode:node];
-        node.key = s.key;
-        node.value = s.value;
-        node = s;
-    }
-    
-    // 实际被删除节点的子节点
-    JKRTreeMapNode *replacement = node.left ? node.left : node.right;
-    if (replacement) { // 被删除的节点度为1
-        replacement.parent = node.parent;
-        if (!node.parent) {
-            _root = replacement;
-        } else if (node == node.parent.left) {
-            node.parent.left = replacement;
-        } else {
-            node.parent.right = replacement;
-        }
-        [self afterRemoveWithNode:replacement];
-    } else if(!node.parent) { // 被删除的节点度为0且没有父节点，被删除的节点是根节点且二叉树只有一个节点
-        _root = nil;
-        [self afterRemoveWithNode:node];
-    } else { // 被删除的节点是叶子节点且不是根节点
-        if (node == node.parent.left) {
-            node.parent.left = nil;
-        } else {
-            node.parent.right = nil;
-        }
-        [self afterRemoveWithNode:node];
-    }
-}
+
 
 #pragma mark - 节点的后继节点
 - (JKRTreeMapNode *)successorWithNode:(JKRTreeMapNode *)node {
@@ -453,9 +455,17 @@ static BOOL const BLACK = true;
 }
 
 - (void)dealloc {
-    NSLog(@"<%@: %p> dealloc", self.className, self);
+//    NSLog(@"<%@: %p> dealloc", self.className, self);
 }
 
+#pragma mark - 扩展
+- (id)objectForKeyedSubscript:(id)key {
+    return [self objectForKey:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key {
+    [self setObject:obj forKey:key];
+}
 
 @end
 
