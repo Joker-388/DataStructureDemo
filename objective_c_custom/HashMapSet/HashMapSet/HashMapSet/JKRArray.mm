@@ -12,9 +12,7 @@
 
 #pragma mark - 初始化
 + (instancetype)arrayWithLength:(NSUInteger)length {
-    @autoreleasepool {
-        return [[self alloc] initWithLength:length];        
-    }
+    return [[[self alloc] initWithLength:length] autorelease];
 }
 
 - (instancetype)initWithLength:(NSUInteger)length {

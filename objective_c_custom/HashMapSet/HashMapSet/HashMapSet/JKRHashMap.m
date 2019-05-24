@@ -57,14 +57,14 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
 
 - (instancetype)init {
     self = [super init];
-    self.array = [[JKRArray alloc] initWithLength:HASH_MAP_DEAFULT_CAPACITY];
+    self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
     return self;
 }
 
 - (void)removeAllObjects {
     if (_size == 0) return;
     _size = 0;
-    self.array = [[JKRArray alloc] initWithLength:HASH_MAP_DEAFULT_CAPACITY];
+    self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
 }
 
 - (void)setObject:(id)object forKey:(id)key {

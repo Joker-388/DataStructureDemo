@@ -64,7 +64,7 @@ void testBase() {
 }
 
 void testJKRArray() {
-    JKRArray<Person *> *array = [[JKRArray alloc] initWithLength:4];
+    JKRArray<Person *> *array = [JKRArray arrayWithLength:4];
     for (NSUInteger i = 0; i < 4; i++) {
         Person *p = [Person new];
         p.name = getRandomStr();
@@ -257,9 +257,6 @@ int main(int argc, const char * argv[]) {
 //        test5();
         
 //        test6();
-        
-//        [[JKRArray alloc] initWithLength:16];
-        [JKRArray arrayWithLength:16];
     }
     return 0;
 }
