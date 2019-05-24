@@ -221,8 +221,9 @@ void test1() {
 }
 
 void test6() {
-    NSMutableArray *allStrings = allFileStrings();
     JKRHashMap *map = [JKRHashMap new];
+    NSMutableArray *allStrings = allFileStrings();
+//    allStrings = [allStrings subarrayWithRange:NSMakeRange(0, 100)];
     [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSNumber *count = map[obj];
         if (count) {
@@ -232,12 +233,23 @@ void test6() {
         }
         map[obj] = count;
     }];
-
+    NSLog(@"HashMap 计算不重复单词数量和出现次数 %zd", map.count);
+    
     [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [map removeObjectForKey:obj];
     }];
-
-    NSLog(@"HashMap 计算不重复单词数量和出现次数 %zd", map.count);
+    
+    NSLog(@"HashMap 依次删除后数量 %zd", map.count);
+    
+//    for (NSUInteger i = 0; i < 10; i++) {
+//        map[[NSNumber numberWithInteger:i]] = nil;
+//    }
+//    NSLog(@"%@", map);
+//
+//    for (NSUInteger i = 0; i < 10; i++) {
+//        [map removeObjectForKey:[NSNumber numberWithInteger:i]];
+//    }
+//    NSLog(@"%zd", map.count);
 }
 
 int main(int argc, const char * argv[]) {

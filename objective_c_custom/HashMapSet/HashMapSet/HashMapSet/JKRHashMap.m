@@ -117,6 +117,7 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
         } else {
             node.key = key;
             node.value = object;
+            node.keyHashCode = key ? [key hash] : 0;
             return;
         }
     } while (node);
@@ -198,11 +199,7 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
 }
 
 - (void)removeObjectForKey:(id)key {
-    JKRHashMapNode *node = [self nodeWithKey:key];
-    if (!node) {
-        NSLog(@"未找到节点");
-    }
-    [self removeWithNode:node];
+    [self removeWithNode:[self nodeWithKey:key]];
 }
 
 - (NSUInteger)count {
@@ -219,6 +216,7 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
         JKRHashMapNode *s = [self successorWithNode:node];
         node.key = s.key;
         node.value = s.value;
+        node.keyHashCode = s.keyHashCode;
         node = s;
     }
     
@@ -256,12 +254,8 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     }
     
     JKRHashMapNode *parent = node.parent;
-    // 删除的是根节点
-    if (!parent) {
-        NSUInteger index = [self indexWithNode:node];
-        [self.array removeObjectAtIndex:index];
-        return;
-    }
+
+    if (!parent) return;
     
     // 删除的是黑色叶子节点，下溢，判定被删除的节点是左还是右
     BOOL left = !parent.left || node.isLeftChild;
