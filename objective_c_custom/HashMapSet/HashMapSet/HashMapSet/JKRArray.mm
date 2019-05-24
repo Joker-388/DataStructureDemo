@@ -11,11 +11,27 @@
 @implementation JKRArray
 
 #pragma mark - 初始化
++ (instancetype)arrayWithLength:(NSUInteger)length {
+    @autoreleasepool {
+        return [[self alloc] initWithLength:length];        
+    }
+}
+
 - (instancetype)initWithLength:(NSUInteger)length {
     self = [super init];
     _length = length;
     _array = new void*[length]();
     return self;
+}
+
+#pragma mark - dealloc
+- (void)dealloc {
+    for (NSUInteger i = 0; i < _length; i++) {
+        id object = [self objectAtIndex:i];
+        if (object) [object release];
+    }
+    NSLog(@"<%@, %p> dealloc", self.className, self);
+    [super dealloc];
 }
 
 #pragma mark - 返回长度
@@ -110,15 +126,6 @@
 }
 
 #pragma mark - 打印
-- (void)dealloc {
-    for (NSUInteger i = 0; i < _length; i++) {
-        id object = [self objectAtIndex:i];
-        if (object) [object release];
-    }
-//    NSLog(@"<%@, %p> dealloc", self.className, self);
-    [super dealloc];
-}
-
 - (NSString *)description {
     NSMutableString *mutableString = [NSMutableString string];
     [mutableString appendString:[NSString stringWithFormat:@"<%@: %p>: \nlength: %zd\n{\n", self.className, self, _length]];

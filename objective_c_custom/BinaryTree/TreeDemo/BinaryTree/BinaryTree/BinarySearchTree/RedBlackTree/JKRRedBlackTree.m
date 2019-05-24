@@ -40,7 +40,8 @@
     // 添加的节点是根节点 或者 上溢出到达根节点
     if (!parent) {
         if (self.debugPrint) {
-            printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+            printf("\n--- 操作节点 %s 是根节点，或者上溢到达根节点---  \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+            printf("\n--- 染黑节点 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
         }
         [self black:node];
         return;
@@ -62,6 +63,7 @@
      */
     if ([self isBlack:parent]) {
         if (self.debugPrint) {
+            printf("\n--- 操作节点 %s 父节点是黑色 --- \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
             printf("\n--- 不需要平衡 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
         }
         return;
@@ -76,7 +78,10 @@
     // 叔父节点是红色的情况，B树节点上溢
     if ([self isRed:uncle]) {
         if(self.debugPrint) {
-            printf("\n--- 染色 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);            
+            printf("\n--- 操作节点 %s 叔父节点是红色 --- \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+            printf("\n--- 染红 grand --- %s \n\n", [[NSString stringWithFormat:@"%@", grand] UTF8String]);
+            printf("\n--- 染黑 parent --- %s \n\n", [[NSString stringWithFormat:@"%@", parent] UTF8String]);
+            printf("\n--- 染黑 uncle --- %s \n\n", [[NSString stringWithFormat:@"%@", uncle] UTF8String]);
         }
         /*
          只需要处理染色就可以，不需要旋转
@@ -104,7 +109,9 @@
     if (parent.isLeftChild) { // L
         if (node.isLeftChild) { // LL
             if(self.debugPrint) {
-                printf("\n--- LL --- \n\n");
+                printf("\n--- 操作节点 %s 叔父节点不是红色 LL --- \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+                printf("\n--- 染红 grand --- %s \n\n", [[NSString stringWithFormat:@"%@", grand] UTF8String]);
+                printf("\n--- 染黑 parent --- %s \n\n", [[NSString stringWithFormat:@"%@", parent] UTF8String]);
             }
             /*
              LL:
@@ -136,7 +143,9 @@
             [self black:parent];
         } else { // LR
             if(self.debugPrint) {
-                printf("\n--- LR --- \n\n");
+                printf("\n--- 操作节点 %s 叔父节点不是红色 LR --- \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+                printf("\n--- 染红 grand --- %s \n\n", [[NSString stringWithFormat:@"%@", grand] UTF8String]);
+                printf("\n--- 染黑节点 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
             }
             /*
              LR:
@@ -182,7 +191,9 @@
     } else { // R
         if (node.isLeftChild) { // RL
             if(self.debugPrint) {
-                printf("\n--- RL --- \n\n");
+                printf("\n--- 操作节点 %s 叔父节点不是红色 RL --- \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+                printf("\n--- 染红 grand --- %s \n\n", [[NSString stringWithFormat:@"%@", grand] UTF8String]);
+                printf("\n--- 染黑节点 --- %s \n\n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
             }
             /*
              RL:
@@ -225,7 +236,9 @@
             [self rotateRight:parent];
         } else { // RR
             if(self.debugPrint) {
-                printf("\n--- RR --- \n\n");
+                printf("\n--- 操作节点 %s 叔父节点不是红色 RR --- \n", [[NSString stringWithFormat:@"%@", node] UTF8String]);
+                printf("\n--- 染红 grand --- %s \n\n", [[NSString stringWithFormat:@"%@", grand] UTF8String]);
+                printf("\n--- 染黑 parent --- %s \n\n", [[NSString stringWithFormat:@"%@", parent] UTF8String]);
             }
             /*
              RR:

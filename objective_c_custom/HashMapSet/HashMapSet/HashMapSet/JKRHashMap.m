@@ -178,24 +178,6 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
             }
         }
     }
-    
-//    NSMutableArray *stack = [NSMutableArray array];
-//    for (NSUInteger i = 0; i < self.array.length && !stop; i++) {
-//        JKRHashMapNode *node = self.array[i];
-//        if (!node) continue;
-//        do {
-//            while (node) {
-//                [stack addObject:node];
-//                node = node.left;
-//            }
-//            if (stack.count) {
-//                JKRHashMapNode *n = [stack lastObject];
-//                block(n.key, n.value, &stop);
-//                [stack removeLastObject];
-//                node = n.right;
-//            }
-//        } while (stack.count || node);
-//    }
 }
 
 - (void)removeObjectForKey:(id)key {

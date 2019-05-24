@@ -217,7 +217,7 @@ void test1() {
         NSLog(@"TreeSet 计算不重复单词数量 %zd", set.count);
     }];
     
-    check(hashMapCount == treeMapCount && treeMapCount == treeSetCount, @"结算不重复单词数量结果不一致！");
+    check(hashMapCount == treeMapCount && treeMapCount == treeSetCount, @"计算不重复单词数量结果不一致！");
 }
 
 void test6() {
@@ -235,21 +235,16 @@ void test6() {
     }];
     NSLog(@"HashMap 计算不重复单词数量和出现次数 %zd", map.count);
     
+    __block NSUInteger allCount = 0;
     [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        allCount += [map[obj] integerValue];
         [map removeObjectForKey:obj];
     }];
     
-    NSLog(@"HashMap 依次删除后数量 %zd", map.count);
+    NSLog(@"HashMap 累加计算所有单词数量 %zd", allCount);
     
-//    for (NSUInteger i = 0; i < 10; i++) {
-//        map[[NSNumber numberWithInteger:i]] = nil;
-//    }
-//    NSLog(@"%@", map);
-//
-//    for (NSUInteger i = 0; i < 10; i++) {
-//        [map removeObjectForKey:[NSNumber numberWithInteger:i]];
-//    }
-//    NSLog(@"%zd", map.count);
+    check(allCount == allStrings.count, @"统计所有单词出现的数量和错误！");
+    check(map.count == 0, @"哈希表没有清空！");
 }
 
 int main(int argc, const char * argv[]) {
@@ -261,7 +256,10 @@ int main(int argc, const char * argv[]) {
 //        test4();
 //        test5();
         
-        test6();
+//        test6();
+        
+//        [[JKRArray alloc] initWithLength:16];
+        [JKRArray arrayWithLength:16];
     }
     return 0;
 }

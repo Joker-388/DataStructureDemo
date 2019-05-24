@@ -133,13 +133,14 @@ void testRedBlackTree() {
         return e1.age - e2.age;
     }];
     rb.debugPrint = YES;
-    int nums[] = {55,38,80,25,46,76,88,17,33,50,72,20,52,60};
+    int nums[] = {55,38,80,25,46,76,88,17,33,50,72,74};
     
     NSMutableArray *persons = [NSMutableArray array];
     for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
         printf("%d ", nums[i]);
         [persons addObject:[Person personWithAge:nums[i]]];
     }
+    printf("\n-------------------------------------------------------------------\n\n\n");
     
     for (Person *person in persons) {
         printf("Add: %zd\n\n", person.age);

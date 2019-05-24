@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init __unavailable;
 + (instancetype)new __unavailable;
 
++ (instancetype)arrayWithLength:(NSUInteger)length;
+
 - (instancetype)initWithLength:(NSUInteger)length;
 - (NSUInteger)length;
 - (void)setObject:(nullable ObjectType)object AtIndex:(NSUInteger)index;
