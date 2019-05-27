@@ -461,12 +461,12 @@ static inline BOOL jkrHashMap_color(JKRHashMapNode *node) {
 
 static inline BOOL jkrHashMap_isBlack(JKRHashMapNode *node) {
     BOOL color = !node ? HASH_MAP_COLOR_BLACK : node.color;
-    return color = HASH_MAP_COLOR_BLACK;
+    return color == HASH_MAP_COLOR_BLACK;
 }
 
 static inline BOOL jkrHashMap_isRed(JKRHashMapNode *node) {
     BOOL color = !node ? HASH_MAP_COLOR_BLACK : node.color;
-    return color = HASH_MAP_COLOR_RED;
+    return color == HASH_MAP_COLOR_RED;
 }
 
 #pragma mark - 获取哈希表index
@@ -581,7 +581,7 @@ static inline NSUInteger jkrHaspMap_hash(id key) {
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@: %@", self.key, self.value];
+    return [NSString stringWithFormat:@"%@%@: %@", self.color ? @"":@"R_", self.key, self.value];
 }
 
 @end
