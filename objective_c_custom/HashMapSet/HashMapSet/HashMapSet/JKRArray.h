@@ -39,4 +39,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface JKRArray<ObjectType> (NSGenericFastEnumeraiton) <NSFastEnumeration>
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained _Nullable [_Nonnull])buffer count:(NSUInteger)len;
+
+@end
+
 NS_ASSUME_NONNULL_END

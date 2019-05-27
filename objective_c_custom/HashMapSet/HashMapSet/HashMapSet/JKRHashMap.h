@@ -30,13 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsObject:(nullable ObjectType)object;
 /// 是否包含key
 - (BOOL)containsKey:(nullable KeyType)key;
-/// 遍历所有元素，stop为停止遍历标记
-- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(KeyType key, ObjectType obj, BOOL *stop))block;
 
 @end
 
 @interface JKRHashMap<KeyType, ObjectType> (JKRExtendedHashMap)
 
+- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(KeyType key, ObjectType obj, BOOL *stop))block;
 - (nullable ObjectType)objectForKeyedSubscript:(nullable KeyType)key;
 - (void)setObject:(nullable ObjectType)obj forKeyedSubscript:(nullable KeyType)key;
 

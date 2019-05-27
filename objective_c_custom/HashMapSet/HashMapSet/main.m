@@ -12,6 +12,7 @@
 #import "JKRTreeSet.h"
 #import "Person.h"
 #import "JKRHashMap.h"
+#import "JKRHashSet.h"
 #import "NSObject+JKRDataStructure.h"
 #import "SubKey1.h"
 #import "SubKey2.h"
@@ -29,9 +30,7 @@ NSString * getRandomStr() {
 NSMutableArray * allFileStrings() {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *fileManagerError;
-    // /Users/lucky/Documents/JKRCode/DataStructureDemo/objective_c_custom/Resource/runtime
-    // /Users/joker/Documents/Stu/DataStructureDemo/objective_c_custom/Resource/runtime
-    NSString *fileDirectory = @"/Users/lucky/Documents/JKRCode/DataStructureDemo/objective_c_custom/Resource/runtime";
+    NSString *fileDirectory = @"/Users/joker/Documents/DataStructureDemo/objective_c_custom/Resource/runtime";
     NSArray<NSString *> *array = [fileManager subpathsOfDirectoryAtPath:fileDirectory error:&fileManagerError];
     if (fileManagerError) {
         NSLog(@"读取文件夹失败");
@@ -175,7 +174,7 @@ void test5() {
 
 void test1() {
     NSMutableArray *allStrings = allFileStrings();
-    
+
     __block NSUInteger hashMapCount = 0;
     __block NSUInteger treeMapCount = 1;
     __block NSUInteger treeSetCount = 2;
@@ -192,7 +191,16 @@ void test1() {
             map[obj] = count;
         }];
         hashMapCount = map.count;
-        NSLog(@"HashMap 计算不重复单词数量和出现次数 %zd", map.count);
+        NSLog(@"JKRHashMap 计算不重复单词数量和出现次数 %zd", map.count);
+    }];
+    
+    [JKRTimeTool teskCodeWithBlock:^{
+        JKRHashSet *set = [JKRHashSet new];
+        [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [set addObject:obj];
+        }];
+        treeMapCount = set.count;
+        NSLog(@"JKRHashSet 计算不重复单词数量和出现次数 %zd", set.count);
     }];
     
     [JKRTimeTool teskCodeWithBlock:^{
@@ -211,6 +219,15 @@ void test1() {
     }];
     
     [JKRTimeTool teskCodeWithBlock:^{
+        NSMutableSet *set = [NSMutableSet new];
+        [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [set addObject:obj];
+        }];
+        treeMapCount = set.count;
+        NSLog(@"NSMutableSet 计算不重复单词数量和出现次数 %zd", set.count);
+    }];
+    
+    [JKRTimeTool teskCodeWithBlock:^{
         JKRTreeMap *map = [JKRTreeMap new];
         [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSNumber *count = map[obj];
@@ -222,7 +239,7 @@ void test1() {
             map[obj] = count;
         }];
         treeMapCount = map.count;
-        NSLog(@"TreeMap 计算不重复单词数量和出现次数 %zd", map.count);
+        NSLog(@"JKRTreeMap 计算不重复单词数量和出现次数 %zd", map.count);
     }];
     
     [JKRTimeTool teskCodeWithBlock:^{
@@ -231,7 +248,7 @@ void test1() {
             [set addObject:obj];
         }];
         treeSetCount = set.count;
-        NSLog(@"TreeSet 计算不重复单词数量 %zd", set.count);
+        NSLog(@"JKRTreeSet 计算不重复单词数量 %zd", set.count);
     }];
     
     check(hashMapCount == treeMapCount && treeMapCount == treeSetCount, @"计算不重复单词数量结果不一致！");
@@ -267,13 +284,19 @@ void test6() {
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 //        testJKRArray();
-        test1();
-//        test2();
-//        test3();
-//        test4();
-//        test5();
         
-//        test6();
+        test1();
+        test2();
+        test3();
+        test4();
+        test5();
+
+        test6();
+        
+        
+        
+        
     }
+    NSLog(@"end");
     return 0;
 }

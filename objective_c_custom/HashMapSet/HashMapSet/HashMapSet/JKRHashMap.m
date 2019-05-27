@@ -12,6 +12,11 @@
 #import "NSObject+JKRDataStructure.h"
 #import "LevelOrderPrinter.h"
 
+#define HASH_MAP_COLOR_RED false
+#define HASH_MAP_COLOR_BLACK true
+#define HASH_MAP_DEAFULT_CAPACITY (1<<4)
+#define HASH_MAP_LOAD_FACTOR 0.75f
+
 @interface JKRHashMapNode : NSObject
 
 @property (nonatomic, assign) BOOL color;
@@ -40,11 +45,6 @@
 
 @implementation JKRHashMap
 
-static BOOL const HASH_MAP_COLOR_RED = false;
-static BOOL const HASH_MAP_COLOR_BLACK = true;
-static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
-static CGFloat const DEFAULT_LOAD_FACTOR = 0.75;
-
 - (instancetype)init {
     self = [super init];
     self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
@@ -54,7 +54,9 @@ static CGFloat const DEFAULT_LOAD_FACTOR = 0.75;
 - (void)removeAllObjects {
     if (_size == 0) return;
     _size = 0;
-    self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
+    for (NSUInteger i = 0; i < self.array.length; i++) {
+        self.array[i] = nil;
+    }
 }
 
 - (id)objectForKey:(id)key {
@@ -141,7 +143,6 @@ static CGFloat const DEFAULT_LOAD_FACTOR = 0.75;
         } else if (k1 == k2 || [k1 isEqual:k2]) {
             cmp = 0;
         } else if (k1 && k2 && [k1 class] == [k2 class] && [k1 respondsToSelector:@selector(compare:)] && (cmp = [k1 compare:k2])) {
-            
         } else if (searched) {
             cmp = [k1 jkr_addressIdentity] - [k2 jkr_addressIdentity];
         } else {
@@ -212,7 +213,7 @@ static CGFloat const DEFAULT_LOAD_FACTOR = 0.75;
 
 #pragma mark - 扩容
 - (void)resize {
-    if (_size <= self.array.length * DEFAULT_LOAD_FACTOR) return;
+    if (_size <= self.array.length * HASH_MAP_LOAD_FACTOR) return;
     
     JKRArray *oldArray = self.array;
     self.array = [JKRArray arrayWithLength:oldArray.length << 1];
@@ -598,13 +599,11 @@ static inline NSUInteger jkrHaspMap_hash(id key) {
 }
 
 - (id)print_left:(id)node {
-    JKRHashMapNode *n = (JKRHashMapNode *)node;
-    return n.left;
+    return ((JKRHashMapNode *)node).left;
 }
 
 - (id)print_right:(id)node {
-    JKRHashMapNode *n = (JKRHashMapNode *)node;
-    return n.right;
+    return ((JKRHashMapNode *)node).right;
 }
 
 - (id)print_string:(id)node {

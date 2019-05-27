@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F3A6FA28229BE4AA00B9A4E8 /* JKRHashSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6FA27229BE4AA00B9A4E8 /* JKRHashSet.m */; };
 		F3D0B64C2293EA7200D6D23E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B64B2293EA7200D6D23E /* main.m */; };
 		F3D0B6542293EABE00D6D23E /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6532293EABE00D6D23E /* Person.m */; };
 		F3D0B6622293F08300D6D23E /* JKRHashMap.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D0B6612293F08300D6D23E /* JKRHashMap.m */; };
@@ -34,6 +35,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F3A6FA26229BE4AA00B9A4E8 /* JKRHashSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKRHashSet.h; sourceTree = "<group>"; };
+		F3A6FA27229BE4AA00B9A4E8 /* JKRHashSet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKRHashSet.m; sourceTree = "<group>"; };
 		F3D0B6482293EA7200D6D23E /* HashMapSet */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HashMapSet; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3D0B64B2293EA7200D6D23E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F3D0B6522293EABE00D6D23E /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
@@ -91,6 +94,8 @@
 			children = (
 				F3D0B6602293F08300D6D23E /* JKRHashMap.h */,
 				F3D0B6612293F08300D6D23E /* JKRHashMap.m */,
+				F3A6FA26229BE4AA00B9A4E8 /* JKRHashSet.h */,
+				F3A6FA27229BE4AA00B9A4E8 /* JKRHashSet.m */,
 				F3D0B6AD2295354700D6D23E /* JKRArray.h */,
 				F3D0B6AE2295354700D6D23E /* JKRArray.mm */,
 				F3D0B6B0229689F600D6D23E /* NSObject+JKRDataStructure.h */,
@@ -236,6 +241,7 @@
 				F3D0B6D122978B3700D6D23E /* JKRTreeMap.m in Sources */,
 				F3D0B64C2293EA7200D6D23E /* main.m in Sources */,
 				F3D0B6C52296B6BC00D6D23E /* SubKey2.m in Sources */,
+				F3A6FA28229BE4AA00B9A4E8 /* JKRHashSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

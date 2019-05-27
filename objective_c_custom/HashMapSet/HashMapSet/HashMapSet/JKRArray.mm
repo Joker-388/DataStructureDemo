@@ -106,7 +106,7 @@
     [self setObject:obj AtIndex:idx];
 }
 
-#pragma mark - 支持for in遍历
+#pragma mark - 快速遍历
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id  _Nullable [])buffer count:(NSUInteger)len {
     if (state->state > 0) return 0;
     state->mutationsPtr = (unsigned long*)self;
