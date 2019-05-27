@@ -22,6 +22,7 @@
 @property (nonatomic, assign) BOOL color;
 @property (nonatomic, strong, nonnull) id key;
 @property (nonatomic, strong, nonnull) id value;
+@property (nonatomic, assign) NSUInteger keyHashCode;
 @property (nonatomic, strong, nullable) JKRHashMapNode *left;
 @property (nonatomic, strong, nullable) JKRHashMapNode *right;
 @property (nonatomic, weak, nullable) JKRHashMapNode *parent;
@@ -182,6 +183,7 @@
         JKRHashMapNode *s = jkrHashMap_successor(node);
         node.key = s.key;
         node.value = s.value;
+        node.keyHashCode = s.keyHashCode;
         node = s;
     }
     
@@ -552,8 +554,6 @@ static inline NSUInteger jkrHaspMap_hash(id key) {
 
 @interface JKRHashMapNode ()
 
-@property (nonatomic, assign) NSUInteger keyHashCode;
-
 @end
 
 @implementation JKRHashMapNode
@@ -563,13 +563,9 @@ static inline NSUInteger jkrHaspMap_hash(id key) {
     self.key = key;
     self.value = value;
     self.parent = parent;
-    return self;
-}
-
-- (void)setKey:(id)key {
-    _key = key;
     NSUInteger hash = key ? [key hash] : 0;
     self.keyHashCode = hash ^ (hash >> 16);
+    return self;
 }
 
 - (NSUInteger)hash {

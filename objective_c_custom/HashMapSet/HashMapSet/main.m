@@ -60,10 +60,6 @@ void check(BOOL pass, NSString *errorString) {
     }
 }
 
-void testBase() {
-    
-}
-
 void testJKRArray() {
     JKRArray<Person *> *array = [JKRArray arrayWithLength:4];
     for (NSUInteger i = 0; i < 4; i++) {
