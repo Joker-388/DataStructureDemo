@@ -29,7 +29,9 @@ NSString * getRandomStr() {
 NSMutableArray * allFileStrings() {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *fileManagerError;
-    NSString *fileDirectory = @"/Users/joker/Documents/Stu/DataStructureDemo/objective_c_custom/Resource/runtime";
+    // /Users/lucky/Documents/JKRCode/DataStructureDemo/objective_c_custom/Resource/runtime
+    // /Users/joker/Documents/Stu/DataStructureDemo/objective_c_custom/Resource/runtime
+    NSString *fileDirectory = @"/Users/lucky/Documents/JKRCode/DataStructureDemo/objective_c_custom/Resource/runtime";
     NSArray<NSString *> *array = [fileManager subpathsOfDirectoryAtPath:fileDirectory error:&fileManagerError];
     if (fileManagerError) {
         NSLog(@"读取文件夹失败");
@@ -194,6 +196,21 @@ void test1() {
     }];
     
     [JKRTimeTool teskCodeWithBlock:^{
+        NSMutableDictionary *map = [NSMutableDictionary new];
+        [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSNumber *count = map[obj];
+            if (count) {
+                count = [NSNumber numberWithInteger:count.integerValue+1];
+            } else {
+                count = [NSNumber numberWithInteger:1];
+            }
+            map[obj] = count;
+        }];
+        treeMapCount = map.count;
+        NSLog(@"NSMutableDictionary 计算不重复单词数量和出现次数 %zd", map.count);
+    }];
+    
+    [JKRTimeTool teskCodeWithBlock:^{
         JKRTreeMap *map = [JKRTreeMap new];
         [allStrings enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSNumber *count = map[obj];
@@ -250,7 +267,7 @@ void test6() {
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 //        testJKRArray();
-//        test1();
+        test1();
 //        test2();
 //        test3();
 //        test4();

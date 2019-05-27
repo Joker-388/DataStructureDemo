@@ -14,7 +14,6 @@
 
 @interface JKRHashMapNode : NSObject
 
-@property (nonatomic, assign) NSUInteger keyHashCode;
 @property (nonatomic, assign) BOOL color;
 @property (nonatomic, strong, nonnull) id key;
 @property (nonatomic, strong, nonnull) id value;
@@ -23,16 +22,6 @@
 @property (nonatomic, weak, nullable) JKRHashMapNode *parent;
 
 - (instancetype)initWithKey:(id)key value:(id)value parent:(JKRHashMapNode *)parent;
-/// 是否是叶子节点
-- (BOOL)isLeaf;
-/// 是否有度为2
-- (BOOL)hasTwoChildren;
-/// 是否是父节点的左子树
-- (BOOL)isLeftChild;
-/// 是否是父节点的右子树
-- (BOOL)isRightChild;
-/// 返回兄弟节点
-- (JKRHashMapNode *)sibling;
 
 @end
 
@@ -54,6 +43,7 @@
 static BOOL const HASH_MAP_COLOR_RED = false;
 static BOOL const HASH_MAP_COLOR_BLACK = true;
 static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
+static CGFloat const DEFAULT_LOAD_FACTOR = 0.75;
 
 - (instancetype)init {
     self = [super init];
@@ -67,8 +57,62 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     self.array = [JKRArray arrayWithLength:HASH_MAP_DEAFULT_CAPACITY];
 }
 
+- (id)objectForKey:(id)key {
+    JKRHashMapNode *node = [self nodeWithKey:key];
+    return node ? node.value : nil;
+}
+
+- (BOOL)containsKey:(id)key {
+    return [self nodeWithKey:key] != nil;
+}
+
+- (BOOL)containsObject:(id)object {
+    if (_size == 0) return NO;
+    NSMutableArray *queue = [NSMutableArray array];
+    for (NSUInteger i = 0; i < self.array.length; i++) {
+        if (self.array[i] == nil) continue;
+        [queue addObject:self.array[i]];
+        while (queue.count) {
+            JKRHashMapNode *node = queue.firstObject;
+            if (object == node.value || [object isEqual:node.value]) return YES;
+            [queue removeObjectAtIndex:0];
+            if (node.left) [queue addObject:node.left];
+            if (node.right) [queue addObject:node.right];
+        }
+    }
+    return NO;
+}
+
+- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id _Nonnull, id _Nonnull, BOOL * _Nonnull))block {
+    if (_size == 0) return;
+    BOOL stop = NO;
+    NSMutableArray *queue = [NSMutableArray array];
+    for (NSUInteger i = 0; i < self.array.length && !stop; i++) {
+        if (self.array[i] == nil) continue;
+        [queue addObject:self.array[i]];
+        while (queue.count && !stop) {
+            JKRHashMapNode *node = queue.firstObject;
+            block(node.key, node.value, &stop);
+            [queue removeObjectAtIndex:0];
+            if (node.left) [queue addObject:node.left];
+            if (node.right) [queue addObject:node.right];
+        }
+    }
+}
+
+- (void)removeObjectForKey:(id)key {
+    [self removeWithNode:[self nodeWithKey:key]];
+}
+
+- (NSUInteger)count {
+    return _size;
+}
+
+#pragma mark - 添加节点
 - (void)setObject:(id)object forKey:(id)key {
-    NSUInteger index = [self indexWithKey:key];
+    [self resize];
+    
+    NSUInteger index = jkrHashMap_indexWithKey(key, self.array);
     JKRHashMapNode *root = self.array[index];
     if (!root) {
         root = [[JKRHashMapNode alloc] initWithKey:key value:object parent:nil];
@@ -82,14 +126,14 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     JKRHashMapNode *node = root;
     NSInteger cmp = 0;
     id k1 = key;
-    NSUInteger h1 = k1 ? [k1 hash] : 0;
+    NSUInteger h1 = jkrHaspMap_hash(k1);
     JKRHashMapNode *result = nil;
     BOOL searched = false;
     
     do {
         parent = node;
         id k2 = node.key;
-        NSUInteger h2 = node.keyHashCode;
+        NSUInteger h2 = node.hash;
         if (h1 > h2) {
             cmp = 1;
         } else if (h1 < h2) {
@@ -117,94 +161,32 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
         } else {
             node.key = key;
             node.value = object;
-            node.keyHashCode = key ? [key hash] : 0;
             return;
         }
     } while (node);
     
     JKRHashMapNode *newNode = [[JKRHashMapNode alloc] initWithKey:key value:object parent:parent];
-    if (cmp < 0) {
-        parent.left = newNode;
-    } else {
-        parent.right = newNode;
-    }
+    if (cmp < 0) parent.left = newNode;
+    else parent.right = newNode;
     _size++;
     [self afterAddWithNewNode:newNode];
 }
 
-- (id)objectForKey:(id)key {
-    JKRHashMapNode *node = [self nodeWithKey:key];
-    return node ? node.value : nil;
-}
-
-- (BOOL)containsKey:(id)key {
-    return [self nodeWithKey:key] != nil;
-}
-
-- (BOOL)containsObject:(id)object {
-    if (_size == 0) return NO;
-    NSMutableArray *queue = [NSMutableArray array];
-    for (NSUInteger i = 0; i < self.array.length; i++) {
-        if (self.array[i] == nil) continue;
-        [queue addObject:self.array[i]];
-        while (queue.count) {
-            JKRHashMapNode *node = queue.firstObject;
-            if (object == node.value || [object isEqual:node.value]) return YES;
-            [queue removeObjectAtIndex:0];
-            if (node.left) [queue addObject:node.left];
-            if (node.right) [queue addObject:node.right];
-        }
-    }
-    
-    return NO;
-}
-
-- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id _Nonnull, id _Nonnull, BOOL * _Nonnull))block {
-    if (_size == 0) return;
-    BOOL stop = NO;
-    NSMutableArray *queue = [NSMutableArray array];
-    for (NSUInteger i = 0; i < self.array.length && !stop; i++) {
-        if (self.array[i] == nil) continue;
-        [queue addObject:self.array[i]];
-        while (queue.count && !stop) {
-            JKRHashMapNode *node = queue.firstObject;
-            block(node.key, node.value, &stop);
-            [queue removeObjectAtIndex:0];
-            if (node.left) {
-                [queue addObject:node.left];
-            }
-            if (node.right) {
-                [queue addObject:node.right];
-            }
-        }
-    }
-}
-
-- (void)removeObjectForKey:(id)key {
-    [self removeWithNode:[self nodeWithKey:key]];
-}
-
-- (NSUInteger)count {
-    return _size;
-}
-
+#pragma mark - 删除节点
 - (void)removeWithNode:(JKRHashMapNode *)node {
-    if (!node) {
-        return;
-    }
-    _size--;
+    if (!node) return;
     
-    if (node.hasTwoChildren) {
-        JKRHashMapNode *s = [self successorWithNode:node];
+    _size--;
+    if (node.left && node.right) {
+        JKRHashMapNode *s = jkrHashMap_successor(node);
         node.key = s.key;
         node.value = s.value;
-        node.keyHashCode = s.keyHashCode;
         node = s;
     }
     
     // 实际被删除节点的子节点
     JKRHashMapNode *replacement = node.left ? node.left : node.right;
-    NSUInteger index = [self indexWithNode:node];
+    NSUInteger index = jkrHashMap_indexWithNode(node, self.array);
     if (replacement) { // 被删除的节点度为1
         replacement.parent = node.parent;
         if (!node.parent) {
@@ -228,10 +210,74 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     }
 }
 
+#pragma mark - 扩容
+- (void)resize {
+    if (_size <= self.array.length * DEFAULT_LOAD_FACTOR) return;
+    
+    JKRArray *oldArray = self.array;
+    self.array = [JKRArray arrayWithLength:oldArray.length << 1];
+    NSMutableArray *queue = [NSMutableArray array];
+    for (NSUInteger i = 0; i < oldArray.length; i++) {
+        if (!oldArray[i]) continue;
+        
+        [queue addObject:oldArray[i]];
+        while (queue.count) {
+            JKRHashMapNode *node = [queue firstObject];
+            [queue removeObjectAtIndex:0];
+            if (node.left) [queue addObject:node.left];
+            if (node.right) [queue addObject:node.right];
+            [self moveNode:node];
+        }
+    }
+}
+
+- (void)moveNode:(JKRHashMapNode *)newNode {
+    newNode.parent = nil;
+    newNode.left = nil;
+    newNode.right = nil;
+    newNode.color = HASH_MAP_COLOR_RED;
+    
+    NSUInteger index = jkrHashMap_indexWithNode(newNode, self.array);
+    JKRHashMapNode *root = self.array[index];
+    if (!root) {
+        root = newNode;
+        self.array[index] = root;
+        [self afterAddWithNewNode:root];
+        return;
+    }
+    
+    JKRHashMapNode *parent = root;
+    JKRHashMapNode *node = root;
+    NSInteger cmp = 0;
+    id k1 = newNode.key;
+    NSUInteger h1 = newNode.hash;
+    do {
+        parent = node;
+        id k2 = node.key;
+        NSUInteger h2 = node.hash;
+        if (h1 > h2) {
+            cmp = 1;
+        } else if (h1 < h2) {
+            cmp = -1;
+        } else if (k1 && k2 && [k1 class] == [k2 class] && [k1 respondsToSelector:@selector(compare:)] && (cmp = [k1 compare:k2])) {
+        } else {
+            cmp = [k1 jkr_addressIdentity] - [k2 jkr_addressIdentity];
+        }
+        if (cmp > 0) node = node.right;
+        else if (cmp < 0) node = node.left;
+    } while (node);
+    
+    newNode.parent = parent;
+    if (cmp > 0) parent.right = newNode;
+    else parent.left = newNode;
+    [self afterAddWithNewNode:newNode];
+}
+
+#pragma mark - 平衡红黑树
 - (void)afterRemoveWithNode:(JKRHashMapNode *)node {
     // 如果删除的节点是红色，或者用以取代删除节点的子节点是红色
-    if ([self isRed:node]) {
-        [self black:node];
+    if (jkrHashMap_isRed(node)) {
+        node.color = HASH_MAP_COLOR_BLACK;
         return;
     }
     
@@ -240,75 +286,158 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     if (!parent) return;
     
     // 删除的是黑色叶子节点，下溢，判定被删除的节点是左还是右
-    BOOL left = !parent.left || node.isLeftChild;
+    BOOL left = !parent.left || (node.parent && node.parent.left == node);
     JKRHashMapNode *sibling = left ? parent.right : parent.left;
     if (left) { // 被删除的节点在左边，兄弟节点在右边
-        if ([self isRed:sibling]) { // 兄弟节点是红色
-            [self black:sibling];
-            [self red:parent];
+        if (jkrHashMap_isRed(sibling)) { // 兄弟节点是红色
+            sibling.color = HASH_MAP_COLOR_BLACK;
+            parent.color = HASH_MAP_COLOR_RED;
             [self rotateLeft:parent];
             // 更换兄弟
             sibling = parent.right;
         }
         
         // 兄弟节点必然是黑色
-        if ([self isBlack:sibling.left] && [self isBlack:sibling.right]) {
+        if (jkrHashMap_isBlack(sibling.left) && jkrHashMap_isBlack(sibling.right)) {
             // 兄弟节点没有1个红色子节点，父节点要向下跟兄弟节点合并
-            BOOL parentBlack = [self isBlack:parent];
-            [self black:parent];
-            [self red:sibling];
+            BOOL parentBlack = jkrHashMap_isBlack(parent);
+            parent.color = HASH_MAP_COLOR_BLACK;
+            sibling.color = HASH_MAP_COLOR_RED;
             if (parentBlack) {
                 [self afterRemoveWithNode:parent];
             }
         } else { // 兄弟节点至少有1个红色子节点，向兄弟节点借元素
             // 兄弟节点的左边是黑色，兄弟要先旋转
-            if ([self isBlack:sibling.right]) {
+            if (jkrHashMap_isBlack(sibling.right)) {
                 [self rotateRight:sibling];
                 sibling = parent.right;
             }
-            [self dyeNode:sibling color:[self colorOf:parent]];
-            [self black:sibling.right];
-            [self black:parent];
+            sibling.color = jkrHashMap_color(parent);
+            sibling.right.color = HASH_MAP_COLOR_BLACK;
+            parent.color = HASH_MAP_COLOR_BLACK;
             [self rotateLeft:parent];
         }
     } else { // 被删除的节点在右边，兄弟节点在左边
-        if ([self isRed:sibling]) { // 兄弟节点是红色
-            [self black:sibling];
-            [self red:parent];
+        if (jkrHashMap_isRed(sibling)) { // 兄弟节点是红色
+            sibling.color = HASH_MAP_COLOR_BLACK;
+            parent.color = HASH_MAP_COLOR_RED;
             [self rotateRight:parent];
             // 更换兄弟
             sibling = parent.left;
         }
         
         // 兄弟节点必然是黑色
-        if ([self isBlack:sibling.left] && [self isBlack:sibling.right]) {
+        if (jkrHashMap_isBlack(sibling.left) && jkrHashMap_isBlack(sibling.right)) {
             // 兄弟节点没有1个红色子节点，父节点要向下跟兄弟节点合并
-            BOOL parentBlack = [self isBlack:parent];
-            [self black:parent];
-            [self red:sibling];
+            BOOL parentBlack = jkrHashMap_isBlack(parent);
+            parent.color = HASH_MAP_COLOR_BLACK;
+            sibling.color = HASH_MAP_COLOR_RED;
             if (parentBlack) {
                 [self afterRemoveWithNode:parent];
             }
         } else { // 兄弟节点至少有1个红色子节点，向兄弟节点借元素
             // 兄弟节点的左边是黑色，兄弟要先旋转
-            if ([self isBlack:sibling.left]) {
+            if (jkrHashMap_isBlack(sibling.left)) {
                 [self rotateLeft:sibling];
                 sibling = parent.left;
             }
             
-            [self dyeNode:sibling color:[self colorOf:parent]];
-            [self black:sibling.left];
-            [self black:parent];
+            sibling.color = jkrHashMap_color(parent);
+            sibling.left.color = HASH_MAP_COLOR_BLACK;
+            parent.color = HASH_MAP_COLOR_BLACK;
             [self rotateRight:parent];
         }
     }
 }
 
-#pragma mark - 节点的后继节点
-- (JKRHashMapNode *)successorWithNode:(JKRHashMapNode *)node {
-    if (!node) {
-        return nil;
+- (void)afterAddWithNewNode:(JKRHashMapNode *)node {
+    JKRHashMapNode *parent = node.parent;
+    
+    // 添加的节点是根节点 或者 上溢出到达根节点
+    if (!parent) {
+        node.color = HASH_MAP_COLOR_BLACK;
+        return;
     }
+    
+    if (jkrHashMap_isBlack(parent)) return;
+    
+    // 叔父节点
+    JKRHashMapNode *uncle = nil;
+    if (parent.parent) {
+        if (parent.parent.left == parent) {
+            uncle = parent.parent.right;
+        }
+        if (parent.parent.right == parent) {
+            uncle = parent.parent.left;
+        }
+    }
+    // 祖父节点
+    parent.parent.color = HASH_MAP_COLOR_RED;
+    JKRHashMapNode *grand = parent.parent;
+    
+    // 叔父节点是红色的情况，B树节点上溢
+    if (jkrHashMap_isRed(uncle)) {
+        parent.color = HASH_MAP_COLOR_BLACK;
+        uncle.color = HASH_MAP_COLOR_BLACK;
+        // 把祖父节点当作是新添加的节点
+        [self afterAddWithNewNode:grand];
+        return;
+    }
+    
+    // 叔父节点不是红色
+    if (parent.parent && parent.parent.left == parent) { // L
+        if (node.parent && node.parent.left == node) { // LL
+            parent.color = HASH_MAP_COLOR_BLACK;
+        } else { // LR
+            node.color = HASH_MAP_COLOR_BLACK;
+            [self rotateLeft:parent];
+        }
+        [self rotateRight:grand];
+    } else { // R
+        if (node.parent && node.parent.left == node) { // RL
+            node.color = HASH_MAP_COLOR_BLACK;
+            [self rotateRight:parent];
+        } else { // RR
+            parent.color = HASH_MAP_COLOR_BLACK;
+        }
+        [self rotateLeft:grand];
+    }
+}
+
+- (void)rotateLeft:(JKRHashMapNode *)grand {
+    JKRHashMapNode *parent = grand.right;
+    JKRHashMapNode *child = parent.left;
+    grand.right = child;
+    parent.left = grand;
+    jkrHashMap_afterRotate(grand, parent, child, self.array);
+}
+
+- (void)rotateRight:(JKRHashMapNode *)grand {
+    JKRHashMapNode *parent = grand.left;
+    JKRHashMapNode *child = parent.right;
+    grand.left = child;
+    parent.right = grand;
+    jkrHashMap_afterRotate(grand, parent, child, self.array);
+}
+
+static inline void jkrHashMap_afterRotate(JKRHashMapNode *grand, JKRHashMapNode *parent, JKRHashMapNode *child, JKRArray *array) {
+    if (grand.parent && grand.parent.left == grand) {
+        grand.parent.left = parent;
+    } else if (grand.parent && grand.parent.right == grand) {
+        grand.parent.right = parent;
+    } else {
+        NSUInteger index = jkrHashMap_indexWithNode(grand, array);
+        array[index] = parent;
+    }
+    
+    if (child) child.parent = grand;
+    
+    parent.parent = grand.parent;
+    grand.parent = parent;
+}
+
+static inline JKRHashMapNode * jkrHashMap_successor(JKRHashMapNode *node) {
+    if (!node) return nil;
     
     if (node.right) {
         JKRHashMapNode *p = node.right;
@@ -321,153 +450,53 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     while (node.parent && node == node.parent.right) {
         node = node.parent;
     }
-    
+
     return node.parent;
 }
 
-#pragma mark - 添加后平衡
-- (void)afterAddWithNewNode:(JKRHashMapNode *)node {
-    JKRHashMapNode *parent = node.parent;
-    
-    // 添加的节点是根节点 或者 上溢出到达根节点
-    if (!parent) {
-        [self black:node];
-        return;
-    }
-    
-    if ([self isBlack:parent]) return;
-    
-    // 叔父节点
-    JKRHashMapNode *uncle = parent.sibling;
-    // 祖父节点
-    JKRHashMapNode *grand = [self red:parent.parent];
-    
-    // 叔父节点是红色的情况，B树节点上溢
-    if ([self isRed:uncle]) {
-        [self black:parent];
-        [self black:uncle];
-        // 把祖父节点当作是新添加的节点
-        [self afterAddWithNewNode:grand];
-        return;
-    }
-    
-    // 叔父节点不是红色
-    if (parent.isLeftChild) { // L
-        if (node.isLeftChild) { // LL
-            [self black:parent];
-        } else { // LR
-            [self black:node];
-            [self rotateLeft:parent];
-        }
-        [self rotateRight:grand];
-    } else { // R
-        if (node.isLeftChild) { // RL
-            [self black:node];
-            [self rotateRight:parent];
-        } else { // RR
-            [self black:parent];
-        }
-        [self rotateLeft:grand];
-    }
-}
-
-#pragma mark - 左旋转一个节点
-- (void)rotateLeft:(JKRHashMapNode *)grand {
-    JKRHashMapNode *parent = grand.right;
-    JKRHashMapNode *child = parent.left;
-    grand.right = child;
-    parent.left = grand;
-    [self afterRotateWithGrand:grand parent:parent child:child];
-}
-
-#pragma mark - 右旋转一个节点
-- (void)rotateRight:(JKRHashMapNode *)grand {
-    JKRHashMapNode *parent = grand.left;
-    JKRHashMapNode *child = parent.right;
-    grand.left = child;
-    parent.right = grand;
-    [self afterRotateWithGrand:grand parent:parent child:child];
-}
-
-#pragma mark - 旋转后处理
-- (void)afterRotateWithGrand:(JKRHashMapNode *)grand parent:(JKRHashMapNode *)parent child:(JKRHashMapNode *)child {
-    if (grand.isLeftChild) {
-        grand.parent.left = parent;
-    } else if (grand.isRightChild) {
-        grand.parent.right = parent;
-    } else {
-        self.array[[self indexWithNode:grand]] = parent;
-    }
-    
-    if (child) {
-        child.parent = grand;
-    }
-    
-    parent.parent = grand.parent;
-    grand.parent = parent;
-}
-
-#pragma mark - 为一个节点染色
-- (JKRHashMapNode *)dyeNode:(JKRHashMapNode *)node color:(BOOL)color {
-    if (!node) {
-        return node;
-    }
-    node.color = color;
-    return node;
-}
-
-#pragma mark - 将一个节点染成红色
-- (JKRHashMapNode *)red:(JKRHashMapNode *)node {
-    return [self dyeNode:node color:HASH_MAP_COLOR_RED];
-}
-
-#pragma mark - 将一个节点染成黑色
-- (JKRHashMapNode *)black:(JKRHashMapNode *)node {
-    return [self dyeNode:node color:HASH_MAP_COLOR_BLACK];
-}
-
-#pragma mark - 返回节点颜色
-- (BOOL)colorOf:(JKRHashMapNode *)node {
+static inline BOOL jkrHashMap_color(JKRHashMapNode *node) {
     return !node ? HASH_MAP_COLOR_BLACK : node.color;
 }
 
-#pragma mark - 节点是否为黑色
-- (BOOL)isBlack:(JKRHashMapNode *)node {
-    return [self colorOf:node] == HASH_MAP_COLOR_BLACK;
+static inline BOOL jkrHashMap_isBlack(JKRHashMapNode *node) {
+    BOOL color = !node ? HASH_MAP_COLOR_BLACK : node.color;
+    return color = HASH_MAP_COLOR_BLACK;
 }
 
-#pragma mark - 节点是否为红色
-- (BOOL)isRed:(JKRHashMapNode *)node {
-    return [self colorOf:node] == HASH_MAP_COLOR_RED;
+static inline BOOL jkrHashMap_isRed(JKRHashMapNode *node) {
+    BOOL color = !node ? HASH_MAP_COLOR_BLACK : node.color;
+    return color = HASH_MAP_COLOR_RED;
 }
 
-- (NSUInteger)indexWithKey:(id)key {
-    if (!key) {
-        return 0;
-    }
+#pragma mark - 获取哈希表index
+static inline NSUInteger jkrHashMap_indexWithKey(id key, JKRArray *array) {
+    return jkrHaspMap_hash(key) & (array.length - 1);
+}
+
+static inline NSUInteger jkrHashMap_indexWithNode(JKRHashMapNode *node, JKRArray *array) {
+    return node.hash & (array.length - 1);
+}
+
+static inline NSUInteger jkrHaspMap_hash(id key) {
+    if (!key) return 0;
     NSUInteger hash = [key hash];
-    return (hash ^ (hash >> 16)) & (self.array.length - 1);
+    return (hash ^ (hash >> 16));
 }
 
-- (NSUInteger)indexWithNode:(JKRHashMapNode *)node {
-    NSUInteger hash = node.keyHashCode;
-    return (hash ^ (hash >> 16)) & (self.array.length - 1);
-}
-
-#pragma mark - 通过key获取节点
+#pragma mark - 获取哈希表节点
 - (JKRHashMapNode *)nodeWithKey:(id)key {
-    NSUInteger index = [self indexWithKey:key];
+    NSUInteger index = jkrHashMap_indexWithKey(key, self.array);
     JKRHashMapNode *root = self.array[index];
     return root ? [self nodeWithNode:root key:key] : nil;
 }
 
 - (JKRHashMapNode *)nodeWithNode:(JKRHashMapNode *)node key:(id)key {
-    NSUInteger hash1 = key ? [key hash] : 0;
+    NSUInteger hash1 = jkrHaspMap_hash(key);
     JKRHashMapNode *result = nil;
     NSInteger cmp = 0;
     while (node) {
         id key2 = node.key;
-        NSUInteger hash2 = node.keyHashCode;
+        NSUInteger hash2 = node.hash;
         if (hash1 > hash2) {
             node = node.right;
         } else if (hash1 < hash2) {
@@ -485,6 +514,7 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     return nil;
 }
 
+#pragma mark - 运算符重载
 - (id)objectForKeyedSubscript:(id)key {
     return [self objectForKey:key];
 }
@@ -493,12 +523,13 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     [self setObject:obj forKey:key];
 }
 
+#pragma mark - 打印
 - (NSString *)description {
     NSMutableString *string = [NSMutableString string];
-    [string appendString:[NSString stringWithFormat:@"<%@, %p>: \ncount:%zd\n{\n", self.className, self, _size]];
+    [string appendString:[NSString stringWithFormat:@"<%@, %p>: \ncount:%zd length:%zd\n{\n", self.className, self, _size, self.array.length]];
     [self.array enumerateObjectsUsingBlock:^(JKRHashMapNode*  _Nullable node, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx) {
-            [string appendString:@"\n----------------------------------------------\n"];
+            [string appendString:[NSString stringWithFormat:@"\n--- index: %zd ---\n", idx]];
         }
         if (node) {
             JKRHashTempTree *tree = [[JKRHashTempTree alloc] initWithRoot:node];
@@ -508,12 +539,19 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
             [string appendString:@"Null"];
         }
     }];
+    [string appendString:@"\n}"];
     return string;
 }
 
 - (void)dealloc {
 //    NSLog(@"<%@, %p>: dealloc", self.className, self);
 }
+
+@end
+
+@interface JKRHashMapNode ()
+
+@property (nonatomic, assign) NSUInteger keyHashCode;
 
 @end
 
@@ -524,34 +562,17 @@ static NSUInteger const HASH_MAP_DEAFULT_CAPACITY = 1<<4;
     self.key = key;
     self.value = value;
     self.parent = parent;
-    self.keyHashCode = key ? [key hash] : 0;
     return self;
 }
 
-- (BOOL)isLeaf {
-    return !self.left && !self.right;
+- (void)setKey:(id)key {
+    _key = key;
+    NSUInteger hash = key ? [key hash] : 0;
+    self.keyHashCode = hash ^ (hash >> 16);
 }
 
-- (BOOL)hasTwoChildren {
-    return self.left && self.right;
-}
-
-- (BOOL)isLeftChild {
-    return self.parent && self.parent.left == self;
-}
-
-- (BOOL)isRightChild {
-    return self.parent && self.parent.right == self;
-}
-
-- (JKRHashMapNode *)sibling {
-    if ([self isLeftChild]) {
-        return self.parent.right;
-    }
-    if ([self isRightChild]) {
-        return self.parent.left;
-    }
-    return nil;
+- (NSUInteger)hash {
+    return _keyHashCode;
 }
 
 - (void)dealloc {
